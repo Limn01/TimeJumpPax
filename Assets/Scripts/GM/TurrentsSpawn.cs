@@ -2,14 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurrentsSpawn : EnemySpawn1
+public class TurrentsSpawn : MonoBehaviour
 {
-    //public Transform[] SpawnPoints;
+    public Transform[] transforms;
 
-    GameObject[] turrentEnemies;
+    GameObject[] enemies;
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            SpawnEnemy();
+        }
+    }
 
-    public override void SpawnEnemy()
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            TurnEnemyOff();
+
+        }
+    }
+
+    void SpawnEnemy()
     {
         for (int i = 0; i < transforms.Length; i++)
         {
@@ -28,15 +44,15 @@ public class TurrentsSpawn : EnemySpawn1
         }
     }
 
-    public override void TurnEnemyOff()
+    void TurnEnemyOff()
     {
-        turrentEnemies = GameObject.FindGameObjectsWithTag("Turrent");
+        enemies = GameObject.FindGameObjectsWithTag("Turrent");
 
-        for (int i = 0; i < turrentEnemies.Length; i++)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            if (turrentEnemies[i] != null)
+            if (enemies[i] != null)
             {
-                turrentEnemies[i].SetActive(false);
+                enemies[i].SetActive(false);
             }
         }
     }

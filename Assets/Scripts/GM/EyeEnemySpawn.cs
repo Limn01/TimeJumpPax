@@ -2,17 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawn2 : EnemySpawn1
+public class EyeEnemySpawn : MonoBehaviour
 {
-    //public Transform[] spawnPoints;
+    public Transform[] transforms;
 
-    GameObject[] commonEnemies;
+    GameObject[] enemies;
 
-    public override void SpawnEnemy()
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            SpawnEnemy();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            TurnEnemyOff();
+        }
+    }
+
+    void SpawnEnemy()
     {
         for (int i = 0; i < transforms.Length; i++)
         {
-            GameObject obj = EnemySpawn3Pool.current.GetPooledObject();
+            GameObject obj = EnemySpawnPool2.current.GetPooledObject();
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -27,15 +43,15 @@ public class EnemySpawn2 : EnemySpawn1
         }
     }
 
-    public override void TurnEnemyOff()
+    void TurnEnemyOff()
     {
-        commonEnemies = GameObject.FindGameObjectsWithTag("Enemy2");
+        enemies = GameObject.FindGameObjectsWithTag("Obstacle");
 
-        for (int i = 0; i < commonEnemies.Length; i++)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            if (commonEnemies[i] != null)
+            if (enemies[i] != null)
             {
-                commonEnemies[i].SetActive(false);
+                enemies[i].SetActive(false);
             }
         }
     }

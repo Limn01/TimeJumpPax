@@ -74,4 +74,6 @@ public class EnemyMovement : MonoBehaviour
             transform.parent = other.transform;
         }
     }
+
+    
 }

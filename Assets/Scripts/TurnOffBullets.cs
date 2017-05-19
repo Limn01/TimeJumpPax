@@ -33,6 +33,7 @@ public class TurnOffBullets : MonoBehaviour
         {
             this.gameObject.SetActive(false);
             other.gameObject.SetActive(false);
+            other.gameObject.transform.parent = null;
 
         }
 

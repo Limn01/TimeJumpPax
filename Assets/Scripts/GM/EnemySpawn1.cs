@@ -24,7 +24,7 @@ public class EnemySpawn1 : MonoBehaviour
         }
     }
 
-    public virtual void SpawnEnemy()
+    void SpawnEnemy()
     {
         for (int i = 0; i < transforms.Length; i++)
         {
@@ -43,7 +43,7 @@ public class EnemySpawn1 : MonoBehaviour
         }
     }
 
-    public virtual void TurnEnemyOff()
+    void TurnEnemyOff()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy1");
 

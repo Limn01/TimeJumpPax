@@ -2,13 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingEnemySpawn : EnemySpawn1
+public class FlyingEnemySpawn : MonoBehaviour
 {
-    //public Transform[] spawnPoints;
+    public Transform[] transforms;
 
     GameObject[] enemies;
 
-    public override void SpawnEnemy()
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            SpawnEnemy();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            TurnEnemyOff();
+
+        }
+    }
+
+    void SpawnEnemy()
     {
         for (int i = 0; i < transforms.Length; i++)
         {
@@ -27,7 +44,7 @@ public class FlyingEnemySpawn : EnemySpawn1
         }
     }
 
-    public override void TurnEnemyOff()
+    void TurnEnemyOff()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy3");
 
