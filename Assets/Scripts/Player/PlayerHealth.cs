@@ -7,21 +7,22 @@ public class PlayerHealth : MonoBehaviour
 {
     public static PlayerHealth instance;
     [SerializeField]
-    private int maxVal = 16;
+    private float maxValue;
     [SerializeField]
-    private int currentHealth;
+    private float currentHealth;
     public bool damaged;
     public bool isDead;
     //public AudioSource sound;
-    public Slider healthSlider;
+    //public Slider healthSlider;
     public AudioSource damageSound;
 
     //GameObject player;
     Animator anim;
     GameObject gameManager;
+    [SerializeField]
     HealthBar healthBar;
 
-    public int CurrentHealth
+    public float CurrentHealth
     {
         get
         {
@@ -30,22 +31,22 @@ public class PlayerHealth : MonoBehaviour
 
         set
         {
-            currentHealth = value;
+            this.currentHealth = value;
             healthBar.Value = currentHealth;
         }
     }
 
-    public int StartingHealth
+    public float MaxValue
     {
         get
         {
-            return maxVal;
+            return maxValue;
         }
 
         set
         {
-            maxVal = value;
-            healthBar.MaxValue = maxVal;
+            this.maxValue = value;
+            healthBar.MaxValue = maxValue;
         }
     }
 
@@ -57,10 +58,12 @@ public class PlayerHealth : MonoBehaviour
         
         anim = GetComponentInChildren<Animator>();
 
+        Initialize();
+
         //CurrentHealth = StartingHealth;
     }
 
-   public void TakeDamage(int amount)
+   public void TakeDamage(float amount)
     {
         damaged = true;
 
@@ -92,7 +95,13 @@ public class PlayerHealth : MonoBehaviour
     public void FullHealth()
     {
         isDead = false;
-        CurrentHealth = StartingHealth;
-        healthSlider.value = CurrentHealth;
+        CurrentHealth = MaxValue;
+        //healthSlider.value = CurrentHealth;
+    }
+
+    public void Initialize()
+    {
+        this.MaxValue = MaxValue;
+        this.CurrentHealth = currentHealth;
     }
 }

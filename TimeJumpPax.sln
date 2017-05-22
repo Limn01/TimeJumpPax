@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeJumpPax.CSharp.Plugins", "TimeJumpPax.CSharp.Plugins.csproj", "{6A199E20-9CAB-DE68-C067-B9EB74770FE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeJumpPax.CSharp", "TimeJumpPax.CSharp.csproj", "{72308405-66CA-6B3B-60D5-D182931B3D2A}"

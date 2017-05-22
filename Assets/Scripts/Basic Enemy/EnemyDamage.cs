@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    public int damage = 1;
+    public float damage = 1;
     public float timebetweenAttack = 0.5f;
 
     public bool playerInRange;

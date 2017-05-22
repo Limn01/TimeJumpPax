@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HoverEnemyDamage : MonoBehaviour
 {
-    public int damage;
+    public float damage;
     public float timeBetweenAttack;
 
     GameObject player;

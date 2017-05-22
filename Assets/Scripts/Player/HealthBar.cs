@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField]
-    int fillAmount;
+    float fillAmount;
 
     [SerializeField]
     Image content;
 
-    public int MaxValue { get; set; }
+    public float MaxValue { get; set; }
 
-    public int Value
+    public float Value
     {
         set
         {
@@ -34,7 +34,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    int Map(int value, int inMin, int inMax, int outMin, int outMax)
+    float Map(float value, float inMin, float inMax, float outMin, float outMax)
     {
         return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
