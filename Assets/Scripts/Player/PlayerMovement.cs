@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
             if (colliders[i].gameObject != gameObject)
             {
                 grounded = true;
+                break;
             }
         }
 

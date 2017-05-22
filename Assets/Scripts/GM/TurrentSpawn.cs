@@ -2,18 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurrentSpawn : EnemySpawn
+public class TurrentSpawn : MonoBehaviour
 {
+    public Transform transform;
+
     GameObject enemy;
 
-    public override void SpawnEnemy()
+    void OnTriggerEnter2D(Collider2D col)
     {
-        GameObject obj = TurrentEnemyPool.current.GetPooledObject();
+        if (col.gameObject.tag == "Player")
+        {
+            SpawnEnemy();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            TurnEnemyOff();
+            Debug.Log("Disable Enemy");
+        }
+    }
+
+    void SpawnEnemy()
+    {
+
+        GameObject obj = EnemySpawn1Pool.current.GetPooledObject();
         List<GameObject> pooledObj = new List<GameObject>();
         pooledObj.Add(obj);
         int randomIndex = Random.Range(0, pooledObj.Count);
 
-            
+        if (!pooledObj[randomIndex].activeInHierarchy)
         {
             pooledObj[randomIndex].SetActive(true);
             pooledObj[randomIndex].transform.position = transform.position;
@@ -23,9 +43,9 @@ public class TurrentSpawn : EnemySpawn
 
     }
 
-    public override void TurnEnemyOff()
+    void TurnEnemyOff()
     {
-        enemy = GameObject.FindGameObjectWithTag("Enemy3");
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
 
         if (enemy != null)
         {

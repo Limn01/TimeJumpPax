@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public Transform transform;
+    public Transform tramsform;
 
     GameObject enemy;
 
@@ -25,7 +25,7 @@ public class EnemySpawn : MonoBehaviour
         }
     }
 
-    public virtual void SpawnEnemy()
+    void SpawnEnemy()
     {
        
             GameObject obj = EnemySpawn1Pool.current.GetPooledObject();
@@ -43,7 +43,7 @@ public class EnemySpawn : MonoBehaviour
         
     }
 
-    public virtual void TurnEnemyOff()
+    void TurnEnemyOff()
     {
         enemy = GameObject.FindGameObjectWithTag("Enemy");
 
