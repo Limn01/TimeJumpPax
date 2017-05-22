@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
-{
+{`
     public static PlayerHealth instance;
-    public int startingHealth = 16;
-    public int currentHealth;
+    [SerializeField]
+    private int maxVal = 16;
+    [SerializeField]
+    private int currentHealth;
     public bool damaged;
     public bool isDead;
     //public AudioSource sound;
@@ -17,8 +19,36 @@ public class PlayerHealth : MonoBehaviour
     //GameObject player;
     Animator anim;
     GameObject gameManager;
-    
-   
+    HealthBar healthBar;
+
+    public int CurrentHealth
+    {
+        get
+        {
+            return currentHealth;
+        }
+
+        set
+        {
+            currentHealth = value;
+            healthBar.Value = currentHealth;
+        }
+    }
+
+    public int StartingHealth
+    {
+        get
+        {
+            return maxVal;
+        }
+
+        set
+        {
+            maxVal = value;
+            healthBar.MaxValue = maxVal;
+        }
+    }
+
     void Awake()
     {
         instance = this;
@@ -27,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
         
         anim = GetComponentInChildren<Animator>();
 
-        currentHealth = startingHealth;
+        //CurrentHealth = StartingHealth;
     }
 
    public void TakeDamage(int amount)
@@ -36,13 +66,13 @@ public class PlayerHealth : MonoBehaviour
 
         gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
 
-        currentHealth -= amount;
+        CurrentHealth -= amount;
 
-        healthSlider.value = currentHealth;
+        //healthSlider.value = CurrentHealth;
 
         damageSound.Play();
 
-        if (currentHealth <= 0 && !isDead)
+        if (CurrentHealth <= 0 && !isDead)
         {
             Death();
             
@@ -62,7 +92,7 @@ public class PlayerHealth : MonoBehaviour
     public void FullHealth()
     {
         isDead = false;
-        currentHealth = startingHealth;
-        healthSlider.value = currentHealth;
+        CurrentHealth = StartingHealth;
+        healthSlider.value = CurrentHealth;
     }
 }

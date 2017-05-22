@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public Transform tramsform;
+    public Transform transform;
 
     GameObject enemy;
 

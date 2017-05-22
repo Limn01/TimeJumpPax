@@ -63,7 +63,7 @@ public class FlyingEnemies : MonoBehaviour
                 playerMovement.knockbackFromRight = false;
             }
 
-            if (playerHealth.currentHealth > 0)
+            if (playerHealth.CurrentHealth > 0)
             {
                 playerHealth.TakeDamage(damage);
             }

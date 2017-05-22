@@ -63,7 +63,7 @@ public class EnemyDamage : MonoBehaviour
             PlayerMovement.instance.knockbackFromRight = false;
         }
 
-        if ( PlayerHealth.instance.currentHealth > 0)
+        if ( PlayerHealth.instance.CurrentHealth > 0)
         {
             PlayerHealth.instance.TakeDamage(damage);
         }
