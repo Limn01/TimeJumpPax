@@ -11,9 +11,18 @@ public class LifeManager : MonoBehaviour
     Text theText;
     int lifeCounter;
 
+    [SerializeField]
+    GameObject gameOverScreen;
+
+    [SerializeField]
+    GameObject player;
+    
+
     void Awake()
     {
         instance = this;
+
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Start()
@@ -25,6 +34,13 @@ public class LifeManager : MonoBehaviour
 
     void Update()
     {
+        if (lifeCounter < 0)
+        {
+            gameOverScreen.SetActive(true);
+            player.SetActive(false);
+            PlayerMovement.instance.gameObject.SetActive(false);
+        }
+
         theText.text = "x " + lifeCounter;
     }
 

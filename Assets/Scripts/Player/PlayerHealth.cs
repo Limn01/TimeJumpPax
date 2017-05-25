@@ -21,6 +21,9 @@ public class PlayerHealth : MonoBehaviour
     GameObject gameManager;
     [SerializeField]
     HealthBar healthBar;
+    CamaraShake cameraShake;
+    
+    
 
     public float CurrentHealth
     {
@@ -58,9 +61,11 @@ public class PlayerHealth : MonoBehaviour
         
         anim = GetComponentInChildren<Animator>();
 
+        cameraShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CamaraShake>();
+
         Initialize();
 
-        //CurrentHealth = StartingHealth;
+        CurrentHealth = MaxValue;
     }
 
    public void TakeDamage(float amount)
@@ -70,6 +75,12 @@ public class PlayerHealth : MonoBehaviour
         gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
 
         CurrentHealth -= amount;
+
+        //CamaraShake.instance.gameObject.GetComponent<Camera>();
+        //CamaraShake.instance.ShakeCamera(.3f, .3f);
+
+        cameraShake.ShakeCamera(.3f, .3f);
+        
 
         //healthSlider.value = CurrentHealth;
 

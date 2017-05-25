@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
     public GameObject currentCheckPoint;
 
-    PlayerHealth playerHealth;
+    //PlayerHealth playerHealth;
     GameObject player;
 	// Use this for initialization
     void Awake()
@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
 	void Start ()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
+        //playerHealth = player.GetComponent<PlayerHealth>();
 	}
 
     public void RespawnPlayer()
