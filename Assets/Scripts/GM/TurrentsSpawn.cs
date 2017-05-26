@@ -6,6 +6,7 @@ public class TurrentsSpawn : MonoBehaviour
 {
     public Transform[] transforms;
 
+    bool leftArea = false;
     GameObject[] enemies;
 
     void OnTriggerEnter2D(Collider2D col)
@@ -20,6 +21,7 @@ public class TurrentsSpawn : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            leftArea = true;
             TurnEnemyOff();
 
         }

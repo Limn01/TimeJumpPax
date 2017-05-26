@@ -23,8 +23,16 @@ public class LevelManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
+        StartCoroutine("RestartGame");
+    }
+
+    public IEnumerator RestartGame()
+    {
+        player.gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
         player.transform.position = currentCheckPoint.transform.position;
         PlayerHealth.instance.FullHealth();
-        
+        LifeManager.instance.TakeLife();
+        player.gameObject.SetActive(true);
     }
 }

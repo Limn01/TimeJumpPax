@@ -43,7 +43,11 @@ public class CheckPoint : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            TurnOffParticle();
+            if (particleOn)
+            {
+                TurnOffParticle();
+            }
+            
         }
     }
 
@@ -56,7 +60,7 @@ public class CheckPoint : MonoBehaviour
 
     void TurnOffParticle()
     {
-        lightingParticle = GameObject.FindGameObjectWithTag("Lighting");
+        //lightingParticle = GameObject.FindGameObjectWithTag("Lighting");
         lightingParticle.SetActive(false);
     }
 }

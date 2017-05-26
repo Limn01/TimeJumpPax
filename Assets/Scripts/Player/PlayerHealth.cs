@@ -96,11 +96,10 @@ public class PlayerHealth : MonoBehaviour
     void Death()
     {
         isDead = true;
-        //this.gameObject.SetActive(false);
-        LifeManager.instance.TakeLife();
+        //this.gameObject.SetActive(false);  
         LevelManager.instance.RespawnPlayer();
         FullHealth();
-
+        
     }
 
     public void FullHealth()

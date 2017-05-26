@@ -13,8 +13,6 @@ public class DeadZone : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             LevelManager.instance.RespawnPlayer();
-            LifeManager.instance.TakeLife();
-            PlayerHealth.instance.FullHealth();
            
         }
     }

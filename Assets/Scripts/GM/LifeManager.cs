@@ -13,6 +13,10 @@ public class LifeManager : MonoBehaviour
 
     [SerializeField]
     GameObject gameOverScreen;
+    [SerializeField]
+    float restartDelay = 5f;
+
+    float restartTimer;
 
     [SerializeField]
     GameObject player;
@@ -38,7 +42,8 @@ public class LifeManager : MonoBehaviour
         {
             gameOverScreen.SetActive(true);
             player.SetActive(false);
-            PlayerMovement.instance.gameObject.SetActive(false);
+            //PlayerMovement.instance.gameObject.SetActive(false);
+            
         }
 
         theText.text = "x " + lifeCounter;

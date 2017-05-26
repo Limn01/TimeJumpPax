@@ -16,7 +16,6 @@ public class Spikes : MonoBehaviour
         if (other.gameObject == player )
         {
             LevelManager.instance.RespawnPlayer();
-            LifeManager.instance.TakeLife();
         }
     }
 }
