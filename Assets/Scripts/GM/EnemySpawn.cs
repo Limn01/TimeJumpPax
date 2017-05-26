@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public Transform transform;
+    public static EnemySpawn instance;
+
+    public Transform tranform;
 
     GameObject enemy;
+    GameObject player;
+
+    void Awake()
+    {
+        instance = this;
+        //enemy = GameObject.FindGameObjectWithTag("Enemy");
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject == player)
         {
             SpawnEnemy();
         }
@@ -18,10 +28,12 @@ public class EnemySpawn : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject == player)
         {
-            TurnEnemyOff();
+            OnDisable();
             Debug.Log("Disable Enemy");
+            
+            
         }
     }
 
@@ -36,14 +48,14 @@ public class EnemySpawn : MonoBehaviour
             if (!pooledObj[randomIndex].activeInHierarchy)
             {
                 pooledObj[randomIndex].SetActive(true);
-                pooledObj[randomIndex].transform.position = transform.position;
-                pooledObj[randomIndex].transform.rotation = transform.rotation;
+                pooledObj[randomIndex].transform.position = tranform.position;
+                pooledObj[randomIndex].transform.rotation = tranform.rotation;
 
             }
         
     }
 
-    void TurnEnemyOff()
+    public void OnDisable()
     {
         enemy = GameObject.FindGameObjectWithTag("Enemy");
 

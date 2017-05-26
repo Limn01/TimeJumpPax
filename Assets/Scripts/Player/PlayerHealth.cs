@@ -13,7 +13,6 @@ public class PlayerHealth : MonoBehaviour
     public bool damaged;
     public bool isDead;
     //public AudioSource sound;
-    //public Slider healthSlider;
     public AudioSource damageSound;
 
     //GameObject player;
@@ -21,10 +20,7 @@ public class PlayerHealth : MonoBehaviour
     GameObject gameManager;
     [SerializeField]
     HealthBar healthBar;
-    CamaraShake cameraShake;
     
-    
-
     public float CurrentHealth
     {
         get
@@ -61,8 +57,6 @@ public class PlayerHealth : MonoBehaviour
         
         anim = GetComponentInChildren<Animator>();
 
-        cameraShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CamaraShake>();
-
         Initialize();
 
         CurrentHealth = MaxValue;
@@ -76,13 +70,9 @@ public class PlayerHealth : MonoBehaviour
 
         CurrentHealth -= amount;
 
-        //CamaraShake.instance.gameObject.GetComponent<Camera>();
-        //CamaraShake.instance.ShakeCamera(.3f, .3f);
+        CamaraShake.instance.ShakeCamera(3f, .3f);
 
-        cameraShake.ShakeCamera(.3f, .3f);
-        
-
-        //healthSlider.value = CurrentHealth;
+        //cameraShake.ShakeCamera(5f, .3f);
 
         damageSound.Play();
 
@@ -96,17 +86,17 @@ public class PlayerHealth : MonoBehaviour
     void Death()
     {
         isDead = true;
-        //this.gameObject.SetActive(false);  
-        LevelManager.instance.RespawnPlayer();
+        gameObject.SetActive(false);
+        LevelManager.instance.Invoke("RespawnPlayer", 1);
         FullHealth();
-        
+
+       
     }
 
     public void FullHealth()
     {
         isDead = false;
         CurrentHealth = MaxValue;
-        //healthSlider.value = CurrentHealth;
     }
 
     public void Initialize()

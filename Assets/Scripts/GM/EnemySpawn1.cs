@@ -45,7 +45,7 @@ public class EnemySpawn1 : MonoBehaviour
         }
     }
 
-    void TurnEnemyOff()
+    public void TurnEnemyOff()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy1");
 

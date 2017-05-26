@@ -15,13 +15,11 @@ public class PauseGame : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 0f;
-            
         }
 
         else
         {
             Time.timeScale = 1f;
-           
         }
 
         if (Input.GetButtonDown("Pause"))

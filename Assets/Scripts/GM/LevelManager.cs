@@ -7,6 +7,11 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
     public GameObject currentCheckPoint;
 
+    [SerializeField]
+    float resartDelay = 1f;
+    [SerializeField]
+    float restartTimer;
+
     //PlayerHealth playerHealth;
     GameObject player;
 	// Use this for initialization
@@ -23,16 +28,22 @@ public class LevelManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
-        StartCoroutine("RestartGame");
-    }
+        //StartCoroutine("RestartGame");
 
-    public IEnumerator RestartGame()
-    {
-        player.gameObject.SetActive(false);
-        yield return new WaitForSeconds(1f);
+        //player.gameObject.SetActive(false);
         player.transform.position = currentCheckPoint.transform.position;
         PlayerHealth.instance.FullHealth();
         LifeManager.instance.TakeLife();
         player.gameObject.SetActive(true);
     }
+
+    //public IEnumerator RestartGame()
+    //{
+    //    player.gameObject.SetActive(false);
+    //    yield return new WaitForSeconds(1f);
+    //    player.transform.position = currentCheckPoint.transform.position;
+    //    PlayerHealth.instance.FullHealth();
+    //    LifeManager.instance.TakeLife();
+    //    player.gameObject.SetActive(true);
+    //}
 }

@@ -15,7 +15,8 @@ public class Spikes : MonoBehaviour
     {
         if (other.gameObject == player )
         {
-            LevelManager.instance.RespawnPlayer();
+            player.SetActive(false);
+            LevelManager.instance.Invoke("RespawnPlayer", 1);
         }
     }
 }
