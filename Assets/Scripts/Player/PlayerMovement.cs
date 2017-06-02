@@ -38,12 +38,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != null)
+            Destroy(this.gameObject);
+
+        DontDestroyOnLoad(this.gameObject);
+
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
         gravityStore = rb2d.gravityScale;
-        
     }
 
     void FixedUpdate()
@@ -179,9 +186,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.tag == "FlipPlatform")
         {
             transform.parent = other.transform;
-            
         }
-
     }
 
     void OnCollisionExit2D(Collision2D other)

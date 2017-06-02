@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Linq;
+
 public class EnemySpawn1 : MonoBehaviour
 {
     public Transform[] transforms;
 
-    bool leftArea = false;
-    GameObject[] enemies;
+    List<GameObject> enemies = new List<GameObject>();
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -21,7 +22,6 @@ public class EnemySpawn1 : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            leftArea = true;
             TurnEnemyOff();
         }
     }
@@ -31,6 +31,7 @@ public class EnemySpawn1 : MonoBehaviour
         for (int i = 0; i < transforms.Length; i++)
         {
             GameObject obj = EnemySpawnPool2.current.GetPooledObject();
+            enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -45,11 +46,16 @@ public class EnemySpawn1 : MonoBehaviour
         }
     }
 
-    public void TurnEnemyOff()
+    void FilterList()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy1");
+        enemies = enemies.Where(item => item != null).ToList();
+    }
 
-        for (int i = 0; i < enemies.Length; i++)
+    void TurnEnemyOff()
+    {
+        FilterList();
+
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i] != null)
             {

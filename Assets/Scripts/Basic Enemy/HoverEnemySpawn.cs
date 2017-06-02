@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class HoverEnemySpawn : MonoBehaviour
 {
     public Transform[] transforms;
-
-    GameObject[] enemies;
+ 
+    List<GameObject> enemies = new List<GameObject>();
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -30,6 +31,7 @@ public class HoverEnemySpawn : MonoBehaviour
         for (int i = 0; i < transforms.Length; i++)
         {
             GameObject obj = HoverEnemyPool.current.GetPooledObject();
+            enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -44,11 +46,16 @@ public class HoverEnemySpawn : MonoBehaviour
         }
     }
 
+    void FilterList()
+    {
+        enemies = enemies.Where(item => item != null).ToList();
+    }
+
     void TurnEnemyOff()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Obstacle");
+        FilterList();
 
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i] != null)
             {

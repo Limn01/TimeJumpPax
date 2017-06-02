@@ -1,14 +1,15 @@
-﻿    using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class EnemySpawn : MonoBehaviour
 {
     public static EnemySpawn instance;
 
     public Transform tranform;
-
-    GameObject enemy;
+    [SerializeField]
+    List<GameObject> enemies = new List<GameObject>();
     GameObject player;
 
     void Awake()
@@ -30,7 +31,7 @@ public class EnemySpawn : MonoBehaviour
     {
         if (col.gameObject == player)
         {
-            OnDisable();
+           TurnOffEnemy();
             Debug.Log("Disable Enemy");
             
             
@@ -41,6 +42,7 @@ public class EnemySpawn : MonoBehaviour
     {
        
             GameObject obj = EnemySpawn1Pool.current.GetPooledObject();
+        enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -55,13 +57,18 @@ public class EnemySpawn : MonoBehaviour
         
     }
 
-    public void OnDisable()
+    void FilterList()
     {
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemies = enemies.Where(item => item != null).ToList();
+    }
 
-        if (enemy != null)
+    public void TurnOffEnemy()
+    {
+        FilterList();
+
+        for (int i = 0; i < enemies.Count; i++)
         {
-            enemy.SetActive(false);
+            enemies[i].SetActive(false);
         }
     }    
 }

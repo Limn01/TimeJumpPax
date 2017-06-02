@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LifeManager : MonoBehaviour
 {
@@ -15,11 +16,15 @@ public class LifeManager : MonoBehaviour
     GameObject gameOverScreen;
     [SerializeField]
     float restartDelay = 5f;
-
+    [SerializeField]
+    Transform restartPoint;
+    [SerializeField]
     float restartTimer;
 
     [SerializeField]
     GameObject player;
+    
+    
     
 
     void Awake()
@@ -27,6 +32,7 @@ public class LifeManager : MonoBehaviour
         instance = this;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        
     }
 
     void Start()
@@ -42,9 +48,21 @@ public class LifeManager : MonoBehaviour
         {
             gameOverScreen.SetActive(true);
             player.SetActive(false);
+            restartTimer += Time.deltaTime;
+
+            if (restartTimer >= restartDelay)
+            {
+                SceneManager.LoadScene("Level2");
+                //player.transform.position = restartPoint.position;
+                //player.SetActive(true);
+                //gameOverScreen.SetActive(false);
+                //lifeCounter = startingLives;
+            }
             //PlayerMovement.instance.gameObject.SetActive(false);
             
         }
+
+        
 
         theText.text = "x " + lifeCounter;
     }

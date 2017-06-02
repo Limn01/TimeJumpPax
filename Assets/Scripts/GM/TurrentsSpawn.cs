@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TurrentsSpawn : MonoBehaviour
 {
     public Transform[] transforms;
 
-    bool leftArea = false;
-    GameObject[] enemies;
+    List<GameObject> enemies = new List<GameObject>();
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -21,7 +21,7 @@ public class TurrentsSpawn : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            leftArea = true;
+            
             TurnEnemyOff();
 
         }
@@ -32,6 +32,7 @@ public class TurrentsSpawn : MonoBehaviour
         for (int i = 0; i < transforms.Length; i++)
         {
             GameObject obj = TurrentEnemyPool.current.GetPooledObject();
+            enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -46,16 +47,18 @@ public class TurrentsSpawn : MonoBehaviour
         }
     }
 
+    void FilterList()
+    {
+        enemies = enemies.Where(item => item != null).ToList();
+    }
+
     void TurnEnemyOff()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Turrent");
+        FilterList();
 
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            if (enemies[i] != null)
-            {
-                enemies[i].SetActive(false);
-            }
+            enemies[i].SetActive(false);
         }
     }
 }

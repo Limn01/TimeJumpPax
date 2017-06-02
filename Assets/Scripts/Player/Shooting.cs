@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-   
+    public static Shooting instance; 
+
     public float bulletSpeed;
     public Transform shotEnd;
     public float timeBetweenShots;
@@ -13,6 +14,11 @@ public class Shooting : MonoBehaviour
     float timer;
     public AudioSource shootSound;
     
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Update()
     {
         timer += Time.deltaTime;

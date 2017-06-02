@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spikes : MonoBehaviour
+namespace Com.LuisPedroFonseca.ProCamera2D
 {
-    GameObject player;
-
-    void Awake()
+    public class Spikes : MonoBehaviour
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
+        GameObject player;
 
-   void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject == player )
+        void Awake()
         {
-            player.SetActive(false);
-            LevelManager.instance.Invoke("RespawnPlayer", 1);
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject == player)
+            {
+                LevelManager.instance.StartCoroutine("RespawnPlayer");
+            }
         }
     }
 }
+
+

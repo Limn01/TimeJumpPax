@@ -2,90 +2,110 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingEnemies : MonoBehaviour
+
+namespace Com.LuisPedroFonseca.ProCamera2D
 {
-    public float moveSpeed;
-    public float playerRange;
-    public LayerMask playerLayer;
-    public int damage;
-    public int startingHealth = 2;
-    public int currentHealth;
-    
-
-    public bool playerInRange;
-    bool damaged;
-    bool isDead;
-
-    PlayerMovement playerMovement;
-    GameObject player;
-    PlayerHealth playerHealth;
-   
-
-    void Start()
+    public class FlyingEnemies : MonoBehaviour, IHealable
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        public float moveSpeed;
+        public float playerRange;
+        public LayerMask playerLayer;
+        public float damage;
+        [SerializeField]
+        int startingHealth = 2;
+        [SerializeField]
+        int currentHealth;
 
-        currentHealth = startingHealth;
-    }
 
-    void Update()
-    {
-        playerInRange = Physics2D.OverlapCircle(transform.position, playerRange, playerLayer);
+        public bool playerInRange;
+        bool damaged;
+        bool isDead;
 
-        if (playerInRange)
+        PlayerMovement playerMovement;
+        GameObject player;
+        PlayerHealth playerHealth;
+
+        void Awake()
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+            player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+            playerMovement = player.GetComponent<PlayerMovement>();
+
+            currentHealth = startingHealth;
         }
-        
-    }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, playerRange);
-    }
-
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject == player)
+        void Update()
         {
+            playerInRange = Physics2D.OverlapCircle(transform.position, playerRange, playerLayer);
 
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
-
-            if (player.transform.position.x < transform.position.x)
+            if (playerInRange)
             {
-                playerMovement.knockbackFromRight = true;
-            }
-            else
-            {
-                playerMovement.knockbackFromRight = false;
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
             }
 
-            if (playerHealth.CurrentHealth > 0)
+            if (isDead)
             {
-                playerHealth.TakeDamage(damage);
+                FullHealth();
+                Debug.Log("Full health");
+            }
+
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, playerRange);
+        }
+
+        void OnCollisionEnter2D(Collision2D other)
+        {
+            if (other.gameObject == player)
+            {
+
+                playerMovement.knockbackCount = playerMovement.knockbackLength;
+
+                if (player.transform.position.x < transform.position.x)
+                {
+                    playerMovement.knockbackFromRight = true;
+                }
+                else
+                {
+                    playerMovement.knockbackFromRight = false;
+                }
+
+                if (playerHealth.CurrentHealth > 0)
+                {
+                    playerHealth.TakeDamage(damage);
+                }
             }
         }
-    }
 
-    public void TakeDamage(int amount)
-    {
-        damaged = true;
-
-        currentHealth -= amount;
-
-        gameObject.GetComponentInChildren<Animator>().Play("FlyingDamage");
-
-        if (currentHealth <= 0 && !isDead)
+        public void TakeDamage(int amount)
         {
-            Death();
-        }
-    }
+            damaged = true;
 
-    void Death()
-    {
-        gameObject.SetActive(false);
+            currentHealth -= amount;
+
+            gameObject.GetComponentInChildren<Animator>().Play("FlyingDamage");
+
+            if (currentHealth <= 0 && !isDead)
+            {
+                Death();
+            }
+        }
+
+        void Death()
+        {
+            isDead = true;
+            gameObject.SetActive(false);
+        }
+
+        public void FullHealth()
+        {
+            isDead = false;
+            currentHealth = startingHealth;
+        }
     }
 }
+
+

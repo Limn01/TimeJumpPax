@@ -3,105 +3,123 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+namespace Com.LuisPedroFonseca.ProCamera2D
 {
-    public static PlayerHealth instance;
-    [SerializeField]
-    private float maxValue;
-    [SerializeField]
-    private float currentHealth;
-    public bool damaged;
-    public bool isDead;
-    //public AudioSource sound;
-    public AudioSource damageSound;
-
-    //GameObject player;
-    Animator anim;
-    GameObject gameManager;
-    [SerializeField]
-    HealthBar healthBar;
-    
-    public float CurrentHealth
+    public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     {
-        get
+        public static PlayerHealth instance;
+        [SerializeField]
+        private float maxValue;
+        [SerializeField]
+        private float currentHealth;
+        [SerializeField]
+        bool damaged = false;
+
+        public bool isDead;
+        //public AudioSource sound;
+        [SerializeField]
+        AudioSource damageSound;
+        [SerializeField]
+        HealthBar healthBar;
+
+        //GameObject player;
+        Animator anim;
+        GameObject gameManager;
+        GameObject player;
+        CamaraShake cameraShake;
+
+
+        public float CurrentHealth
         {
-            return currentHealth;
+            get
+            {
+                return currentHealth;
+            }
+
+            set
+            {
+                this.currentHealth = value;
+                healthBar.Value = currentHealth;
+            }
         }
 
-        set
+        public float MaxValue
         {
-            this.currentHealth = value;
-            healthBar.Value = currentHealth;
-        }
-    }
+            get
+            {
+                return maxValue;
+            }
 
-    public float MaxValue
-    {
-        get
+            set
+            {
+                this.maxValue = value;
+                healthBar.MaxValue = maxValue;
+            }
+        }
+
+        void OnDestroy()
         {
-            return maxValue;
+            instance = null;
         }
 
-        set
+        void Awake()
         {
-            this.maxValue = value;
-            healthBar.MaxValue = maxValue;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            //player = GameObject.FindGameObjectWithTag("Player");
+            gameManager = GameObject.FindGameObjectWithTag("_GM");
+
+            PlayerHealth health = FindObjectOfType<PlayerHealth>();
+
+            anim = GetComponentInChildren<Animator>();
+
+            cameraShake = FindObjectOfType<CamaraShake>();
+
+            Initialize();
+
+            CurrentHealth = MaxValue;
         }
-    }
 
-    void Awake()
-    {
-        instance = this;
-        //player = GameObject.FindGameObjectWithTag("Player");
-        gameManager = GameObject.FindGameObjectWithTag("_GM");
-        
-        anim = GetComponentInChildren<Animator>();
-
-        Initialize();
-
-        CurrentHealth = MaxValue;
-    }
-
-   public void TakeDamage(float amount)
-    {
-        damaged = true;
-
-        gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
-
-        CurrentHealth -= amount;
-
-        CamaraShake.instance.ShakeCamera(3f, .3f);
-
-        //cameraShake.ShakeCamera(5f, .3f);
-
-        damageSound.Play();
-
-        if (CurrentHealth <= 0 && !isDead)
+        public void TakeDamage(float amount)
         {
-            Death();
-            
+            damaged = true;
+
+            gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
+
+            CurrentHealth -= amount;
+
+            cameraShake.ShakeCamera(3f, .3f);
+
+            damageSound.Play();
+
+            if (CurrentHealth <= 0 && !isDead)
+            {
+                Death();
+            }
         }
-    }
 
-    void Death()
-    {
-        isDead = true;
-        gameObject.SetActive(false);
-        LevelManager.instance.Invoke("RespawnPlayer", 1);
-        FullHealth();
+        void Death()
+        {
+            isDead = true;
+            gameObject.SetActive(false);
+            LevelManager.instance.StartCoroutine("RespawnPlayer");
+            FullHealth();
+        }
 
-       
-    }
+        public void FullHealth()
+        {
+            isDead = false;
+            CurrentHealth = MaxValue;
+        }
 
-    public void FullHealth()
-    {
-        isDead = false;
-        CurrentHealth = MaxValue;
-    }
-
-    public void Initialize()
-    {
-        this.MaxValue = MaxValue;
-        this.CurrentHealth = currentHealth;
+        public void Initialize()
+        {
+            this.MaxValue = MaxValue;
+            this.CurrentHealth = currentHealth;
+        }
     }
 }
+
+

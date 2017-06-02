@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Linq;
+
 public class FlyingEnemySpawn : MonoBehaviour
 {
     public Transform[] transforms;
 
-    GameObject[] enemies;
+    List<GameObject> enemies = new List<GameObject>();
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -21,7 +23,7 @@ public class FlyingEnemySpawn : MonoBehaviour
         if (col.gameObject.tag == "Player")
         {
             TurnEnemyOff();
-
+            Debug.Log("TurnOff");
         }
     }
 
@@ -30,6 +32,7 @@ public class FlyingEnemySpawn : MonoBehaviour
         for (int i = 0; i < transforms.Length; i++)
         {
             GameObject obj = FlyingEnemyPool.current.GetPooledObject();
+            enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);
             int randomIndex = Random.Range(0, pooledObj.Count);
@@ -44,11 +47,16 @@ public class FlyingEnemySpawn : MonoBehaviour
         }
     }
 
+    void FilterList()
+    {
+        enemies = enemies.Where(item => item != null).ToList();
+    }
+
     void TurnEnemyOff()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy3");
+        FilterList();
 
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i] != null)
             {

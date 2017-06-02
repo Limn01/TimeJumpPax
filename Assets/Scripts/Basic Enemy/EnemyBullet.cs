@@ -2,59 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBullet : MonoBehaviour
+namespace Com.LuisPedroFonseca.ProCamera2D
 {
-    public int damage = 3;
-
-    GameObject player;
-    PlayerHealth playerHealth;
-
-    void Awake()
+    public class EnemyBullet : MonoBehaviour
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        
-        
-    }
+        public int damage = 3;
 
-    void OnEnable()
-    {
-        Invoke("Destroy", 5f);
-    }
+        GameObject player;
+        PlayerHealth playerHealth;
 
-    void Destroy()
-    {
-        gameObject.SetActive(false);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Ground")
+        void Awake()
         {
-            this.gameObject.SetActive(false);
+            player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+
+
         }
 
-        if (other.gameObject.tag == "Player")
+        void OnEnable()
         {
-            this.gameObject.SetActive(false);
-            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
+            Invoke("Destroy", 5f);
+        }
 
-            if (other.transform.position.x < transform.position.x)
+        void Destroy()
+        {
+            gameObject.SetActive(false);
+        }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.tag == "Ground")
             {
-                playerMovement.knockbackFromRight = true;
+                this.gameObject.SetActive(false);
             }
 
-            if (other.transform.position.x > transform.position.x)
+            if (other.gameObject.tag == "Player")
             {
-                playerMovement.knockbackFromRight = false;
+                this.gameObject.SetActive(false);
+                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+                playerMovement.knockbackCount = playerMovement.knockbackLength;
+
+                if (other.transform.position.x < transform.position.x)
+                {
+                    playerMovement.knockbackFromRight = true;
+                }
+
+                if (other.transform.position.x > transform.position.x)
+                {
+                    playerMovement.knockbackFromRight = false;
+                }
+                playerHealth.TakeDamage(damage);
             }
-            playerHealth.TakeDamage(damage);
+        }
+
+        void OnDisable()
+        {
+            CancelInvoke();
         }
     }
 
-    void OnDisable()
-    {
-        CancelInvoke();
-    }
 }
+

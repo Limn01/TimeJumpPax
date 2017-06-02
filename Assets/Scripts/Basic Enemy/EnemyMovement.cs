@@ -15,10 +15,12 @@ public class EnemyMovement : MonoBehaviour
     Rigidbody2D rb2d;
     bool hittingWall;
     bool notAtEdge;
+    bool stuckToPlatform = false;
 
-    void Start()
+    void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        //gameObject.transform.parent = null;
     }
 
     void FixedUpdate()
@@ -32,22 +34,31 @@ public class EnemyMovement : MonoBehaviour
             moveRight = !moveRight;
         }
 
-        //if (!notAtEdge && !hittingWall)
+        //if (hittingWall)
         //{
         //    rb2d.velocity = new Vector2(rb2d.velocity.x, -moveSpeed);
-        //    transform.rotation = Quaternion.Euler(0,0,90);
-        //    rb2d.AddForce(-Vector2.right, ForceMode2D.Force);
-        //   
+        //    //transform.rotation = Quaternion.Euler(0,0,90);
+        //    //rb2d.AddForce(Vector2.right, ForceMode2D.Force);
+        //    rb2d.gravityScale = 0;
         //
-        //    moveRight = false;
+        //   // moveRight = false;
+        //}
+
+        //if (!notAtEdge)
+        //{
+        //    //transform.localScale = new Vector3(1, 1, 1);
+        //    transform.rotation = Quaternion.Euler(0,0,90);
+        //    rb2d.velocity = new Vector2(rb2d.velocity.x, -moveSpeed);
+        //    //rb2d.gravityScale = 10;
         //}
 
         if (moveRight)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
+        { 
+            //rb2d.gravityScale = -10;
             rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-            moveRight = true;
-        }
+            transform.localScale = new Vector3(-1, 1, 1);
+           // transform.rotation = Quaternion.Euler(0,0,90);
+        } 
         else
         {
             if (!moveRight || !hittingWall && !notAtEdge)
@@ -56,10 +67,11 @@ public class EnemyMovement : MonoBehaviour
               rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
               //enemyCloneSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-              //rb2d.gravityScale = 10;
+             // rb2d.gravityScale = -10;
             }
         }
     }
+
 
     void OnDrawGizmos()
     {
@@ -69,11 +81,33 @@ public class EnemyMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.Log(other.gameObject.name);
         if (other.gameObject.tag == "MovingPlatform")
         {
-            transform.parent = other.transform;
+            if (gameObject.activeInHierarchy)
+            {
+                transform.parent = other.transform;
+            }
+            
+            
+        }
+
+        if (other.gameObject.tag == "Ground")
+        {
+            transform.parent = null;
         }
     }
-
     
+    //private void OnCollisionExit2D(Collision2D other)
+    //{
+    //    if (other.gameObject.tag == "Ground")
+    //    {
+    //        if (gameObject.activeInHierarchy)
+    //        {
+    //            transform.parent = null;
+    //        }
+    //        
+    //        
+    //    }
+    //}
 }
