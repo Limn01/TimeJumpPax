@@ -4,73 +4,111 @@ using UnityEngine;
 
 public class PatrolEnemy : MonoBehaviour
 {
-    public float moveSpeed;
-    public float waitTime;
-    public Transform pathHolder;
-    public float rayDistance;
-    public Transform player;
+    enum EnemyStates { Partolling, Attacking};
 
+    [SerializeField]
+    float moveSpeed;
+    [SerializeField]
+    float rayDistance;
+    [SerializeField]
+    Transform player;
+    [SerializeField]
+    Transform wallCheck;
+    [SerializeField]
+    Transform edgeCheck;
+    [SerializeField]
+    float wallCheckRadius;
+    [SerializeField]
+    LayerMask whatIsWall;
+    [SerializeField]
+    float timer = 0.5f;
+    [SerializeField]
+    float patrolDelay;
+
+    bool hittingWall;
+    bool notAtEdge;
+    bool movingRight;
+    bool moving = true;
+    EnemyStates enemyStates;
     RaycastHit2D hit;
     Rigidbody2D rb2d;
 
-    void Start()
+    private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-
-        Vector3[] wayPoints = new Vector3[pathHolder.childCount];
-        for (int i = 0; i < wayPoints.Length; i++)
-        {
-            wayPoints[i] = pathHolder.GetChild(i).position;
-        }
-
-        StartCoroutine(FollowPath(wayPoints));
     }
 
     void Update()
     {
-        hit = Physics2D.Raycast(transform.position, Vector2.left, rayDistance);
+        State();
+
+        hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector3.left, rayDistance);
+        Debug.DrawRay(transform.position, transform.localScale.x * Vector3.left * rayDistance); 
 
         if (hit.collider != null && hit.collider.tag == "Player")
         {
             HandleAttack();
             Debug.Log("Attacking");
-          
         }
+
+    }
+
+    private void FixedUpdate()
+    {
         
     }
 
-    IEnumerator FollowPath(Vector3[] wayPoints)
+    void Movement()
     {
-        transform.position = wayPoints[0];
+        hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
+        notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
-        int targetWaypointIndex = 1;
-        Vector3 targetWaypoint = wayPoints[targetWaypointIndex];
-
-        while (true)
+        
+        if (hittingWall || !notAtEdge)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, moveSpeed * Time.deltaTime);
-
-
-            if (transform.position.x == targetWaypoint.x)
-            {
-                transform.localScale = new Vector3(1, 1, 1);
-                targetWaypointIndex = (targetWaypointIndex + 1) % wayPoints.Length;
-                targetWaypoint = wayPoints[targetWaypointIndex];
-                yield return new WaitForSeconds(waitTime);
-            }
-
-            else if (transform.position.x <= targetWaypoint.x)
-            {
-                transform.localScale = new Vector3(-1,1,1);
-            }
-
-            if (transform.position.x >= targetWaypoint.x)
-            {
-                transform.localScale = new Vector3(1, 1, 1);
-            }
-            yield return null;
+            movingRight = !movingRight;
+            StartCoroutine(WaitTime());
         }
 
+        if (movingRight)
+        {
+            
+            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+           
+            rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
+    void State()
+    {
+        switch (enemyStates)
+        {
+            case EnemyStates.Partolling:
+                Movement();
+                
+                Debug.Log("Moving");
+                break;
+
+            case EnemyStates.Attacking:
+                HandleAttack();
+                Debug.Log("Attacking");
+                break;
+
+        }
+    }
+
+    IEnumerator WaitTime()
+    {
+        moving = false;
+        moveSpeed = 0;
+        yield return new WaitForSeconds(patrolDelay);
+        moving = true;
+        moveSpeed = 60;
     }
 
     void HandleAttack()
@@ -87,6 +125,8 @@ public class PatrolEnemy : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.localScale.x * Vector3.left * rayDistance);
+       // Gizmos.DrawLine(transform.position, transform.position + transform.localScale.x * Vector3.left * rayDistance);
+        Gizmos.DrawSphere(wallCheck.position, wallCheckRadius);
+        Gizmos.DrawSphere(edgeCheck.position, wallCheckRadius);
     }
 }
