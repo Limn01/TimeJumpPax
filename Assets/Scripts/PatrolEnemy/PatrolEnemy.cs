@@ -24,7 +24,14 @@ public class PatrolEnemy : MonoBehaviour
     float timer = 0.5f;
     [SerializeField]
     float patrolDelay;
+    [SerializeField]
+    LayerMask playerLayer;
+    [SerializeField]
+    GameObject FireParticle;
+    [SerializeField]
+    ParticleSystem fire;
 
+    float runningSpeed = 70;
     bool hittingWall;
     bool notAtEdge;
     bool movingRight;
@@ -32,23 +39,33 @@ public class PatrolEnemy : MonoBehaviour
     EnemyStates enemyStates;
     RaycastHit2D hit;
     Rigidbody2D rb2d;
+    float force = 50f;
+    Animator anim;
+    
 
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        
+
+        anim.SetBool("Patrolling", true);
     }
 
     void Update()
     {
         State();
 
-        hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector3.left, rayDistance);
+        hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector3.left, rayDistance, playerLayer);
         Debug.DrawRay(transform.position, transform.localScale.x * Vector3.left * rayDistance); 
 
         if (hit.collider != null && hit.collider.tag == "Player")
         {
-            HandleAttack();
-            Debug.Log("Attacking");
+            enemyStates = EnemyStates.Attacking;
+        }
+        else
+        {
+            enemyStates = EnemyStates.Partolling;
         }
 
     }
@@ -77,6 +94,8 @@ public class PatrolEnemy : MonoBehaviour
             rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
             transform.localScale = new Vector3(1, 1, 1);
         }
+
+       
     }
 
     void State()
@@ -85,12 +104,18 @@ public class PatrolEnemy : MonoBehaviour
         {
             case EnemyStates.Partolling:
                 Movement();
-                
+               
                 Debug.Log("Moving");
+                anim.SetBool("Attacking", false);
+                FireParticle.SetActive(false);
+                fire.Play();
                 break;
 
             case EnemyStates.Attacking:
                 HandleAttack();
+                anim.SetBool("Attacking", true);
+                FireParticle.SetActive(true);
+                
                 Debug.Log("Attacking");
                 break;
 
@@ -100,9 +125,11 @@ public class PatrolEnemy : MonoBehaviour
     IEnumerator WaitTime()
     {
         moving = false;
+        anim.SetBool("Patrolling", false);
         moveSpeed = 0;
         yield return new WaitForSeconds(patrolDelay);
         moving = true;
+        anim.SetBool("Patrolling", true);
         moveSpeed = 60;
     }
 
@@ -110,9 +137,9 @@ public class PatrolEnemy : MonoBehaviour
     {
         float dist = Vector2.Distance(transform.position, player.position);
 
-        if (dist < rayDistance)
+        if (dist > rayDistance)
         {
-            rb2d.velocity = new Vector2(hit.collider.transform.position.x - transform.position.x, 0);
+            rb2d.AddForce(Vector3.up * force + (hit.collider.transform.position - transform.position) * force);
         }
         
     }
@@ -120,7 +147,6 @@ public class PatrolEnemy : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-       // Gizmos.DrawLine(transform.position, transform.position + transform.localScale.x * Vector3.left * rayDistance);
         Gizmos.DrawSphere(wallCheck.position, wallCheckRadius);
         Gizmos.DrawSphere(edgeCheck.position, wallCheckRadius);
     }
