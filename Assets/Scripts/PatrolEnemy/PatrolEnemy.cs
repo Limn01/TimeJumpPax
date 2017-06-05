@@ -53,11 +53,6 @@ public class PatrolEnemy : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
-
     void Movement()
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
