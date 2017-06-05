@@ -12,8 +12,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         private float maxValue;
         [SerializeField]
         private float currentHealth;
-        [SerializeField]
-        bool damaged = false;
+        
+        public bool damaged = false;
 
         public bool isDead;
         //public AudioSource sound;
@@ -110,6 +110,7 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         public void FullHealth()
         {
+            damaged = false;
             isDead = false;
             CurrentHealth = MaxValue;
         }
