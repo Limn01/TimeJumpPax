@@ -1,12 +1,11 @@
 fileFormatVersion: 2
-guid: d8f142ab8ed92ae4db6fa79c2d11f24e
-timeCreated: 1489117191
+guid: 10f280b0ea101784190cca8aac04ef88
+timeCreated: 1496817300
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Clouds (1)_0
-    21300002: Clouds (1)_1
-    21300004: Clouds (1)_2
+    21300000: Sprite-0006_0
+    21300002: Sprite-0006_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -43,7 +42,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -81,39 +80,26 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Clouds (1)_0
+      name: Sprite-0006_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1824
-        width: 826
-        height: 202
+        x: 27
+        y: 535
+        width: 945
+        height: 387
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Clouds (1)_1
+      name: Sprite-0006_1
       rect:
         serializedVersion: 2
-        x: 924
-        y: 1449
-        width: 1576
-        height: 627
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: Clouds (1)_2
-      rect:
-        serializedVersion: 2
-        x: 24
-        y: 850
-        width: 1502
-        height: 476
+        x: 104
+        y: 291
+        width: 837
+        height: 169
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

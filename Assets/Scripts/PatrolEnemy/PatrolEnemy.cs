@@ -6,7 +6,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 {
     public class PatrolEnemy : MonoBehaviour
     {
-        enum EnemyStates { Partolling, Attacking };
+        enum EnemyStates { Partolling, Attacking, Stop };
+        enum IdleState { Idle};
 
         [SerializeField]
         float moveSpeed;
@@ -32,6 +33,12 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         ParticleSystem fire;
         [SerializeField]
         Collider2D attackTrigger;
+        [SerializeField]
+        float waitTime;
+        [SerializeField]
+        GameObject chargeParticle;
+        [SerializeField]
+        ParticleSystem charge;
 
         float runningSpeed = 70;
         [SerializeField]
@@ -39,7 +46,9 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         [SerializeField]
         float attackDelay;
         float attackDamage = 3f;
-        float force = 40f;
+        float force = 30f;
+        [SerializeField]
+        float timer;
 
         bool hittingWall;
         bool notAtEdge;
@@ -49,22 +58,25 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         bool playerInRange;
 
         EnemyStates enemyStates;
+        IdleState idleState;
         RaycastHit2D hit;
         Rigidbody2D rb2d;
         Animator anim;
         [SerializeField]
         GameObject player;
         PlayerHealth playerHealth;
-
+        PlayerMovement playerMovement;
 
 
     private void Awake()
         {
             player = GameObject.FindGameObjectWithTag("Player");
+            playerMovement = player.GetComponent<PlayerMovement>();
             playerHealth = player.GetComponent<PlayerHealth>();
             rb2d = GetComponent<Rigidbody2D>();
             anim = GetComponentInChildren<Animator>();
 
+           
             attackTrigger.enabled = false;
             anim.SetBool("Patrolling", true);
         }
@@ -72,30 +84,56 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         void Update()
         {
             State();
+            Idle();
 
             hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector3.left, rayDistance, playerLayer);
             Debug.DrawRay(transform.position, transform.localScale.x * Vector3.left * rayDistance);
 
             if (hit.collider != null && hit.collider.tag == "Player")
             {
-                StartCoroutine("AttackDelay");
-                //enemyStates = EnemyStates.Attacking;
-                attackTrigger.enabled = true;
-            }
+                //moveSpeed = 0;
+                // moving = false;
+                idleState = IdleState.Idle;
+                anim.SetBool("Patrolling", false);
+                chargeParticle.SetActive(true);
 
+                timer += Time.deltaTime;
+
+                if (timer >= waitTime)
+                {
+                    chargeParticle.SetActive(false);
+                    enemyStates = EnemyStates.Attacking;
+                    timer = 0;
+                    
+                }
+            }
 
             else
             {
-                enemyStates = EnemyStates.Partolling;
-                attackTrigger.enabled = false;
-               
+                if (hit.collider == null)
+                {
+                    timer = 0;
+                    moving = true;
+                    moveSpeed = 60;
+                   // State();
+                    enemyStates = EnemyStates.Partolling;
+                   // StartCoroutine(WaitTime());
+                }
+                
             }
 
-            //attackTimer += Time.deltaTime;
+            attackTimer += Time.deltaTime;
+
+            if (attackTimer >= attackDelay && playerInRange)
+            {
+                HandleAttack();
+                //moveSpeed = 60;
+            }
         }
 
         void Movement()
         {
+            moving = true;
             hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
             notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
@@ -121,24 +159,58 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         void State()
         {
+            
+
             switch (enemyStates)
             {
                 case EnemyStates.Partolling:
                     Movement();
-
+                    //moveSpeed = 60;
                     Debug.Log("Moving");
                     anim.SetBool("Attacking", false);
+                    //anim.SetBool("Patrolling", true);
                     FireParticle.SetActive(false);
-                    fire.Play();
+                   // fire.Play();
+                    chargeParticle.SetActive(false);
                     attacking = false;
+                    moving = true;
                     break;
 
                 case EnemyStates.Attacking:
-                    HandleAttack();
+                    HandleBoost();
+                    chargeParticle.SetActive(false);
+                    
                     anim.SetBool("Attacking", true);
                     FireParticle.SetActive(true);
+                   
                     attacking = true;
                     Debug.Log("Attacking");
+                    moving = false;
+                    break;
+
+                //case EnemyStates.Stop:
+                //    Debug.Log("Stop");
+                //    Stop();
+                //    moving = false;
+                //    attacking = false;
+                //    anim.SetBool("Patrolling", false);
+                //    //chargeParticle.SetActive(true);
+                //    //StopCoroutine(WaitTime());
+                //   // charge.Play();
+                //    
+                //    break;
+            }
+
+           
+        }
+
+        void Idle()
+        {
+            switch (idleState)
+            {
+                case IdleState.Idle:
+                    moving = false;
+                    moveSpeed = 0;
                     break;
             }
         }
@@ -146,38 +218,39 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         IEnumerator WaitTime()
         {
             moving = false;
-            anim.SetBool("Patrolling", false);
-            moveSpeed = 0;
+            Idle();
+
             yield return new WaitForSeconds(patrolDelay);
             moving = true;
-            anim.SetBool("Patrolling", true);
-            moveSpeed = 60;
+            enemyStates = EnemyStates.Partolling;
+           
         }
 
-        IEnumerator AttackDelay()
+        void HandleBoost()
         {
-            enemyStates = EnemyStates.Attacking;
-            yield return new WaitForSeconds(attackDelay);
-            enemyStates = EnemyStates.Attacking;
+            //float dist = Vector2.Distance(transform.position, playerTrans.position);
+            
+            //if (dist < rayDistance)
+            //{
+                Debug.Log(rb2d);
+              rb2d.AddForce(Vector3.up * force + (hit.collider.transform.position - transform.position)*force);
+            //}
         }
 
         void HandleAttack()
         {
-            //float dist = Vector2.Distance(transform.position, playerTrans.position);
+            attackTimer = 0;
 
-            //if (dist < rayDistance)
-            //{
-                rb2d.AddForce(Vector3.up * force + (hit.collider.transform.position - transform.position) * force);
-
-           // }
+            if (playerHealth.CurrentHealth > 0)
+            {
+                playerHealth.TakeDamage(attackDamage);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D other)
         {
             if (other.gameObject == player)
             {
-                //Invoke("HandleAttack", 3);
-                PlayerMovement playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
                 playerMovement.knockbackCount = playerMovement.knockbackLength;
 
                 if (player.transform.position.x < transform.position.x)
@@ -193,9 +266,30 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
                 if (playerHealth.CurrentHealth > 0)
                 {
-                    playerHealth.TakeDamage(attackDamage);
-                    
+                    HandleAttack();
                 }
+            }
+        }
+
+        void Stop()
+        {
+            moving = false;
+            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject == player)
+            {
+                playerInRange = true;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.gameObject == player)
+            {
+                playerInRange = false;
             }
         }
 
