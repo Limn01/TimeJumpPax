@@ -9,7 +9,6 @@ public class PatrolEnemyScript : MonoBehaviour, Idamageable,IHealable
     [SerializeField]
     float currentHealth;
 
-    GameObject player;
     bool damaged;
     bool isDead;
 
@@ -41,8 +40,6 @@ public class PatrolEnemyScript : MonoBehaviour, Idamageable,IHealable
 
     private void Awake()
     {
-        player = GameObject.FindObjectOfType<GameObject>();
-
         CurrentHealth = StartingHealth;
     }
 

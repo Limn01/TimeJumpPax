@@ -16,6 +16,7 @@ public class EyeShooterMovement : MonoBehaviour
         for (int i = 0; i < wayPoints.Length; i++)
         {
             wayPoints[i] = pathHolder.GetChild(i).position;
+            
         }
 
         StartCoroutine(FollowPath(wayPoints));

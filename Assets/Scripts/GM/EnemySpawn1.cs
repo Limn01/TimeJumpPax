@@ -7,6 +7,7 @@ using System.Linq;
 public class EnemySpawn1 : MonoBehaviour
 {
     public Transform[] transforms;
+    
 
     List<GameObject> enemies = new List<GameObject>();
 
@@ -43,7 +44,22 @@ public class EnemySpawn1 : MonoBehaviour
                 pooledObj[randomIndex].transform.rotation = transforms[i].rotation;
 
             }
+
+            GameObject ob = PatrolEnemyPool.current.GetPooledObject();
+            enemies.Add(ob);
+            List<GameObject> patrolObj = new List<GameObject>();
+            patrolObj.Add(ob);
+            int patrolIndex = Random.Range(0, patrolObj.Count);
+
+            if (!patrolObj[patrolIndex].activeInHierarchy)
+            {
+                patrolObj[patrolIndex].SetActive(true);
+                patrolObj[patrolIndex].transform.position = transforms[i].position;
+                patrolObj[patrolIndex].transform.rotation = transforms[i].rotation;
+            }
         }
+
+        
     }
 
     void FilterList()

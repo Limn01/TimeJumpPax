@@ -12,9 +12,9 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         public LayerMask playerLayer;
         public float damage;
         [SerializeField]
-        int startingHealth = 2;
+        float startingHealth = 2;
         [SerializeField]
-        int currentHealth;
+        float currentHealth;
 
 
         public bool playerInRange;
@@ -80,7 +80,7 @@ namespace Com.LuisPedroFonseca.ProCamera2D
             }
         }
 
-        public void TakeDamage(int amount)
+        public void TakeDamage(float amount)
         {
             damaged = true;
 
