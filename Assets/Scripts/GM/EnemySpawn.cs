@@ -55,19 +55,6 @@ public class EnemySpawn : MonoBehaviour
 
             }
 
-        GameObject ob = PatrolEnemyPool.current.GetPooledObject();
-        enemies.Add(ob);
-        List<GameObject> patrolObj = new List<GameObject>();
-        patrolObj.Add(ob);
-        int patrolIndex = Random.Range(0, patrolObj.Count);
-
-        if (!patrolObj[patrolIndex].activeInHierarchy)
-        {
-            patrolObj[patrolIndex].SetActive(true);
-            patrolObj[patrolIndex].transform.position = transform.position;
-            patrolObj[patrolIndex].transform.rotation = transform.rotation;
-        }
-
     }
 
     void FilterList()
