@@ -7,7 +7,7 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 {
     public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     {
-        public static PlayerHealth instance;
+       
         [SerializeField]
         private float maxValue;
         [SerializeField]
@@ -59,18 +59,12 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         void OnDestroy()
         {
-            instance = null;
+            
         }
 
         void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            //player = GameObject.FindGameObjectWithTag("Player");
-            gameManager = GameObject.FindGameObjectWithTag("_GM");
-
+            
             PlayerHealth health = FindObjectOfType<PlayerHealth>();
 
             anim = GetComponentInChildren<Animator>();

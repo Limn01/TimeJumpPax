@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.LuisPedroFonseca.ProCamera2D;
 
-namespace Com.LuisPedroFonseca.ProCamera2D
-{
     public class EnemyDamage : MonoBehaviour
     {
         public float damage = 1;
@@ -14,12 +13,15 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         GameObject player;
         Animator anim;
+        PlayerHealth playerHealth;
+        PlayerMovement playerMovement;
 
         void Awake()
         {
-            PlayerMovement.instance.GetComponent<PlayerMovement>();
             anim = GetComponent<Animator>();
             player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+            playerMovement = player.GetComponent<PlayerMovement>();
         }
 
         void OnCollisionEnter2D(Collision2D other)
@@ -54,25 +56,25 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         {
             timer = 0f;
 
-            PlayerMovement.instance.knockbackCount = PlayerMovement.instance.knockbackLength;
+            playerMovement.knockbackCount = playerMovement.knockbackLength;
 
             if (player.transform.position.x < transform.position.x)
             {
-                PlayerMovement.instance.knockbackFromRight = true;
+                playerMovement.knockbackFromRight = true;
             }
             else
             {
-                PlayerMovement.instance.knockbackFromRight = false;
+                playerMovement.knockbackFromRight = false;
             }
 
-            if (PlayerHealth.instance.CurrentHealth > 0)
+            if (playerHealth.CurrentHealth > 0)
             {
-                PlayerHealth.instance.TakeDamage(damage);
+                playerHealth.TakeDamage(damage);
             }
 
 
         }
     }
-}
+
 
 

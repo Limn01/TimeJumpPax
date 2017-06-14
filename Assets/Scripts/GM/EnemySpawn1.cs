@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Com.LuisPedroFonseca.ProCamera2D;
 using System.Linq;
 
 public class EnemySpawn1 : MonoBehaviour
@@ -43,19 +43,6 @@ public class EnemySpawn1 : MonoBehaviour
                 pooledObj[randomIndex].transform.position = transforms[i].position;
                 pooledObj[randomIndex].transform.rotation = transforms[i].rotation;
 
-            }
-
-            GameObject ob = PatrolEnemyPool.current.GetPooledObject();
-            enemies.Add(ob);
-            List<GameObject> patrolObj = new List<GameObject>();
-            patrolObj.Add(ob);
-            int patrolIndex = Random.Range(0, patrolObj.Count);
-
-            if (!patrolObj[patrolIndex].activeInHierarchy)
-            {
-                patrolObj[patrolIndex].SetActive(true);
-                patrolObj[patrolIndex].transform.position = transforms[i].position;
-                patrolObj[patrolIndex].transform.rotation = transforms[i].rotation;
             }
         }
 

@@ -39,7 +39,7 @@ public class PatrolEnemy : MonoBehaviour
     float attackDamage = 2;
 
     bool playerInRange;
-    bool grounded;
+    public bool grounded;
 
     Animator anim;
     GameObject player;
@@ -60,25 +60,23 @@ public class PatrolEnemy : MonoBehaviour
         waypointManager = GameObject.FindGameObjectWithTag("_GM").GetComponent<WaypointManager>();
 
         waypoints = waypointManager.waypoints;
-        
-        StartCoroutine("Patrol");
-        anim.SetBool("Patrolling", true);
+    }
+
+    private void Start()
+    {
+        //anim.SetBool("Patrolling", true);
+
+        //if (gameObject.activeInHierarchy)
+        //{
+        //    StartCoroutine("Patrol");
+        //}
     }
 
     private void FixedUpdate()
     {
         grounded = false;
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius, whatIsGround);
-
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i].gameObject != gameObject)
-            {
-                grounded = true;
-                break;
-            }
-        }
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
     }
 
     private void Update()
@@ -89,7 +87,7 @@ public class PatrolEnemy : MonoBehaviour
         {
             anim.SetBool("Attacking", true);
             Fire.SetActive(true);
-            float dist = Vector2.Distance(transform.position, player.transform.position);
+            //float dist = Vector2.Distance(transform.position, player.transform.position);
 
             rb2d.AddForce(Vector3.up * force + (hit.collider.transform.position - transform.position) * force);
         }
@@ -109,78 +107,83 @@ public class PatrolEnemy : MonoBehaviour
 
         if (!grounded)
         {
-            Invoke("Destroy", 2);
+            Invoke("Destroy", .5f);
         }
 
         if (grounded)
         {
             CancelInvoke();
         }
+
+        
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject == player)
         {
-            playerInRange = true;
+            playerMovement.knockbackCount = playerMovement.knockbackLength;
+
+            if (player.transform.position.x < transform.position.x)
+            {
+                playerMovement.knockbackFromRight = true;
+            }
+            else
+            {
+                playerMovement.knockbackFromRight = false;
+            }
         }
 
-        playerMovement.knockbackCount = playerMovement.knockbackLength;
-
-        if (player.transform.position.x < transform.position.x)
-        {
-            playerMovement.knockbackFromRight = true;
-        }
-        else
-        {
-            playerMovement.knockbackFromRight = false;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject == player)
-        {
-            playerInRange = false;
-        }
-    }
-
-    IEnumerator Patrol()
-    {
-        Debug.Log("Started");
-    
-        while (true)
-        {
-            if (transform.position.x == waypoints[currentPoint].position.x)
-            {
-                
-                currentPoint++;
-                anim.SetBool("Patrolling", false);
-                yield return new WaitForSeconds(waitTime);
-                anim.SetBool("Patrolling", true);
-            }
-    
-            if (currentPoint >= waypoints.Length)
-            {
-                currentPoint = 0;
-            }
-    
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(waypoints[currentPoint].position.x, transform.position.y), moveSpeed * Time.deltaTime);
-    
-            if (transform.position.x < waypoints[currentPoint].position.x)
-            {
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-            else if (transform.position.x > waypoints[currentPoint].position.x)
-            {
-                transform.localScale = Vector3.one;
-            }
-    
-            
-            yield return null;
-        }
         
     }
+
+    //private void OnCollisionExit2D(Collision2D other)
+    //{
+    //    if (other.gameObject == player)
+    //    {
+    //        playerInRange = false;
+    //    }
+    //}
+
+    //IEnumerator Patrol()
+    //{
+    //    //Debug.Log("Started");
+    //
+    //        while (true)
+    //        {
+    //            if (transform.position.x == waypoints[currentPoint].position.x)
+    //            {
+    //
+    //                currentPoint++;
+    //                anim.SetBool("Patrolling", false);
+    //                yield return new WaitForSeconds(waitTime);
+    //                anim.SetBool("Patrolling", true);
+    //            }
+    //
+    //            if (currentPoint >= waypoints.Length)
+    //            {
+    //                currentPoint = 0;
+    //            }
+    //
+    //            transform.position = Vector2.MoveTowards(transform.position, new Vector2(waypoints//[currentPoint].position.x, transform.position.y), moveSpeed * Time.deltaTime);
+    //
+    //            if (transform.position.x < waypoints[currentPoint].position.x)
+    //            {
+    //                transform.localScale = new Vector3(-1, 1, 1);
+    //            }
+    //            else if (transform.position.x > waypoints[currentPoint].position.x)
+    //            {
+    //                transform.localScale = Vector3.one;
+    //            }
+    //
+    //
+    //            yield return null;
+    //        }
+    //    
+    //
+    //    
+    //    
+    //}
 
     void Attack()
     {

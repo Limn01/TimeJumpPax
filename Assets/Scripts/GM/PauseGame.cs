@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Com.LuisPedroFonseca.ProCamera2D;
 
 
 public class PauseGame : MonoBehaviour
@@ -19,8 +20,9 @@ public class PauseGame : MonoBehaviour
     Transform iconTransform;
     [SerializeField] float moveSpeed;
 
-
-
+    GameObject player;
+    PlayerMovement playerMovement;
+    Shooting playerShooting;
     bool isPaused;
 
     void Awake()
@@ -35,6 +37,10 @@ public class PauseGame : MonoBehaviour
         }
         
         DontDestroyOnLoad(gameObject);
+
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerMovement = player.GetComponent<PlayerMovement>();
+        playerShooting = player.GetComponent<Shooting>();
         iconTransform.position = firstPoint.position;
     }
 
@@ -44,16 +50,16 @@ public class PauseGame : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 0f;
-            PlayerMovement.instance.enabled = false;
-            Shooting.instance.enabled = false;
+            playerMovement.enabled = false;
+            playerShooting.enabled = false;
             pauseScreen.SetActive(true);
         }
 
         else
         {
             Time.timeScale = 1f;
-            PlayerMovement.instance.enabled = true;
-            Shooting.instance.enabled = true;
+            playerMovement.enabled = true;
+            playerShooting.enabled = true;
             pauseScreen.SetActive(false);
         }
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.LuisPedroFonseca.ProCamera2D;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public static PlayerMovement instance;
+   
     public float moveSpeed;
     public float jumpforce = 400f;
     public float jumpTimer;
@@ -38,15 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != null)
-            Destroy(this.gameObject);
-
-        DontDestroyOnLoad(this.gameObject);
-
+        
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();

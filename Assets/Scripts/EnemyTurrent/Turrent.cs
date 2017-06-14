@@ -24,6 +24,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         RaycastHit2D hit;
         GameObject player;
+        PlayerHealth playerHealth;
+        PlayerMovement playerMovement;
 
         public float CurrentHealth
         {
@@ -54,6 +56,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         void Awake()
         {
             player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+            playerMovement = player.GetComponent<PlayerMovement>();
 
             Init();
 
@@ -142,20 +146,20 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
             if (other.gameObject.tag == "Player")
             {
-                PlayerMovement.instance.knockbackCount = PlayerMovement.instance.knockbackLength;
+                playerMovement.knockbackCount = playerMovement.knockbackLength;
 
                 if (player.transform.position.x < transform.position.x)
                 {
-                    PlayerMovement.instance.knockbackFromRight = true;
+                    playerMovement.knockbackFromRight = true;
                 }
                 else
                 {
-                    PlayerMovement.instance.knockbackFromRight = false;
+                    playerMovement.knockbackFromRight = false;
                 }
 
-                if (PlayerHealth.instance.CurrentHealth > 0)
+                if (playerHealth.CurrentHealth > 0)
                 {
-                    PlayerHealth.instance.TakeDamage(damage);
+                    playerHealth.TakeDamage(damage);
                 }
             }
         }
