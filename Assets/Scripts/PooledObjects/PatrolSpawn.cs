@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.LuisPedroFonseca.ProCamera2D;
+
 using System.Linq;
 
 public class PatrolSpawn : MonoBehaviour
@@ -9,10 +9,10 @@ public class PatrolSpawn : MonoBehaviour
     //public static PatrolSpawn instance;
 
     public Transform tranform;
-    [SerializeField]
+
     List<GameObject> enemies = new List<GameObject>();
     GameObject player;
-    
+
     GameObject patrol;
     PatrolEnemy patrolEnemy;
 
@@ -28,7 +28,7 @@ public class PatrolSpawn : MonoBehaviour
         if (col.gameObject == player)
         {
             SpawnEnemy();
-           // patrolEnemy.StartCoroutine("Patrol");
+            // patrolEnemy.StartCoroutine("Patrol");
         }
     }
 
@@ -58,7 +58,6 @@ public class PatrolSpawn : MonoBehaviour
             //patrolEnemy.StartCoroutine("Patrol");
 
         }
-
     }
 
     void FilterList()

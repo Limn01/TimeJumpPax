@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.LuisPedroFonseca.ProCamera2D;
 
 public class PlayerMovement : MonoBehaviour
 {
-   
+
     public float moveSpeed;
     public float jumpforce = 400f;
     public float jumpTimer;
@@ -14,7 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float knockbackCount;
     public float knockbackLength;
     public bool knockbackFromRight;
-    
+    [SerializeField]
+    float rayLength;
 
     public bool wallCheck;
     public Transform groundCheck;
@@ -32,14 +32,17 @@ public class PlayerMovement : MonoBehaviour
     public bool onLadder;
 
     public bool facingRight = true;
-    [SerializeField] bool airControl = false;
+    [SerializeField]
+    bool airControl = false;
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
     Animator anim;
+    
+    RaycastHit2D hit;
 
     void Awake()
     {
-        
+
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
@@ -57,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
             if (colliders[i].gameObject != gameObject)
             {
                 grounded = true;
+                
                 break;
             }
         }
@@ -69,6 +73,13 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
         anim.SetBool("Grounded", grounded);
 
+        hit = Physics2D.Raycast(transform.position, Vector2.down, rayLength, whatIsGround);
+
+        if (hit.collider != null)
+        {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
+        }
+        
         if (grounded)
         {
             doubleJump = false;
@@ -88,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpTimer += Time.deltaTime;
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpforce);
+            
         }
         else
         {
@@ -97,6 +109,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !doubleJump && !grounded)
         {
             doubleJump = true;
+            
+            rb2d.gravityScale = gravityStore;
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpforce * 1.2f);
             doubleJumpSound.Play();
         }
@@ -111,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         if (!onLadder)
         {
             rb2d.gravityScale = gravityStore;
-            
+
         }
     }
 
@@ -126,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
             if (h > 0 && !facingRight)
             {
                 Flip();
-                shotEnd.rotation = Quaternion.AngleAxis(0,Vector3.up);
+                shotEnd.rotation = Quaternion.AngleAxis(0, Vector3.up);
             }
 
             else if (h < 0 && facingRight)
@@ -147,17 +161,17 @@ public class PlayerMovement : MonoBehaviour
                 rb2d.velocity = new Vector2(-knockback, knockback);
                 airControl = false;
             }
-        
+
             if (!knockbackFromRight)
             {
                 rb2d.velocity = new Vector2(knockback, knockback);
                 airControl = false;
             }
-        
+
             knockbackCount -= Time.deltaTime;
-           
+
         }
-        
+
     }
 
     void Flip()
@@ -194,9 +208,11 @@ public class PlayerMovement : MonoBehaviour
             transform.parent = null;
         }
     }
-    
-   void OnDrawGizmos()
+
+    void OnDrawGizmos()
     {
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayLength);
     }
 }
+

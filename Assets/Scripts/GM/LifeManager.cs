@@ -52,7 +52,7 @@ public class LifeManager : MonoBehaviour
 
             if (restartTimer >= restartDelay)
             {
-                SceneManager.LoadScene("Level2");
+                SceneManager.LoadScene("Level1");
                 //player.transform.position = restartPoint.position;
                 //player.SetActive(true);
                 //gameOverScreen.SetActive(false);

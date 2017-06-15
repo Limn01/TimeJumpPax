@@ -2,73 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.LuisPedroFonseca.ProCamera2D
+public class HoverEnemyDamage : MonoBehaviour
 {
-    public class HoverEnemyDamage : MonoBehaviour
+    public float damage;
+    public float timeBetweenAttack;
+
+    GameObject player;
+    PlayerHealth playerHealth;
+    PlayerMovement playerMovement;
+    float timer;
+
+    bool playerInRange;
+
+    void Awake()
     {
-        public float damage;
-        public float timeBetweenAttack;
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        playerMovement = player.GetComponent<PlayerMovement>();
 
-        GameObject player;
-        PlayerHealth playerHealth;
-        PlayerMovement playerMovement;
-        float timer;
+    }
 
-        bool playerInRange;
-
-        void Awake()
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject == player)
         {
-            player = GameObject.FindGameObjectWithTag("Player");
-            playerHealth = player.GetComponent<PlayerHealth>();
-            playerMovement = player.GetComponent<PlayerMovement>();
+            playerInRange = true;
 
-        }
+            playerMovement.knockbackCount = playerMovement.knockbackLength;
 
-        void OnCollisionEnter2D(Collision2D other)
-        {
-            if (other.gameObject == player)
+            if (other.transform.position.x < transform.position.x)
             {
-                playerInRange = true;
-
-                playerMovement.knockbackCount = playerMovement.knockbackLength;
-
-                if (other.transform.position.x < transform.position.x)
-                {
-                    playerMovement.knockbackFromRight = true;
-                }
-                else
-                {
-                    playerMovement.knockbackFromRight = false;
-                }
+                playerMovement.knockbackFromRight = true;
+            }
+            else
+            {
+                playerMovement.knockbackFromRight = false;
             }
         }
+    }
 
-        void OnCollisionExit2D(Collision2D other)
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject == player)
         {
-            if (other.gameObject == player)
-            {
-                playerInRange = false;
-            }
+            playerInRange = false;
         }
+    }
 
-        void Update()
+    void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= timeBetweenAttack && playerInRange)
         {
-            timer += Time.deltaTime;
-
-            if (timer >= timeBetweenAttack && playerInRange)
-            {
-                Attack();
-            }
+            Attack();
         }
+    }
 
-        void Attack()
+    void Attack()
+    {
+        timer = 0;
+
+        if (playerHealth.CurrentHealth > 0)
         {
-            timer = 0;
-
-            if (playerHealth.CurrentHealth > 0)
-            {
-                playerHealth.TakeDamage(damage);
-            }
+            playerHealth.TakeDamage(damage);
         }
     }
 }

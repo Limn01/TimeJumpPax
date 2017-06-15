@@ -7,7 +7,6 @@ namespace Com.LuisPedroFonseca.ProCamera2D
     public class TurnOffBullets : MonoBehaviour
     {
         public float damage = 1;
-
         
         void OnEnable()
         {
@@ -29,10 +28,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
             if (other.gameObject.tag == "Enemy")
             {
                 this.gameObject.SetActive(false);
-                PatrolEnemyScript patrolHealth = other.gameObject.GetComponent<PatrolEnemyScript>();
-                patrolHealth.TakeDamage(damage);
-
-               
+                EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
+                enemyHealth.TakeDamage(damage);
             }
 
             if (other.gameObject.tag == "Enemy1")
@@ -73,5 +70,8 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         }
     }
 }
+
+    
+
 
 

@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Com.LuisPedroFonseca.ProCamera2D;
-using UnityEngine;
 
+using UnityEngine;
 
 public class PatrolEnemy : MonoBehaviour
 {
-  
+
     public Transform[] waypoints;
     [SerializeField]
     float moveSpeed;
@@ -28,7 +27,7 @@ public class PatrolEnemy : MonoBehaviour
     Transform groundCheck;
     [SerializeField]
     LayerMask whatIsGround;
-    
+
 
     const float groundCheckRadius = .2f;
 
@@ -62,16 +61,6 @@ public class PatrolEnemy : MonoBehaviour
         waypoints = waypointManager.waypoints;
     }
 
-    private void Start()
-    {
-        //anim.SetBool("Patrolling", true);
-
-        //if (gameObject.activeInHierarchy)
-        //{
-        //    StartCoroutine("Patrol");
-        //}
-    }
-
     private void FixedUpdate()
     {
         grounded = false;
@@ -81,14 +70,13 @@ public class PatrolEnemy : MonoBehaviour
 
     private void Update()
     {
-        hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector2.left,rayLength, playerLayer);
+        hit = Physics2D.Raycast(transform.position, transform.localScale.x * Vector2.left, rayLength, playerLayer);
 
         if (hit.collider != null && hit.collider.tag == "Player")
         {
             anim.SetBool("Attacking", true);
             Fire.SetActive(true);
-            //float dist = Vector2.Distance(transform.position, player.transform.position);
-
+         
             rb2d.AddForce(Vector3.up * force + (hit.collider.transform.position - transform.position) * force);
         }
 
@@ -114,8 +102,6 @@ public class PatrolEnemy : MonoBehaviour
         {
             CancelInvoke();
         }
-
-        
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -133,8 +119,6 @@ public class PatrolEnemy : MonoBehaviour
                 playerMovement.knockbackFromRight = false;
             }
         }
-
-        
     }
 
     //private void OnCollisionExit2D(Collision2D other)
@@ -193,8 +177,8 @@ public class PatrolEnemy : MonoBehaviour
         {
             playerHealth.TakeDamage(attackDamage);
         }
-        
-        
+
+
     }
 
     private void Destroy()
@@ -202,7 +186,7 @@ public class PatrolEnemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    
+
     private void OnDisable()
     {
         CancelInvoke();

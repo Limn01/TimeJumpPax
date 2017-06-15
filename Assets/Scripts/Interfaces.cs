@@ -12,9 +12,4 @@ public interface IHealable
     void FullHealth();
 }
 
-public interface IEnemyState
-{
-    void Execute();
-    void Enter(PatrolEnemy enemy);
-    void Exit();
-}
+
