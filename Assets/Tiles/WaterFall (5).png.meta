@@ -1,14 +1,12 @@
 fileFormatVersion: 2
-guid: ef5829cf5e908ae4599276cff163b5da
-timeCreated: 1493350894
+guid: c9de45600ecf68040a7b60026d25a773
+timeCreated: 1497600184
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: WaterFall (2)_0
-    21300002: WaterFall (2)_1
-    21300004: WaterFall (2)_2
-    21300006: WaterFall (2)_3
-    21300008: WaterFall (2)_4
+    21300000: WaterFall (5)_0
+    21300002: WaterFall (5)_1
+    21300004: WaterFall (5)_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -83,65 +81,39 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WaterFall (2)_0
+      name: WaterFall (5)_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
-        width: 32
-        height: 32
+        y: 30
+        width: 30
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: WaterFall (2)_1
+      name: WaterFall (5)_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
+        x: 30
+        y: 30
+        width: 30
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: WaterFall (2)_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: WaterFall (2)_3
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: WaterFall (2)_4
+      name: WaterFall (5)_2
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 30
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

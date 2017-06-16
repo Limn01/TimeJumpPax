@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
     public IEnumerator RespawnPlayer()
     {
         player.gameObject.SetActive(false);
-        //anim.SetTrigger("Death");
+        //anim.SetTrigger("Gay");
         transition.TransitionExit();
 
         yield return new WaitForSeconds(3f);
@@ -72,7 +72,7 @@ public class LevelManager : MonoBehaviour
         LifeManager.instance.TakeLife();
         playerHealth.FullHealth();
 
-        //anim.SetTrigger("Enter");
+        //anim.SetTrigger("Gay");
         //camera.enabled = true;
         //camera.Reset();
     }
