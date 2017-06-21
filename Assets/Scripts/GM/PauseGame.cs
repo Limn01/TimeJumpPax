@@ -23,7 +23,9 @@ public class PauseGame : MonoBehaviour
     GameObject player;
     PlayerMovement playerMovement;
     Shooting playerShooting;
+    float timeScaleStore;
     bool isPaused;
+    TimeSlow timeSlow;
 
     void Awake()
     {
@@ -42,6 +44,9 @@ public class PauseGame : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         playerShooting = player.GetComponent<Shooting>();
         iconTransform.position = firstPoint.position;
+        timeSlow = player.GetComponent<TimeSlow>();
+
+        timeScaleStore = Time.timeScale;
     }
 
 	// Update is called once per frame
@@ -55,14 +60,14 @@ public class PauseGame : MonoBehaviour
             pauseScreen.SetActive(true);
         }
 
-        else
+        else if (!isPaused && !timeSlow.isSlow)
         {
-            Time.timeScale = 1f;
+            Time.timeScale = timeScaleStore;
             playerMovement.enabled = true;
             playerShooting.enabled = true;
             pauseScreen.SetActive(false);
         }
-
+       
         if (Input.GetButtonDown("Pause") && !isPaused)
         {
             isPaused = !isPaused;

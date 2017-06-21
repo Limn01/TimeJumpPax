@@ -8,19 +8,20 @@ public class BlinkMechanic : MonoBehaviour
     [SerializeField]
     float blinkTime = 1f;
     [SerializeField]
-    ParticleSystem blinkPartick
+    ParticleSystem blinkPartick;
 
     float blinkTimer;
     bool facingRight;
     bool canBlink = true;
-    
-
+    float blinkSpeed;
+   
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L) && canBlink)
+        if (Input.GetButtonDown("Blink") && canBlink)
         {
             canBlink = false;
             Blink();
+            blinkPartick.Play();
         }
         
         if (!canBlink)
@@ -48,7 +49,10 @@ public class BlinkMechanic : MonoBehaviour
     {
         Vector3 blink;
         if (facingRight)
-            transform.position = Vector2.MoveTowards(transform.position, blinkDistance, 1f);
+        {
+            blink = new Vector3(blinkDistance, 0, 0);
+        }
+            
         else
             blink = new Vector3(-blinkDistance, 0, 0);
 
