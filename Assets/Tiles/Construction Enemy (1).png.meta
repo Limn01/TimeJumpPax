@@ -1,16 +1,20 @@
 fileFormatVersion: 2
-guid: b3efc1cbfa11f1b4a993f0207a8725f2
-timeCreated: 1494479666
+guid: 7940e949a0e8595479aac34767ff3bd2
+timeCreated: 1498190109
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: FlyingEnemy (2)_0
-    21300002: FlyingEnemy (2)_1
-    21300004: FlyingEnemy (2)_2
-    21300006: FlyingEnemy (2)_3
-    21300008: FlyingEnemy (2)_4
-    21300010: FlyingEnemy (2)_5
-    21300012: FlyingEnemy (2)_6
+    21300000: Construction Enemy (1)_0
+    21300002: Construction Enemy (1)_1
+    21300004: Construction Enemy (1)_2
+    21300006: Construction Enemy (1)_3
+    21300008: Construction Enemy (1)_4
+    21300010: Construction Enemy (1)_5
+    21300012: Construction Enemy (1)_6
+    21300014: Construction Enemy (1)_7
+    21300016: Construction Enemy (1)_8
+    21300018: Construction Enemy (1)_9
+    21300020: Construction Enemy (1)_10
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -85,91 +89,143 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FlyingEnemy (2)_0
+      name: Construction Enemy (1)_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
-        width: 32
-        height: 32
+        y: 114
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_1
+      name: Construction Enemy (1)_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
+        x: 38
+        y: 114
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_2
+      name: Construction Enemy (1)_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
+        x: 76
+        y: 114
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_3
+      name: Construction Enemy (1)_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
-        width: 32
-        height: 32
+        y: 76
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_4
+      name: Construction Enemy (1)_4
       rect:
         serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
+        x: 38
+        y: 76
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_5
+      name: Construction Enemy (1)_5
       rect:
         serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
+        x: 76
+        y: 76
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FlyingEnemy (2)_6
+      name: Construction Enemy (1)_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 38
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Construction Enemy (1)_7
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 38
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Construction Enemy (1)_8
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 38
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Construction Enemy (1)_9
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Construction Enemy (1)_10
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
