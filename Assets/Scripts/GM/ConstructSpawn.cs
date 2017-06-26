@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class EyeEnemySpawn : MonoBehaviour
+public class ConstructSpawn : MonoBehaviour
 {
     public Transform[] transforms;
 
@@ -31,7 +31,7 @@ public class EyeEnemySpawn : MonoBehaviour
     {
         for (int i = 0; i < transforms.Length; i++)
         {
-            GameObject obj = EyeEnemyPool.current.GetPooledObject();
+            GameObject obj = ConstructPool.current.GetPooledObject();
             enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);

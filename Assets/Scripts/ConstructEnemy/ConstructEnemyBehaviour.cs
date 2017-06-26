@@ -4,8 +4,6 @@ using UnityEngine;
 public class ConstructEnemyBehaviour : MonoBehaviour
 {
     [SerializeField]
-    Transform[] waypoints;
-    [SerializeField]
     float range;
     [SerializeField]
     LayerMask playerLayer;
@@ -13,67 +11,79 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     float moveSpeed;
     [SerializeField]
     float waitTime;
+    [SerializeField]
+    Transform pathHolder;
+    [SerializeField]
+    Transform point;
 
-    int currentPoint;
     bool playerInRange;
-    PlayerMovement playerMovement;
-    GameObject player;
+    bool coroutineStarted = false;
+    
     Animator anim;
-
-
+    Vector3[] wayPoints;
+    
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
         anim = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
         anim.SetBool("IsAwake", false);
+
+        wayPoints = new Vector3[pathHolder.childCount];
+        for (int i = 0; i < wayPoints.Length; i++)
+        {
+            wayPoints[i] = pathHolder.GetChild(i).position;
+        }
     }
 
     private void Update()
     {
         playerInRange = Physics2D.OverlapCircle(transform.position, range, playerLayer);
 
-        if (playerInRange)
+        if (playerInRange && !coroutineStarted)
         {
-            StartCoroutine(MoveBetweenPoints());
+            anim.SetBool("IsAwake", true);
+            StartCoroutine(FollowPath(wayPoints));
         }
 
-        //else if (!playerInRange)
-        //{
-        //    transform.position
-        //}
+        else if (coroutineStarted && !playerInRange)
+        {
+            anim.SetBool("IsAwake", false);
+            coroutineStarted = false;
+
+            transform.position = Vector3.Lerp(transform.position, point.position, moveSpeed * Time.deltaTime);
+        }
     }
 
-    IEnumerator MoveBetweenPoints()
+    IEnumerator FollowPath(Vector3[] wayPoints)
     {
-        while (true)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2(waypoints[currentPoint].position.x, transform.position.y), moveSpeed * Time.deltaTime);
+        coroutineStarted = true;
 
-            if (transform.position.x == waypoints[currentPoint].position.x)
+        transform.position = wayPoints[0];
+
+        int targetWaypointIndex = 1;
+        Vector3 targetWaypoint = wayPoints[targetWaypointIndex];
+
+        while (playerInRange)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, moveSpeed * Time.deltaTime);
+
+            if (transform.position == targetWaypoint)
             {
-                currentPoint++;
-                anim.SetBool("IsAwake", true);
+                targetWaypointIndex = (targetWaypointIndex + 1) % wayPoints.Length;
+                targetWaypoint = wayPoints[targetWaypointIndex];
                 yield return new WaitForSeconds(waitTime);
             }
-
-            if (currentPoint >= waypoints.Length)
-            {
-                currentPoint = 0;
-            }
-
-            
 
             yield return null;
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawSphere(transform.position, range);
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawSphere(transform.position, range);
+    }
 }
