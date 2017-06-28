@@ -19,9 +19,13 @@ public class HoverEnemyMovement : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
+    }
+
+    private void Update()
+    {
 
         if (hittingWall)
         {

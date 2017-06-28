@@ -25,7 +25,7 @@ public class PauseGame : MonoBehaviour
     Shooting playerShooting;
     float timeScaleStore;
     bool isPaused;
-    TimeSlow timeSlow;
+    
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class PauseGame : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         playerShooting = player.GetComponent<Shooting>();
         iconTransform.position = firstPoint.position;
-        timeSlow = player.GetComponent<TimeSlow>();
+        
 
         timeScaleStore = Time.timeScale;
     }
@@ -60,7 +60,7 @@ public class PauseGame : MonoBehaviour
             pauseScreen.SetActive(true);
         }
 
-        else if (!isPaused && !timeSlow.isSlow)
+        else if (!isPaused)
         {
             Time.timeScale = timeScaleStore;
             playerMovement.enabled = true;

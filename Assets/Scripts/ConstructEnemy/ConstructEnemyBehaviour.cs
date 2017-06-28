@@ -38,9 +38,14 @@ public class ConstructEnemyBehaviour : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         playerInRange = Physics2D.OverlapCircle(transform.position, range, playerLayer);
+    }
+
+    private void Update()
+    {
+        
 
         if (playerInRange && !coroutineStarted)
         {

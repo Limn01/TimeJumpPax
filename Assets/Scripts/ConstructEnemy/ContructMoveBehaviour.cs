@@ -5,36 +5,29 @@ using UnityEngine;
 public class ContructMoveBehaviour : MonoBehaviour
 {
     [SerializeField]
-    float range;
-    [SerializeField]
-    LayerMask playerLayer;
-    [SerializeField]
     float moveSpeed;
-    [SerializeField]
-    Vector2 targetStoredPosition;
-
-    public Transform target;
+    
+    Vector3 targetStoredPosition;
+    Transform target;
     GameObject player;
     bool playerInRange;
     bool attack;
+    float distance;
 
     private void Awake()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
+        target = player.GetComponent<Transform>();
     }
 
     private void Update()
     {
-        playerInRange = Physics2D.OverlapCircle(transform.position, range, playerLayer);
-
-        
+        distance = Vector3.Distance(transform.position, target.position);
 
         if (!attack)
         {
-            if (playerInRange)
+            if (distance > 1)
             {
-                
-
                 transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
 
                 targetStoredPosition = target.transform.position;
@@ -52,11 +45,15 @@ public class ContructMoveBehaviour : MonoBehaviour
                 attack = false;
             }
         }
+
+        EnemyTurn();
     }
 
-    private void OnDrawGizmos()
+    void EnemyTurn()
     {
-        Gizmos.color = new Color(0, 0, 1, 0.5f);
-        Gizmos.DrawSphere(transform.position, range);
+        Vector3 vectorToTarget = transform.position - target.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * moveSpeed);
     }
 }

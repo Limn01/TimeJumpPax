@@ -137,12 +137,6 @@ public class PlayerMovement : MonoBehaviour
             rb2d.gravityScale = gravityStore;
 
         }
-
-        if (timeSlow.isSlow && inAir)
-        {
-            rb2d.gravityScale = 10f;
-        }
-        
        
     }
 

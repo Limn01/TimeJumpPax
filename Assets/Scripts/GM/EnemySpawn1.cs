@@ -31,7 +31,7 @@ public class EnemySpawn1 : MonoBehaviour
     {
         for (int i = 0; i < transforms.Length; i++)
         {
-            GameObject obj = EnemySpawnPool2.current.GetPooledObject();
+            GameObject obj = EnemySpawn1Pool.current.GetPooledObject();
             enemies.Add(obj);
             List<GameObject> pooledObj = new List<GameObject>();
             pooledObj.Add(obj);

@@ -34,10 +34,14 @@ namespace Com.LuisPedroFonseca.ProCamera2D
             currentHealth = startingHealth;
         }
 
-        void Update()
+        private void FixedUpdate()
         {
             playerInRange = Physics2D.OverlapCircle(transform.position, playerRange, playerLayer);
+        }
 
+        void Update()
+        {
+            
             if (playerInRange)
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);

@@ -5,8 +5,7 @@ using System.Linq;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public static EnemySpawn instance;
-
+    
     public Transform tranform;
     [SerializeField]
     List<GameObject> enemies = new List<GameObject>();
@@ -14,7 +13,7 @@ public class EnemySpawn : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        
         //enemy = GameObject.FindGameObjectWithTag("Enemy");
         player = GameObject.FindGameObjectWithTag("Player");
     }

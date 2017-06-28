@@ -30,6 +30,11 @@ public class EnemyMovement : MonoBehaviour
 
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
+       
+    }
+
+    private void Update()
+    {
         Movement();
     }
 
