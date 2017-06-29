@@ -15,10 +15,10 @@ public class EnemyBullet : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<PlayerMovement>();
-
+        
     }
 
-    void OnEnable()
+   void OnEnable()
     {
         Invoke("Destroy", 5f);
     }

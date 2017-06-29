@@ -22,10 +22,6 @@ public class HoverEnemyMovement : MonoBehaviour
     private void FixedUpdate()
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
-    }
-
-    private void Update()
-    {
 
         if (hittingWall)
         {
@@ -42,5 +38,11 @@ public class HoverEnemyMovement : MonoBehaviour
             transform.localScale = new Vector2(1, 1);
             rb2D.velocity = new Vector2(-moveSpeed, rb2D.velocity.y);
         }
+    }
+
+    private void Update()
+    {
+
+        
     }
 }

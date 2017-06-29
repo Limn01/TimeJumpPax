@@ -30,7 +30,6 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded;
     bool canJump;
     bool doubleJump;
-    bool inAir;
     public bool onLadder;
 
     public bool facingRight = true;
@@ -39,11 +38,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
     Animator anim;
-    
-    RaycastHit2D hit;
-    TimeSlow timeSlow;
-    
-
+ 
     void Awake()
     {
 
@@ -51,49 +46,27 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
         gravityStore = rb2d.gravityScale;
-        timeSlow = GetComponent<TimeSlow>();
+       
     }
 
     void FixedUpdate()
     {
-        grounded = false;
-        inAir = true;
+        //grounded = false;
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius, whatIsGround);
-
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i].gameObject != gameObject)
-            {
-                grounded = true;
-                inAir = false;
-                
-                break;
-            }
-        }
-
-        
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        Move();
     }
 
     void Update()
     {
-        Move();
-
+        
         anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
         anim.SetBool("Grounded", grounded);
-
-        hit = Physics2D.Raycast(transform.position, Vector2.down, rayLength, whatIsGround);
-
-        if (hit.collider != null)
-        {
-            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
-        }
         
         if (grounded)
         {
             doubleJump = false;
             airControl = true;
-            rb2d.gravityScale = gravityStore;
         }
 
         if (grounded && Input.GetButtonDown("Jump"))
@@ -144,13 +117,9 @@ public class PlayerMovement : MonoBehaviour
     {
         float h = Input.GetAxisRaw("Horizontal");
 
-        
-
         if (grounded || airControl)
         {
-            rb2d.velocity = new Vector2(h * moveSpeed * 1 / Time.timeScale, rb2d.velocity.y);
-
-            //transform.localPosition += new Vector3(h, 0, 0) * Time.deltaTime * moveSpeed * 0.5f / Time.timeScale;
+            rb2d.velocity = new Vector2(h * moveSpeed, rb2d.velocity.y);
 
             if (h > 0 && !facingRight)
             {

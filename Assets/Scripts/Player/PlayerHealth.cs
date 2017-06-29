@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Com.LuisPedroFonseca.ProCamera2D;
 
 public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 {
@@ -24,6 +25,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     Animator anim;
     GameObject gameManager;
     GameObject player;
+    [SerializeField]
     CamaraShake cameraShake;
 
 
@@ -66,8 +68,6 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
         PlayerHealth health = FindObjectOfType<PlayerHealth>();
 
         anim = GetComponentInChildren<Animator>();
-
-        cameraShake = FindObjectOfType<CamaraShake>();
 
         Initialize();
 

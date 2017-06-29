@@ -4,10 +4,6 @@ using UnityEngine;
 public class ConstructEnemyBehaviour : MonoBehaviour
 {
     [SerializeField]
-    float range;
-    [SerializeField]
-    LayerMask playerLayer;
-    [SerializeField]
     float moveSpeed;
     [SerializeField]
     float waitTime;
@@ -15,21 +11,29 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     Transform pathHolder;
     [SerializeField]
     Transform point;
-
-    bool playerInRange;
-    bool coroutineStarted = false;
+    [SerializeField]
+    float returnSpeed;
     
+    bool coroutineStarted = false;
+
+    GameObject player;
+    Transform target;
+    float distance;
     Animator anim;
     Vector3[] wayPoints;
+    Coroutine coroutine;
     
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        target = player.GetComponent<Transform>();
     }
 
     private void Start()
     {
         anim.SetBool("IsAwake", false);
+       
 
         wayPoints = new Vector3[pathHolder.childCount];
         for (int i = 0; i < wayPoints.Length; i++)
@@ -38,27 +42,24 @@ public class ConstructEnemyBehaviour : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        playerInRange = Physics2D.OverlapCircle(transform.position, range, playerLayer);
-    }
-
     private void Update()
     {
-        
+        distance = Vector2.Distance(target.transform.position, transform.position);
 
-        if (playerInRange && !coroutineStarted)
+        if (distance < 200  && !coroutineStarted)
         {
+            
             anim.SetBool("IsAwake", true);
             StartCoroutine(FollowPath(wayPoints));
+            Debug.Log("StartedCor");
         }
 
-        else if (coroutineStarted && !playerInRange)
+        else if (distance > 200 && coroutineStarted)
         {
             anim.SetBool("IsAwake", false);
             coroutineStarted = false;
-
-            transform.position = Vector3.Lerp(transform.position, point.position, moveSpeed * Time.deltaTime);
+            Debug.Log("StoppedCor");
+            StopAllCoroutines();
         }
     }
 
@@ -71,7 +72,7 @@ public class ConstructEnemyBehaviour : MonoBehaviour
         int targetWaypointIndex = 1;
         Vector3 targetWaypoint = wayPoints[targetWaypointIndex];
 
-        while (playerInRange)
+        while (true)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, moveSpeed * Time.deltaTime);
 
@@ -84,11 +85,5 @@ public class ConstructEnemyBehaviour : MonoBehaviour
 
             yield return null;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawSphere(transform.position, range);
     }
 }

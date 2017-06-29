@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class CamaraShake : MonoBehaviour
 {
-    public static CamaraShake instance;
-
     [SerializeField]
     float shakeTimer;
     [SerializeField]
     float shakeAmount;
 	// Update is called once per frame
-
-    void Awake()
-    {
-        instance = this;
-    }
 
 	void Update ()
     {

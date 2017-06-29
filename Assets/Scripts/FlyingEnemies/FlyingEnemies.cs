@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace Com.LuisPedroFonseca.ProCamera2D
-{
-    public class FlyingEnemies : MonoBehaviour, IHealable
+public class FlyingEnemies : MonoBehaviour, IHealable
     {
         public float moveSpeed;
         public float playerRange;
@@ -16,33 +13,30 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         [SerializeField]
         float currentHealth;
 
-
-        public bool playerInRange;
         bool damaged;
         bool isDead;
 
         PlayerMovement playerMovement;
+        Transform target;
         GameObject player;
         PlayerHealth playerHealth;
+        float distance;
 
         void Awake()
         {
             player = GameObject.FindGameObjectWithTag("Player");
             playerHealth = player.GetComponent<PlayerHealth>();
             playerMovement = player.GetComponent<PlayerMovement>();
-
+            target = player.GetComponent<Transform>();
             currentHealth = startingHealth;
-        }
-
-        private void FixedUpdate()
-        {
-            playerInRange = Physics2D.OverlapCircle(transform.position, playerRange, playerLayer);
         }
 
         void Update()
         {
+            distance = (transform.position - target.position).sqrMagnitude;
+           // distance = Vector3.Distance(transform.position, target.transform.position);
             
-            if (playerInRange)
+            if (distance < 90000)
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
             }
@@ -53,12 +47,6 @@ namespace Com.LuisPedroFonseca.ProCamera2D
                 Debug.Log("Full health");
             }
 
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = new Color(1,0,0,0.5f);
-            Gizmos.DrawSphere(transform.position, playerRange);
         }
 
         void OnCollisionEnter2D(Collision2D other)
@@ -110,6 +98,6 @@ namespace Com.LuisPedroFonseca.ProCamera2D
             currentHealth = startingHealth;
         }
     }
-}
+
 
 

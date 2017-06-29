@@ -15,6 +15,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
         Animator anim;
         PlayerHealth playerHealth;
         PlayerMovement playerMovement;
+        
 
         void Awake()
         {

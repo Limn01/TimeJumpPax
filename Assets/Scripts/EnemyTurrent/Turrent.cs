@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.LuisPedroFonseca.ProCamera2D
-{
-
     public class Turrent : MonoBehaviour,Idamageable,IHealable
     {
         public float playerInRange;
@@ -170,5 +167,5 @@ namespace Com.LuisPedroFonseca.ProCamera2D
             this.CurrentHealth = CurrentHealth;
         }
     }
-}
+
 

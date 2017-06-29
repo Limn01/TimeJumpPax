@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Com.LuisPedroFonseca.ProCamera2D;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
@@ -24,19 +23,19 @@ public class EnemyMovement : MonoBehaviour
         //gameObject.transform.parent = null;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
 
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
-       
-    }
-
-    private void Update()
-    {
         Movement();
     }
+
+    //private void Update()
+    //{
+    //    
+    //}
 
     void OnDrawGizmos()
     {
