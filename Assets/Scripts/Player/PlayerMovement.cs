@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool wallCheck;
     public Transform groundCheck;
-    public const float groundCheckRadius = .2f;
+    public const float groundCheckRadius = .02f;
     public Transform shotEnd;
     public float climbSpeed;
     public float climbVelocity;
@@ -31,6 +31,16 @@ public class PlayerMovement : MonoBehaviour
     bool canJump;
     bool doubleJump;
     public bool onLadder;
+    float jumpVelocity;
+
+    float gravity;
+    public float maxJumpHeight = 6;
+    public float minJumpHeight = 1;
+    public float timeToJumpApex = .4f;
+    float accerlerationTimeAirborne = .2f;
+    float accelerationTimeGrounded = .1f;
+    float maxJumpVelocity;
+    float minJumpVelocity;
 
     public bool facingRight = true;
     [SerializeField]
@@ -38,10 +48,11 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
     Animator anim;
+
+    
  
     void Awake()
     {
-
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
@@ -49,17 +60,23 @@ public class PlayerMovement : MonoBehaviour
        
     }
 
+    private void Start()
+    {
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+    }
+
     void FixedUpdate()
     {
-        //grounded = false;
-
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
         Move();
     }
 
     void Update()
     {
-        
+        rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
+
         anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
         anim.SetBool("Grounded", grounded);
         
@@ -73,8 +90,8 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpTimer = 0;
             canJump = true;
-            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpforce * 3);
-            
+            rb2d.velocity = new Vector2(rb2d.velocity.x, maxJumpVelocity);
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             jumpSound.Play();
             
         }
@@ -196,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayLength);
+       // Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayLength);
     }
 }
 
