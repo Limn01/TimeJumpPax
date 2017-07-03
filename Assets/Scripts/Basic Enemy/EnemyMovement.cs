@@ -16,11 +16,27 @@ public class EnemyMovement : MonoBehaviour
     bool hittingWall;
     bool notAtEdge;
     bool stuckToPlatform = false;
+    float gravity;
+
+    float maxJumpHeight = 6;
+    float minJumpHeight = 1;
+    float timeToJumpApex = .4f;
+    float accerlerationTimeAirborne = .2f;
+    float accelerationTimeGrounded = .1f;
+    float maxJumpVelocity;
+    float minJumpVelocity;
 
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
         //gameObject.transform.parent = null;
+    }
+
+    private void Start()
+    {
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
     }
 
     private void FixedUpdate()
@@ -29,13 +45,10 @@ public class EnemyMovement : MonoBehaviour
 
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
+        rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
+
         Movement();
     }
-
-    //private void Update()
-    //{
-    //    
-    //}
 
     void OnDrawGizmos()
     {

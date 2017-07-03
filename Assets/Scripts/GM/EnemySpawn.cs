@@ -13,7 +13,6 @@ public class EnemySpawn : MonoBehaviour
 
     void Awake()
     {
-        
         //enemy = GameObject.FindGameObjectWithTag("Enemy");
         player = GameObject.FindGameObjectWithTag("Player");
     }

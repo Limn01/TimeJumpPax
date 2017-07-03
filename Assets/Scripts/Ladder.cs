@@ -7,7 +7,7 @@ public class Ladder : MonoBehaviour
     GameObject player;
     PlayerMovement playerMovement;
 
-    void Start()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
