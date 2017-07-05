@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class PatrolEnemy : MonoBehaviour
 {
-
-    public Transform[] waypoints;
-    [SerializeField]
     float moveSpeed;
     [SerializeField]
     float waitTime;
@@ -47,7 +44,14 @@ public class PatrolEnemy : MonoBehaviour
     PlayerMovement playerMovement;
     RaycastHit2D hit;
     Rigidbody2D rb2d;
-    WaypointManager waypointManager;
+    float gravity;
+    float maxJumpHeight = 6;
+    float minJumpHeight = 1;
+    float timeToJumpApex = .4f;
+    float accerlerationTimeAirborne = .2f;
+    float accelerationTimeGrounded = .1f;
+    float maxJumpVelocity;
+    float minJumpVelocity;
 
     private void Awake()
     {
@@ -56,9 +60,13 @@ public class PatrolEnemy : MonoBehaviour
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<PlayerMovement>();
         rb2d = GetComponent<Rigidbody2D>();
-        waypointManager = GameObject.FindGameObjectWithTag("_GM").GetComponent<WaypointManager>();
+    }
 
-        waypoints = waypointManager.waypoints;
+    private void Start()
+    {
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
     }
 
     private void FixedUpdate()
@@ -66,6 +74,8 @@ public class PatrolEnemy : MonoBehaviour
         grounded = false;
 
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+
+        rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
     }
 
     private void Update()
@@ -177,8 +187,6 @@ public class PatrolEnemy : MonoBehaviour
         {
             playerHealth.TakeDamage(attackDamage);
         }
-
-
     }
 
     private void Destroy()

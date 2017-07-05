@@ -22,7 +22,7 @@ public class ContructMoveBehaviour : MonoBehaviour
 
     private void Update()
     {
-        distance = Vector3.Distance(transform.position, target.position);
+        distance = (transform.position - target.position).sqrMagnitude;
 
         if (!attack)
         {
@@ -51,8 +51,8 @@ public class ContructMoveBehaviour : MonoBehaviour
 
     void EnemyTurn()
     {
-        Vector3 vectorToTarget = transform.position - target.position;
-        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Vector3 vectorToTarget = target.position - transform.position;
+        float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) + 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * moveSpeed);
     }

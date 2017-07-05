@@ -34,7 +34,6 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     {
         anim.SetBool("IsAwake", false);
        
-
         wayPoints = new Vector3[pathHolder.childCount];
         for (int i = 0; i < wayPoints.Length; i++)
         {
@@ -44,17 +43,16 @@ public class ConstructEnemyBehaviour : MonoBehaviour
 
     private void Update()
     {
-        distance = Vector2.Distance(target.transform.position, transform.position);
+        distance = (transform.position - target.position).sqrMagnitude;
 
-        if (distance < 200  && !coroutineStarted)
+        if (distance < 10  && !coroutineStarted)
         {
-            
             anim.SetBool("IsAwake", true);
             StartCoroutine(FollowPath(wayPoints));
             Debug.Log("StartedCor");
         }
 
-        else if (distance > 200 && coroutineStarted)
+        else if (distance > 10 && coroutineStarted)
         {
             anim.SetBool("IsAwake", false);
             coroutineStarted = false;

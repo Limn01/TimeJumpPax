@@ -8,26 +8,25 @@ public class EyeShooterScript : MonoBehaviour
     public float bulletSpeed;
     public Transform shotPoint;
     public float waitBetweenShots;
-    public PlayerMovement playerMovement;
-    public GameObject player;
+
+    PlayerMovement playerMovement;
+    GameObject player;
 
     float shotCounter;
 
-    void Start()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
 
         shotCounter = waitBetweenShots;
-        
-        
     }
 
     void Update()
     {
-        Debug.DrawLine(new Vector3(transform.position.x - playerInRange, transform.position.y, transform.position.z),
-            new Vector3(transform.position.x + playerInRange, transform.position.y, transform.position.z));
-
+        //Debug.DrawLine(new Vector3(transform.position.x - playerInRange, transform.position.y, //transform.position.z),
+        //    new Vector3(transform.position.x + playerInRange, transform.position.y, //transform.position.z));
+        //
         shotCounter -= Time.deltaTime;
 
         if (playerMovement.transform.position.x > transform.position.x && playerMovement.transform.position.x < transform.position.x + playerInRange && shotCounter < 0)
@@ -63,5 +62,11 @@ public class EyeShooterScript : MonoBehaviour
                 shotCounter = waitBetweenShots;
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(new Vector3(transform.position.x - playerInRange, transform.position.y, transform.position.z),
+           new Vector3(transform.position.x + playerInRange, transform.position.y, transform.position.z));
     }
 }

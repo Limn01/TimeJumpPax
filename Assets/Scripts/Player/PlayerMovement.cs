@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
-        gravityStore = rb2d.gravityScale;
+        
        
     }
 
@@ -65,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+
+        gravityStore = gravity;
     }
 
     void FixedUpdate()
@@ -77,8 +79,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        
-
         anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
         anim.SetBool("Grounded", grounded);
         
@@ -119,15 +119,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (onLadder)
         {
-            rb2d.gravityScale = 0f;
+            gravity = 0;
             climbVelocity = climbSpeed * Input.GetAxis("Vertical");
             rb2d.velocity = new Vector2(rb2d.velocity.x, climbVelocity);
         }
 
         if (!onLadder)
         {
-            rb2d.gravityScale = gravityStore;
-
+            gravity = gravityStore;
         }
        
     }

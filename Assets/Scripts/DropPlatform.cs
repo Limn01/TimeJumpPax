@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DropPlatform : MonoBehaviour
@@ -7,7 +6,7 @@ public class DropPlatform : MonoBehaviour
     GameObject platform;
     Animator anim;
 
-    void Start()
+    void Awake()
     {
         platform = GameObject.FindGameObjectWithTag("FlipPlatform");
         anim = platform.GetComponent<Animator>();
