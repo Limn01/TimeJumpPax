@@ -16,7 +16,8 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     float gravity;
     float shotCounter;
     bool isDamaged;
-    bool isDead;
+    public bool isDead;
+    bool restore;
     public LayerMask playerLayer;
     int damage = 2;
     public float maxJumpHeight = 6;
@@ -68,6 +69,11 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
         Init();
 
+       
+    }
+
+    private void OnEnable()
+    {
         CurrentHealth = StartingHealth;
     }
 
@@ -76,6 +82,8 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+
+        
     }
 
     private void FixedUpdate()
@@ -118,7 +126,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             pooledObj[randomIndex].SetActive(true);
             pooledObj[randomIndex].transform.position = shotPoint.transform.position;
             pooledObj[randomIndex].transform.rotation = transform.rotation;
-            pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.right*bulletSpeed,ForceMode2D.Impulse);
+            pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
 
 
         }
@@ -152,6 +160,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
     public void FullHealth()
     {
+        restore = true;
         isDead = false;
         CurrentHealth = StartingHealth;
     }

@@ -29,6 +29,11 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
         playerMovement = player.GetComponent<PlayerMovement>();
         target = player.GetComponent<Transform>();
 
+        
+    }
+
+    private void OnEnable()
+    {
         currentHealth = startingHealth;
     }
 
@@ -40,12 +45,6 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
         if (distance < 100)
         {
             transform.position = Vector3.MoveTowards(transform.position,player.transform.position,moveSpeed * Time.deltaTime);
-        }
-
-        if (isDead)
-        {
-            FullHealth();
-            Debug.Log("Full health");
         }
 
     }

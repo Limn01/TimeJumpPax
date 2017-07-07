@@ -7,7 +7,14 @@ public class ConstructSpawn : MonoBehaviour
 {
     public Transform[] transforms;
 
+    EnemyHealth enemyHealth;
+
     List<GameObject> enemies = new List<GameObject>();
+
+    private void Awake()
+    {
+        
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -23,7 +30,6 @@ public class ConstructSpawn : MonoBehaviour
         {
 
             TurnEnemyOff();
-
         }
     }
 

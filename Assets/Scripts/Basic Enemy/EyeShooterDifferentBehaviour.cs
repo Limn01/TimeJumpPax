@@ -10,12 +10,17 @@ public class EyeShooterDifferentBehaviour : MonoBehaviour
     float waitBetweenShots;
     [SerializeField]
     float bulletSpeed;
-    [SerializeField]
+    
     Transform target;
-
+    GameObject player;
     float dist;
-    [SerializeField]
     float shotCounter;
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        target = player.GetComponent<Transform>();
+    }
 
     private void Start()
     {

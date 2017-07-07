@@ -6,7 +6,17 @@ using UnityEngine;
 public class TurnOffBullets : MonoBehaviour
 {
     public float damage = 1;
-    
+
+    GameObject turrent;
+    Turrent turrentHealth;
+    enum EnemyType { Enemy, Turrent, Obstacle}
+    EnemyType enemyType;
+
+    private void Awake()
+    {
+        
+    }
+
     void OnEnable()
     {
         Invoke("Destroy", 2f);
@@ -19,6 +29,7 @@ public class TurnOffBullets : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+
         if (other.gameObject.tag == "Ground")
         {
             this.gameObject.SetActive(false);
@@ -29,10 +40,20 @@ public class TurnOffBullets : MonoBehaviour
             this.gameObject.SetActive(false);
             EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
             enemyHealth.TakeDamage(damage);
-            
+        }
+        else if (other.gameObject.tag == "Turrent")
+        {
+            this.gameObject.SetActive(false);
+            Turrent turrent = other.gameObject.GetComponent<Turrent>();
+            turrent.TakeDamage(damage);
         }
 
-        if (other.gameObject.tag == "Obstacle")
+        //else if (other.gameObject.tag == "Contruct")
+        //{
+        //    
+        //}
+
+        else if (other.gameObject.tag == "Obstacle")
         {
             this.gameObject.SetActive(false);
         }

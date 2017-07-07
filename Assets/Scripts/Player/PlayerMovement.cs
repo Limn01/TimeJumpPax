@@ -171,15 +171,12 @@ public class PlayerMovement : MonoBehaviour
             }
 
             knockbackCount -= Time.deltaTime;
-
         }
-
     }
 
     void Flip()
     {
         facingRight = !facingRight;
-
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
@@ -214,7 +211,6 @@ public class PlayerMovement : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
-       // Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayLength);
     }
 }
 

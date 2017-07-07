@@ -45,14 +45,14 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     {
         distance = (transform.position - target.position).sqrMagnitude;
 
-        if (distance < 10  && !coroutineStarted)
+        if (distance < 50  && !coroutineStarted)
         {
             anim.SetBool("IsAwake", true);
             StartCoroutine(FollowPath(wayPoints));
             Debug.Log("StartedCor");
         }
 
-        else if (distance > 10 && coroutineStarted)
+        else if (distance > 50 && coroutineStarted)
         {
             anim.SetBool("IsAwake", false);
             coroutineStarted = false;

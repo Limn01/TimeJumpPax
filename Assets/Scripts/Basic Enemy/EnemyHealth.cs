@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class EnemyHealth : MonoBehaviour,Idamageable, IHealable
+public class EnemyHealth : MonoBehaviour,Idamageable
 {
     public float damage = 1;
    
@@ -15,17 +14,10 @@ public class EnemyHealth : MonoBehaviour,Idamageable, IHealable
     bool damaged;
     bool isDead;
 
-    private void Awake()
+    private void OnEnable()
     {
         currentHealth = startingHealth;
-    }
-
-    private void Update()
-    {
-        if (isDead)
-        {
-            FullHealth();
-        }
+        isDead = false;
     }
 
     public void TakeDamage(float amount)
@@ -46,11 +38,6 @@ public class EnemyHealth : MonoBehaviour,Idamageable, IHealable
         gameObject.SetActive(false);
     }
 
-    public void FullHealth()
-    {
-        isDead = false;
-        currentHealth = startingHealth;
-    }
 }
 
 
