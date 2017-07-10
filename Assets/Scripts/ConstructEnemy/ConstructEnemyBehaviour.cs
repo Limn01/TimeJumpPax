@@ -11,8 +11,6 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     Transform pathHolder;
     [SerializeField]
     Transform point;
-    [SerializeField]
-    float returnSpeed;
     
     bool coroutineStarted = false;
 
