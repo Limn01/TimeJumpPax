@@ -72,8 +72,6 @@ using Com.LuisPedroFonseca.ProCamera2D;
             {
                 playerHealth.TakeDamage(damage);
             }
-
-
         }
     }
 

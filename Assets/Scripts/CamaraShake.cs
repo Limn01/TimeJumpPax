@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CamaraShake : MonoBehaviour
@@ -22,6 +21,8 @@ public class CamaraShake : MonoBehaviour
 
     public void ShakeCamera(float shakePower,float shakeDuration)
     {
+        Debug.Log("CameraShakeing");
+
         shakeAmount = shakePower;
         shakeTimer = shakeDuration;
     }

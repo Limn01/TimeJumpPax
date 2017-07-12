@@ -8,6 +8,7 @@ public class LifeManager : MonoBehaviour
 {
     public static LifeManager instance;
     public int startingLives;
+    public GameObject heart;
 
     Text theText;
     int lifeCounter;
@@ -48,6 +49,7 @@ public class LifeManager : MonoBehaviour
         {
             gameOverScreen.SetActive(true);
             player.SetActive(false);
+            heart.SetActive(false);
             restartTimer += Time.deltaTime;
 
             if (restartTimer >= restartDelay)

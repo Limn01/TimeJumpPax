@@ -43,14 +43,17 @@ public class PauseGame : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
         playerShooting = player.GetComponent<Shooting>();
+    }
+
+    private void OnEnable()
+    {
         iconTransform.position = firstPoint.position;
-        
 
         timeScaleStore = Time.timeScale;
     }
 
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update ()
     {
         if (isPaused)
         {

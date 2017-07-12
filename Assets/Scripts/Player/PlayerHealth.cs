@@ -6,6 +6,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 
 public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 {
+    public CamaraShake cameraShake;
 
     [SerializeField]
     private float maxValue;
@@ -20,14 +21,13 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     AudioSource damageSound;
     [SerializeField]
     HealthBar healthBar;
+    ProCamera2DShake proShake;
+    GameObject camera;
 
     //GameObject player;
     Animator anim;
     GameObject gameManager;
     GameObject player;
-    [SerializeField]
-    CamaraShake cameraShake;
-
 
     public float CurrentHealth
     {
@@ -66,6 +66,9 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     {
 
         PlayerHealth health = FindObjectOfType<PlayerHealth>();
+        camera = GameObject.FindGameObjectWithTag("MainCamera");
+        proShake = camera.GetComponent<ProCamera2DShake>();
+        
 
         anim = GetComponentInChildren<Animator>();
 
@@ -82,7 +85,8 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 
         CurrentHealth -= amount;
 
-        cameraShake.ShakeCamera(3f, .3f);
+        //cameraShake.ShakeCamera(3f, 3f);
+        proShake.Shake("PlayerHit");
 
         damageSound.Play();
 

@@ -56,8 +56,6 @@ public class PlayerMovement : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
-        
-       
     }
 
     private void Start()

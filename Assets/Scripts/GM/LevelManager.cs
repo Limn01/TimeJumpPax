@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     Animator anim;
     PlayerHealth playerHealth;
+    PlayerMovement playerMovement;
     GameObject cameraGame;
     [SerializeField]
     ProCamera2D proCamera;
@@ -40,9 +41,10 @@ public class LevelManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-
-        playerHealth = FindObjectOfType<PlayerHealth>();
         player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        playerMovement = player.GetComponent<PlayerMovement>();
+        
         //cameraGame = GameObject.FindGameObjectWithTag("MainCamera");
         camera = GameObject.FindGameObjectWithTag("MainCamera");
         proCamera = camera.GetComponent<ProCamera2D>();
@@ -53,6 +55,7 @@ public class LevelManager : MonoBehaviour
     public IEnumerator RespawnPlayer()
     {
         player.gameObject.SetActive(false);
+        playerMovement.enabled = false;
         //anim.SetTrigger("Gay");
         transition.TransitionExit();
 
@@ -63,6 +66,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
         transition.TransitionEnter();
+        playerMovement.enabled = true;
 
         //SceneManager.LoadScene("level prototype");
         //Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, currentCheckPoint.transform.position.y, -10);
