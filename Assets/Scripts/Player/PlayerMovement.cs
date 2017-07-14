@@ -99,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpTimer += Time.deltaTime;
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpforce);
-            
         }
         else
         {

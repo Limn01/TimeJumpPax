@@ -82,8 +82,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
-
-        
     }
 
     private void FixedUpdate()
@@ -106,11 +104,11 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             }
         }
 
-        if (isDead)
-        {
-            FullHealth();
-            Debug.Log("Restore Health");
-        }
+        //if (isDead)
+        //{
+        //    FullHealth();
+        //    Debug.Log("Restore Health");
+        //}
     }
 
     void Shoot()
@@ -155,6 +153,17 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     void Death()
     {
         isDead = true;
+
+        GameObject obj = ExplosionsPool.current.GetPooledObject();
+        List<GameObject> pooledObj = new List<GameObject>();
+        pooledObj.Add(obj);
+        int randomIndex = Random.Range(0, pooledObj.Count);
+        if (!pooledObj[randomIndex].activeInHierarchy)
+        {
+            pooledObj[randomIndex].SetActive(true);
+            pooledObj[randomIndex].transform.position = transform.position;
+            pooledObj[randomIndex].transform.rotation = transform.rotation;
+        }
         this.gameObject.SetActive(false);
     }
 

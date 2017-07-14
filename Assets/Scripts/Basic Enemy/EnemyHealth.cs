@@ -12,8 +12,6 @@ public class EnemyHealth : MonoBehaviour,Idamageable
     [SerializeField]
     float currentHealth;
 
-    GameObject mainCamera;
-    ProCamera2DShake shake;
     bool damaged;
     bool isDead;
     
@@ -21,12 +19,6 @@ public class EnemyHealth : MonoBehaviour,Idamageable
     {
         currentHealth = startingHealth;
         isDead = false;
-    }
-
-    private void Awake()
-    {
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        shake = mainCamera.GetComponent<ProCamera2DShake>();
     }
 
     public void TakeDamage(float amount)
@@ -38,7 +30,6 @@ public class EnemyHealth : MonoBehaviour,Idamageable
         if (currentHealth <= 0 && !isDead)
         {
             Death();
-            shake.Shake("PlayerHit");
         }
     }
 
