@@ -34,6 +34,12 @@ public class TurnOffBullets : MonoBehaviour
             EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
             enemyHealth.TakeDamage(damage);
         }
+
+        else if (other.gameObject.tag == "Boss")
+        {
+            BossHealth bossHealth = other.gameObject.GetComponent<BossHealth>();
+            bossHealth.TakeDamage(damage);
+        }
         else if (other.gameObject.tag == "Turrent")
         {
             this.gameObject.SetActive(false);

@@ -4,9 +4,7 @@ using UnityEngine;
 using Com.LuisPedroFonseca.ProCamera2D;
 
 public class EnemyHealth : MonoBehaviour,Idamageable
-{
-    public float damage = 1;
-   
+{  
     [SerializeField]
     float startingHealth;
     [SerializeField]

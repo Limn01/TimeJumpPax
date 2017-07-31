@@ -47,14 +47,14 @@ public class PlayerMovement : MonoBehaviour
     bool airControl = false;
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
-    Animator anim;
+    
 
     
  
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
+        
         jumpSound = GetComponent<AudioSource>();
     }
 
@@ -77,8 +77,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
-        anim.SetBool("Grounded", grounded);
+        //anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
+        //anim.SetBool("Grounded", grounded);
         
         if (grounded)
         {
