@@ -21,6 +21,8 @@ public class MainBoss : MonoBehaviour
     public Transform jumpTo;
     public float moveSpeed;
     public Vector2 targetStoredPos;
+    public GameObject jetBooster1;
+    public GameObject jetBooster2;
 
     float gravity;
     float maxJumpHeight = 6;
@@ -31,10 +33,12 @@ public class MainBoss : MonoBehaviour
     float maxJumpVelocity;
     float minJumpVelocity;
     float gravityStore;
+    
 
     bool coroutineStarted = false;
     bool otherCoroutineStarted = false;
     bool isGrounded;
+    bool attack;
     bool jumping;
     bool facingRight;
     bool facingLeft = true;
@@ -51,6 +55,10 @@ public class MainBoss : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
         anim = GetComponentInChildren<Animator>();
+        
+
+        jetBooster1.SetActive(false);
+        jetBooster2.SetActive(false);
     }
 
     private void Start()
@@ -58,11 +66,10 @@ public class MainBoss : MonoBehaviour
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         gravityStore = gravity;
 
-        if (!otherCoroutineStarted)
+        if (!coroutineStarted)
         {
-            StartCoroutine(BossMovementChange());
+            StartCoroutine(BossMove());
         }
-        
     }
 
     private void FixedUpdate()
@@ -80,6 +87,8 @@ public class MainBoss : MonoBehaviour
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
             jumping = false;
+            jetBooster1.SetActive(false);
+            jetBooster2.SetActive(false);
         }
 
         if (bossHealth.currentHealth <= 10 && coroutineStarted && !otherCoroutineStarted)
@@ -90,54 +99,53 @@ public class MainBoss : MonoBehaviour
         }
     }
 
-    //IEnumerator BossMove()
-    //{
-    //    coroutineStarted = true;
-    //
-    //    while (true)
-    //    {
-    //        yield return new WaitForSeconds(timeTojump);
-    //
-    //        int i = 1;
-    //
-    //        if (Random.value < chance)
-    //        {
-    //            if (player.transform.position.x < transform.position.x)
-    //            {
-    //               
-    //                facingLeft = true;
-    //                facingRight = false;
-    //                i = -1;
-    //                transform.localScale = new Vector3(1, 1, 1);
-    //            }
-    //        }
-    //        if (player.transform.position.x > transform.position.x)
-    //        {
-    //           
-    //            facingRight = true;
-    //            facingLeft = false;
-    //            i = 1;
-    //            transform.localScale = new Vector3(-1, 1, 1);
-    //        }
-    //
-    //        jumping = true;
-    //
-    //        anim.SetTrigger("Jumping");
-    //        
-    //        rb.velocity = new Vector2(jumpForce.x * i, jumpForce.y);
-    //
-    //        yield return new WaitForSeconds(timeToShoot);
-    //
-    //        if (!facingLeft)
-    //        {
-    //            SpredShotRight();
-    //        }
-    //        else if (facingLeft)
-    //        {
-    //            SpreadShotLeft();
-    //        }
-    //    }
-    //}
+    IEnumerator BossMove()
+    {
+        coroutineStarted = true;
+    
+        while (true)
+        {
+            yield return new WaitForSeconds(timeTojump);
+    
+            int i = 1;
+    
+            if (Random.value < chance)
+            {
+                if (player.transform.position.x < transform.position.x)
+                {
+                    facingLeft = true;
+                    facingRight = false;
+                    i = -1;
+                    transform.localScale = new Vector3(1, 1, 1);
+                }
+            }
+            if (player.transform.position.x > transform.position.x)
+            {
+                facingRight = true;
+                facingLeft = false;
+                i = 1;
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+    
+            anim.SetTrigger("Jumping");
+            
+            rb.velocity = new Vector2(jumpForce.x * i, jumpForce.y);
+
+            jetBooster1.SetActive(true);
+            jetBooster2.SetActive(true);
+    
+            yield return new WaitForSeconds(timeToShoot);
+    
+            if (!facingLeft)
+            {
+                SpredShotRight();
+            }
+            else if (facingLeft)
+            {
+                SpreadShotLeft();
+            }
+        }
+    }
 
     void SpreadShotLeft()
     {
@@ -187,9 +195,9 @@ public class MainBoss : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, jumpTo.position, moveSpeed * Time.deltaTime);
 
-            yield return new WaitForSeconds(timeToHoldJump);
+            targetStoredPos = target.position; 
 
-            targetStoredPos = target.position;
+            yield return new WaitForSeconds(timeToHoldJump);
 
             float distance = (transform.position - target.transform.position).sqrMagnitude;
 
