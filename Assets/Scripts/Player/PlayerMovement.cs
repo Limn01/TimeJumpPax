@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     bool airControl = false;
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
+    Animator anim;
     
 
     
@@ -54,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        
+        anim = GetComponentInChildren<Animator>();
         jumpSound = GetComponent<AudioSource>();
     }
 
@@ -134,17 +135,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded || airControl)
         {
-            rb2d.velocity = new Vector2(h * moveSpeed, rb2d.velocity.y);
+            
+            //anim.SetFloat("Speed", Mathf.Abs(h));
 
-            if (h > 0 && !facingRight)
+            if (h > 0)
             {
-                Flip();
+                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+                transform.localScale = new Vector3(1, 1, 1);
                 shotEnd.rotation = Quaternion.AngleAxis(0, Vector3.up);
             }
 
-            else if (h < 0 && facingRight)
+            else if (h < 0)
             {
-                Flip();
+                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+                transform.localScale = new Vector3(-1, 1, 1);
                 shotEnd.rotation = Quaternion.AngleAxis(180, Vector3.up);
             }
         }
@@ -169,14 +173,6 @@ public class PlayerMovement : MonoBehaviour
 
             knockbackCount -= Time.deltaTime;
         }
-    }
-
-    void Flip()
-    {
-        facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
     }
 
     void OnCollisionEnter2D(Collision2D other)

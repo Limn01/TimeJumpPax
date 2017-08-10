@@ -23,6 +23,8 @@ public class MainBoss : MonoBehaviour
     public Vector2 targetStoredPos;
     public GameObject jetBooster1;
     public GameObject jetBooster2;
+    //public GameObject warpParticle;
+    //public ParticleSystem particle;
 
     float gravity;
     float maxJumpHeight = 6;
@@ -33,8 +35,7 @@ public class MainBoss : MonoBehaviour
     float maxJumpVelocity;
     float minJumpVelocity;
     float gravityStore;
-    
-
+   
     bool coroutineStarted = false;
     bool otherCoroutineStarted = false;
     bool isGrounded;
@@ -55,10 +56,6 @@ public class MainBoss : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
         anim = GetComponentInChildren<Animator>();
-        
-
-        jetBooster1.SetActive(false);
-        jetBooster2.SetActive(false);
     }
 
     private void Start()
@@ -70,6 +67,10 @@ public class MainBoss : MonoBehaviour
         {
             StartCoroutine(BossMove());
         }
+
+        jetBooster1.SetActive(false);
+        jetBooster2.SetActive(false);
+        //warpParticle.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -195,7 +196,10 @@ public class MainBoss : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, jumpTo.position, moveSpeed * Time.deltaTime);
 
-            targetStoredPos = target.position; 
+            targetStoredPos = target.position;
+
+            //warpParticle.SetActive(true);
+            //particle.Play();
 
             yield return new WaitForSeconds(timeToHoldJump);
 
