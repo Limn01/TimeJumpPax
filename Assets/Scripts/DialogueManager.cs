@@ -5,72 +5,83 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
-    public Text nameText;
+    public GameObject dialogueBox;
     public Text dialogueText;
-    public Animator anim;
-    GameObject player;
-    PlayerMovement playerMovement;
 
-    Queue<string> sentences;
+    public bool dialogueActive;
+    public float typeSpeed;
 
-    private void Awake()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
-    }
+    public string[] sentences;
+    public int currentLine;
 
+    bool isTyping = false;
+    bool cancelTyping = false;
+    PlayerMovement player;
+ 
     private void Start()
     {
-        sentences = new Queue<string>();
+        player = FindObjectOfType<PlayerMovement>();
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    private void Update()
     {
-        
-        anim.SetBool("IsOpen", true);
-
-        playerMovement.moveSpeed = 0;
-
-        nameText.text = dialogue.name;
-
-        sentences.Clear();
-
-        foreach (string sentence in dialogue.sentences)
+        if (dialogueActive && Input.GetButtonDown("YButton"))
         {
-            sentences.Enqueue(sentence);
-        }
+            if (!isTyping)
+            {
+                currentLine++;
 
-        DisplayNextSentence();
+                if (currentLine >= sentences.Length)
+                {
+                    dialogueBox.SetActive(false);
+                    dialogueActive = false;
+
+                    currentLine = 0;
+                    player.canMove = true;
+                }
+                else
+                {
+                    StartCoroutine(TextScroll(sentences[currentLine]));
+                }
+            }
+            else if (isTyping && !cancelTyping)
+            {
+                cancelTyping = true;
+            }
+        }
     }
 
-    public void DisplayNextSentence()
+    IEnumerator TextScroll(string lineOfText)
     {
-        if (sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
-
-        string sentence = sentences.Dequeue();
-        
-        StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
-    }
-
-    IEnumerator TypeSentence(string sentence)
-    {
+        int letter = 0;
         dialogueText.text = "";
-    
-        foreach (char letter in sentence.ToCharArray())
+        isTyping = true;
+        cancelTyping = false;
+
+        while (isTyping && !cancelTyping && (letter < lineOfText.Length - 1))
         {
-            dialogueText.text += letter;
-            yield return null;
+            dialogueText.text += lineOfText[letter];
+            letter += 1;
+            yield return new WaitForSeconds(typeSpeed);
         }
+
+        dialogueText.text = lineOfText;
+        isTyping = false;
+        cancelTyping = false;
     }
 
-    void EndDialogue()
+    public void ShowBox(string dialogue)
     {
-        anim.SetBool("IsOpen", false);
-        playerMovement.moveSpeed = 6;
+        dialogueActive = true;
+        dialogueBox.SetActive(true);
+        dialogueText.text = dialogue;
+        StartCoroutine(TextScroll(sentences[currentLine]));
+    }
+
+    public void ShowDialogue()
+    {
+        dialogueActive = true;
+        dialogueBox.SetActive(true);
+        player.canMove = false;
     }
 }

@@ -25,9 +25,9 @@ public class PlayerMovement : MonoBehaviour
     public float gravityStore;
     public AudioSource jumpSound;
     public AudioSource doubleJumpSound;
-    
 
     public bool grounded;
+    public bool canMove;
     bool canJump;
     bool doubleJump;
     public bool onLadder;
@@ -48,9 +48,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb2d;
     public LayerMask whatIsGround;
     Animator anim;
-    
-
-    
+    float moveSpeedStore;
  
     void Awake()
     {
@@ -66,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
 
         gravityStore = gravity;
+        moveSpeedStore = moveSpeed;
+        canMove = true;
     }
 
     void FixedUpdate()
@@ -78,13 +78,21 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
-        //anim.SetBool("Grounded", grounded);
+        if (!canMove)
+        {
+            moveSpeed = 0;
+            return;
+        }
+        else
+        {
+            moveSpeed = moveSpeedStore;
+        }
         
         if (grounded)
         {
             doubleJump = false;
             airControl = true;
+            anim.SetBool("Grounded", true);
         }
 
         if (grounded && Input.GetButtonDown("Jump"))
@@ -94,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
             rb2d.velocity = new Vector2(rb2d.velocity.x, maxJumpVelocity);
             rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             jumpSound.Play();
+            anim.SetBool("Grounded", false);
             
         }
         else if (Input.GetButton("Jump") && canJump && jumpTimer < maxJumpTimer)
@@ -136,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded || airControl)
         {
             
-            //anim.SetFloat("Speed", Mathf.Abs(h));
+            anim.SetFloat("Speed", Mathf.Abs(h));
 
             if (h > 0)
             {

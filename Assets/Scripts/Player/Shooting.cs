@@ -13,7 +13,7 @@ public class Shooting : MonoBehaviour
     public AudioSource shootSound;
 
     void Update()
-    {
+    { 
         timer += Time.deltaTime;
 
         if (Input.GetButtonDown("Fire1"))
