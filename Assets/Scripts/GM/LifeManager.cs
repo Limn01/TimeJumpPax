@@ -11,7 +11,7 @@ public class LifeManager : MonoBehaviour
     public GameObject heart;
 
     Text theText;
-    int lifeCounter;
+    public int lifeCounter;
 
     [SerializeField]
     GameObject gameOverScreen;
@@ -24,16 +24,12 @@ public class LifeManager : MonoBehaviour
 
     [SerializeField]
     GameObject player;
-    
-    
-    
 
     void Awake()
     {
         instance = this;
 
         player = GameObject.FindGameObjectWithTag("Player");
-        
     }
 
     void Start()
@@ -47,6 +43,7 @@ public class LifeManager : MonoBehaviour
     {
         if (lifeCounter < 0)
         {
+            Debug.Log("Game over");
             gameOverScreen.SetActive(true);
             player.SetActive(false);
             heart.SetActive(false);
@@ -54,7 +51,7 @@ public class LifeManager : MonoBehaviour
 
             if (restartTimer >= restartDelay)
             {
-                SceneManager.LoadScene("Level1");
+                SceneManager.LoadScene("MainMenu");
                 //player.transform.position = restartPoint.position;
                 //player.SetActive(true);
                 //gameOverScreen.SetActive(false);
@@ -63,8 +60,6 @@ public class LifeManager : MonoBehaviour
             //PlayerMovement.instance.gameObject.SetActive(false);
             
         }
-
-        
 
         theText.text = "x " + lifeCounter;
     }

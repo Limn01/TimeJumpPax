@@ -7,7 +7,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance;
+    //public static LevelManager instance;
     public GameObject currentCheckPoint;
 
     [SerializeField]
@@ -17,68 +17,56 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     Animator anim;
     PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
+    Player playerMovement;
     GameObject cameraGame;
     [SerializeField]
     ProCamera2D proCamera;
     GameObject camera;
     ProCamera2DTransitionsFX transition;
-
-
-
-    //PlayerHealth playerHealth;
     GameObject player;
 
     // Use this for initialization
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //}
+        //else if (instance != this)
+        //    Destroy(gameObject);
+        //
+        //DontDestroyOnLoad(gameObject);
 
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
-        
-        //cameraGame = GameObject.FindGameObjectWithTag("MainCamera");
+        playerMovement = player.GetComponent<Player>();
         camera = GameObject.FindGameObjectWithTag("MainCamera");
         proCamera = camera.GetComponent<ProCamera2D>();
         transition = camera.GetComponent<ProCamera2DTransitionsFX>();
-
     }
 
     public IEnumerator RespawnPlayer()
     {
-        player.gameObject.SetActive(false);
-        playerMovement.enabled = false;
-        //anim.SetTrigger("Gay");
-        transition.TransitionExit();
+            player.gameObject.SetActive(false);
+            playerMovement.enabled = false;
+            transition.TransitionExit();
 
-        yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(3f);
 
-        player.gameObject.SetActive(true);
-        player.transform.position = currentCheckPoint.transform.position;
+            player.gameObject.SetActive(true);
+            player.transform.position = currentCheckPoint.transform.position;
 
-        yield return new WaitForSeconds(1.5f);
-        transition.TransitionEnter();
-        playerMovement.enabled = true;
+            yield return new WaitForSeconds(1.5f);
+            transition.TransitionEnter();
+            playerMovement.enabled = true;
 
-        //SceneManager.LoadScene("level prototype");
-        //Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, currentCheckPoint.transform.position.y, -10);
+            //SceneManager.LoadScene("level prototype");
+            //Camera.main.transform.position = new (currentCheckPoint.transform.position.x,currentCheckPoint.transform.position.y, -10);
 
-        //camera.CenterTargetOnStart = true;
+            //camera.CenterTargetOnStart = true;
 
-        LifeManager.instance.TakeLife();
-        playerHealth.FullHealth();
-
-        //anim.SetTrigger("Gay");
-        //camera.enabled = true;
-        //camera.Reset();
+            LifeManager.instance.TakeLife();
+            playerHealth.FullHealth();
     }
 }
 

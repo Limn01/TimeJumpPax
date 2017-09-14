@@ -41,7 +41,7 @@ public class PatrolEnemy : MonoBehaviour
     GameObject player;
     GameObject patrolEnemy;
     PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
+    Player playerMovement;
     RaycastHit2D hit;
     Rigidbody2D rb2d;
     float gravity;
@@ -58,7 +58,7 @@ public class PatrolEnemy : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
         rb2d = GetComponent<Rigidbody2D>();
     }
 
@@ -118,15 +118,15 @@ public class PatrolEnemy : MonoBehaviour
     {
         if (other.gameObject == player)
         {
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
+            playerMovement.knockBackCount = playerMovement.knockBackLength;
 
             if (player.transform.position.x < transform.position.x)
             {
-                playerMovement.knockbackFromRight = true;
+                playerMovement.knockBackFromRight = true;
             }
             else
             {
-                playerMovement.knockbackFromRight = false;
+                playerMovement.knockBackFromRight = false;
             }
         }
     }

@@ -34,31 +34,31 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     PlayerMovement playerMovement;
     Rigidbody2D rb;
 
-    public float CurrentHealth
-    {
-        get
-        {
-            return currentHealth;
-        }
-
-        set
-        {
-            this.currentHealth = value;
-        }
-    }
-
-    public float StartingHealth
-    {
-        get
-        {
-            return startingHealth;
-        }
-
-        set
-        {
-            this.startingHealth = value;
-        }
-    }
+    //public float CurrentHealth
+    //{
+    //    get
+    //    {
+    //        return currentHealth;
+    //    }
+    //
+    //    set
+    //    {
+    //        this.currentHealth = value;
+    //    }
+    //}
+    //
+    //public float StartingHealth
+    //{
+    //    get
+    //    {
+    //        return startingHealth;
+    //    }
+    //
+    //    set
+    //    {
+    //        this.startingHealth = value;
+    //    }
+    //}
 
     void Awake()
     {
@@ -67,14 +67,12 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         playerMovement = player.GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
 
-        Init();
-
-       
+        //Init();
     }
 
     private void OnEnable()
     {
-        CurrentHealth = StartingHealth;
+        currentHealth = startingHealth;
     }
 
     private void Start()
@@ -82,6 +80,8 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+
+        currentHealth = startingHealth;
     }
 
     private void FixedUpdate()
@@ -104,11 +104,11 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             }
         }
 
-        //if (isDead)
-        //{
-        //    FullHealth();
-        //    Debug.Log("Restore Health");
-        //}
+        if (isDead)
+        {
+            FullHealth();
+            Debug.Log("Restore Health");
+        }
     }
 
     void Shoot()
@@ -142,9 +142,9 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
         gameObject.GetComponent<Animation>().Play("TurrentDamage");
 
-        CurrentHealth -= amount;
+        currentHealth -= amount;
 
-        if (CurrentHealth <= 0 && !isDead)
+        if (currentHealth <= 0 && !isDead)
         {
             Death();
         }
@@ -171,7 +171,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     {
         restore = true;
         isDead = false;
-        CurrentHealth = StartingHealth;
+        currentHealth = startingHealth;
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -199,12 +199,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
                 playerHealth.TakeDamage(damage);
             }
         }
-    }
-
-    public void Init()
-    {
-        this.StartingHealth = StartingHealth;
-        this.CurrentHealth = CurrentHealth;
     }
 }
 

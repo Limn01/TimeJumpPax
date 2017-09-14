@@ -29,7 +29,7 @@ public class EyeShooterDifferentBehaviour : MonoBehaviour
 
     private void Update()
     {
-        dist = Vector2.Distance(transform.position, target.position);
+        dist = (transform.position - target.position).sqrMagnitude;
 
         if (dist < 1000)
         {

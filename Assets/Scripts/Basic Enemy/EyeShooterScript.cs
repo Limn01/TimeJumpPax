@@ -9,7 +9,7 @@ public class EyeShooterScript : MonoBehaviour
     public Transform shotPoint;
     public float waitBetweenShots;
 
-    PlayerMovement playerMovement;
+    Player playerMovement;
     GameObject player;
 
     float shotCounter;
@@ -17,16 +17,13 @@ public class EyeShooterScript : MonoBehaviour
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
 
         shotCounter = waitBetweenShots;
     }
 
     void Update()
     {
-        //Debug.DrawLine(new Vector3(transform.position.x - playerInRange, transform.position.y, //transform.position.z),
-        //    new Vector3(transform.position.x + playerInRange, transform.position.y, //transform.position.z));
-        //
         shotCounter -= Time.deltaTime;
 
         if (playerMovement.transform.position.x > transform.position.x && playerMovement.transform.position.x < transform.position.x + playerInRange && shotCounter < 0)

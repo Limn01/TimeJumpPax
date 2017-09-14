@@ -7,9 +7,8 @@ using System.Linq;
 public class EnemySpawn1 : MonoBehaviour
 {
     public Transform[] transforms;
-    
 
-    List<GameObject> enemies = new List<GameObject>();
+    public List<GameObject> enemies = new List<GameObject>();
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -42,11 +41,8 @@ public class EnemySpawn1 : MonoBehaviour
                 pooledObj[randomIndex].SetActive(true);
                 pooledObj[randomIndex].transform.position = transforms[i].position;
                 pooledObj[randomIndex].transform.rotation = transforms[i].rotation;
-
             }
         }
-
-        
     }
 
     void FilterList()

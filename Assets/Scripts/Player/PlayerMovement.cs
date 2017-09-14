@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     public float moveSpeed;
     public float jumpforce = 400f;
     public float jumpTimer;
@@ -49,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     Animator anim;
     float moveSpeedStore;
+    Vector3 velocity;
  
     void Awake()
     {
@@ -71,13 +71,14 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-        Move();
-
+        
         rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
     }
 
     void Update()
     {
+        Move();
+
         if (!canMove)
         {
             moveSpeed = 0;
@@ -103,7 +104,6 @@ public class PlayerMovement : MonoBehaviour
             rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             jumpSound.Play();
             anim.SetBool("Grounded", false);
-            
         }
         else if (Input.GetButton("Jump") && canJump && jumpTimer < maxJumpTimer)
         {
@@ -135,18 +135,17 @@ public class PlayerMovement : MonoBehaviour
         {
             gravity = gravityStore;
         }
-       
     }
 
     void Move()
     {
+
         float h = Input.GetAxisRaw("Horizontal");
 
         if (grounded || airControl)
         {
-            
             anim.SetFloat("Speed", Mathf.Abs(h));
-
+            
             if (h > 0)
             {
                 transform.position += Vector3.right * moveSpeed * Time.deltaTime;
@@ -160,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.localScale = new Vector3(-1, 1, 1);
                 shotEnd.rotation = Quaternion.AngleAxis(180, Vector3.up);
             }
+           
         }
 
         if (knockbackCount <= 0)

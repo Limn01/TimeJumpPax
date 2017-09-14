@@ -12,11 +12,14 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
     float startingHealth = 2;
     [SerializeField]
     float currentHealth;
+    public Vector2 tempPos;
+    public float verticalSpeed;
+    public float amplitude;
 
     bool damaged;
     bool isDead;
 
-    PlayerMovement playerMovement;
+    Player playerMovement;
     Transform target;
     GameObject player;
     PlayerHealth playerHealth;
@@ -26,12 +29,11 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
         target = player.GetComponent<Transform>();
-
-        
     }
 
+ 
     private void OnEnable()
     {
         currentHealth = startingHealth;
@@ -40,13 +42,15 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
     void Update()
     {
         distance = (transform.position - target.position).sqrMagnitude;
-       // distance = Vector3.Distance(transform.position, target.transform.position);
         
         if (distance < 100)
         {
             transform.position = Vector3.MoveTowards(transform.position,player.transform.position,moveSpeed * Time.deltaTime);
         }
-
+        else
+        {
+            transform.Translate(0, Mathf.Sin(Time.realtimeSinceStartup * verticalSpeed) * amplitude, 0);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -54,15 +58,15 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
         if (other.gameObject == player)
         {
 
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
+            playerMovement.knockBackCount = playerMovement.knockBackLength;
 
             if (player.transform.position.x < transform.position.x)
             {
-                playerMovement.knockbackFromRight = true;
+                playerMovement.knockBackFromRight = true;
             }
             else
             {
-                playerMovement.knockbackFromRight = false;
+                playerMovement.knockBackFromRight = false;
             }
 
             if (playerHealth.CurrentHealth > 0)

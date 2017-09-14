@@ -5,7 +5,6 @@ using System.Linq;
 
 public class EnemySpawn : MonoBehaviour
 {
-    
     public Transform tranform;
     [SerializeField]
     List<GameObject> enemies = new List<GameObject>();
@@ -31,8 +30,6 @@ public class EnemySpawn : MonoBehaviour
         {
            TurnOffEnemy();
             Debug.Log("Disable Enemy");
-            
-            
         }
     }
 
@@ -52,7 +49,6 @@ public class EnemySpawn : MonoBehaviour
                 pooledObj[randomIndex].transform.rotation = tranform.rotation;
 
             }
-
     }
 
     void FilterList()

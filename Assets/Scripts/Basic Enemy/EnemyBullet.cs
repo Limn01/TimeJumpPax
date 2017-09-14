@@ -8,13 +8,13 @@ public class EnemyBullet : MonoBehaviour
 
     GameObject player;
     PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
+    Player playerMovement;
 
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
         
     }
 
@@ -38,17 +38,17 @@ public class EnemyBullet : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             this.gameObject.SetActive(false);
-            
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
+
+            playerMovement.knockBackCount = playerMovement.knockBackLength;
 
             if (other.transform.position.x < transform.position.x)
             {
-                playerMovement.knockbackFromRight = true;
+                playerMovement.knockBackFromRight = true;
             }
 
             if (other.transform.position.x > transform.position.x)
             {
-                playerMovement.knockbackFromRight = false;
+                playerMovement.knockBackFromRight = false;
             }
             playerHealth.TakeDamage(damage);
         }

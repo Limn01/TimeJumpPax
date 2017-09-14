@@ -23,8 +23,10 @@ public class MainBoss : MonoBehaviour
     public Vector2 targetStoredPos;
     public GameObject jetBooster1;
     public GameObject jetBooster2;
-    //public GameObject warpParticle;
-    //public ParticleSystem particle;
+    public GameObject warpParticle;
+    public Transform warpPoint;
+    public Transform[] shotPoints2;
+    public GameObject knownPosPatricle;
 
     float gravity;
     float maxJumpHeight = 6;
@@ -70,7 +72,6 @@ public class MainBoss : MonoBehaviour
 
         jetBooster1.SetActive(false);
         jetBooster2.SetActive(false);
-        //warpParticle.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -97,6 +98,11 @@ public class MainBoss : MonoBehaviour
             coroutineStarted = false;
             StopAllCoroutines();
             StartCoroutine(BossMovementChange());
+        }
+
+        if (bossHealth.currentHealth <= 0)
+        {
+            knownPosPatricle.SetActive(false);
         }
     }
 
@@ -198,8 +204,26 @@ public class MainBoss : MonoBehaviour
 
             targetStoredPos = target.position;
 
-            //warpParticle.SetActive(true);
-            //particle.Play();
+            GameObject teleportClone = Instantiate(warpParticle, warpPoint.transform.position, Quaternion.Euler(-90, 0, 0))as GameObject;
+
+            yield return new WaitForSeconds(timeToShoot);
+
+            for (int i = 0; i < shotPoints2.Length; i++)
+            {
+                GameObject obj = EnemyBulletPool.current.GetPooledObject();
+                List<GameObject> pooledObj = new List<GameObject>();
+                pooledObj.Add(obj);
+                int randomIndex = Random.Range(0, pooledObj.Count);
+                if (!pooledObj[randomIndex].activeInHierarchy)
+                {
+                    pooledObj[randomIndex].SetActive(true);
+                    pooledObj[randomIndex].transform.position = shotPoints2[i].transform.position;
+                    pooledObj[randomIndex].transform.rotation = shotPoints2[i].transform.rotation;
+                    pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(-shotPoints2[i].up * bulletSpeed, ForceMode2D.Impulse);
+                }
+            }
+
+            GameObject knownPosClone = Instantiate(knownPosPatricle, targetStoredPos, Quaternion.identity) as GameObject;
 
             yield return new WaitForSeconds(timeToHoldJump);
 
@@ -210,7 +234,21 @@ public class MainBoss : MonoBehaviour
                 gravity = gravityStore;
                 transform.position = Vector3.Lerp(transform.position, targetStoredPos, moveSpeed * Time.deltaTime);
             }
+
+            yield return new WaitForSeconds(timeToHoldJump);
+
+            knownPosClone.SetActive(false);
         }
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(BossMove());
     }
 
     private void OnDrawGizmos()

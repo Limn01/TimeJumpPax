@@ -6,7 +6,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 public class EnemyHealth : MonoBehaviour,Idamageable
 {  
     [SerializeField]
-    float startingHealth;
+    float startingHealth = 1;
     [SerializeField]
     float currentHealth;
 

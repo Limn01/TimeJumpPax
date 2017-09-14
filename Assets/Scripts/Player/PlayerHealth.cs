@@ -12,8 +12,9 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     private float maxValue;
     [SerializeField]
     private float currentHealth;
-
+    
     public bool damaged = false;
+    public GameObject gameOver;
 
     public bool isDead;
     //public AudioSource sound;
@@ -28,6 +29,8 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     Animator anim;
     GameObject gameManager;
     GameObject player;
+    Player playerController;
+    LevelManager levelManager;
 
     public float CurrentHealth
     {
@@ -64,12 +67,10 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 
     void Awake()
     {
-
         PlayerHealth health = FindObjectOfType<PlayerHealth>();
+        levelManager = FindObjectOfType<LevelManager>();
         camera = GameObject.FindGameObjectWithTag("MainCamera");
         proShake = camera.GetComponent<ProCamera2DShake>();
-        
-
         anim = GetComponentInChildren<Animator>();
 
         Initialize();
@@ -100,7 +101,8 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     {
         isDead = true;
         gameObject.SetActive(false);
-        LevelManager.instance.StartCoroutine("RespawnPlayer");
+        levelManager.StartCoroutine("RespawnPlayer");
+        //LevelManager.instance.StartCoroutine("RespawnPlayer");
         FullHealth();
     }
 

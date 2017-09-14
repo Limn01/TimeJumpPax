@@ -7,7 +7,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 
 public class PauseGame : MonoBehaviour
 {
-    public static PauseGame instance;
+    //public static PauseGame instance;
     [SerializeField]
     AudioSource source;
     [SerializeField]
@@ -21,7 +21,7 @@ public class PauseGame : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     GameObject player;
-    PlayerMovement playerMovement;
+    //PlayerMovement playerMovement;
     Shooting playerShooting;
     float timeScaleStore;
     bool isPaused;
@@ -29,19 +29,19 @@ public class PauseGame : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-        
-        DontDestroyOnLoad(gameObject);
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //}
+        //else if (instance != this)
+        //{
+        //    Destroy(gameObject);
+        //}
+        //
+        //DontDestroyOnLoad(gameObject);
 
         player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
+        //playerMovement = player.GetComponent<PlayerMovement>();
         playerShooting = player.GetComponent<Shooting>();
     }
 
@@ -58,7 +58,7 @@ public class PauseGame : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 0f;
-            playerMovement.enabled = false;
+            //playerMovement.enabled = false;
             playerShooting.enabled = false;
             pauseScreen.SetActive(true);
         }
@@ -66,7 +66,7 @@ public class PauseGame : MonoBehaviour
         else if (!isPaused)
         {
             Time.timeScale = timeScaleStore;
-            playerMovement.enabled = true;
+            //playerMovement.enabled = true;
             playerShooting.enabled = true;
             pauseScreen.SetActive(false);
         }
@@ -91,7 +91,7 @@ public class PauseGame : MonoBehaviour
 
         if (iconTransform.position == secondPoint.position && Input.GetButtonDown("Jump") && isPaused)
         {
-            SceneManager.LoadScene("Level2");
+            SceneManager.LoadScene("MainMenu");
         }
 
         if (iconTransform.position == firstPoint.position && Input.GetButtonDown("Jump") && isPaused)

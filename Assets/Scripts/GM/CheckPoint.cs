@@ -24,14 +24,21 @@ namespace Com.LuisPedroFonseca.ProCamera2D
         [SerializeField]
         float timer;
 
+        LevelManager levelManager;
         bool hasPlayed = false;
         bool particleOn = false;
+
+        private void Awake()
+        {
+            levelManager = FindObjectOfType<LevelManager>();
+        }
 
         void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.tag == "Player")
             {
-                LevelManager.instance.currentCheckPoint = gameObject;
+                levelManager.currentCheckPoint = gameObject;
+                //LevelManager.instance.currentCheckPoint = gameObject;
 
                 if (!particleOn)
                 {

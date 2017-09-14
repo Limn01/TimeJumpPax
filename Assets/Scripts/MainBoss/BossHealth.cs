@@ -7,9 +7,10 @@ public class BossHealth : MonoBehaviour
     public float startingHealth = 16f;
     public float currentHealth;
     public float damage = 1;
+    public GameObject explosion;
 
     bool isDamaged;
-    bool isDead;
+    public bool isDead;
 
     private void OnEnable()
     {
@@ -37,5 +38,7 @@ public class BossHealth : MonoBehaviour
     void Death()
     {
         isDead = true;
+        this.gameObject.SetActive(false);
+        Instantiate(explosion, transform.position, Quaternion.identity);
     }
 }

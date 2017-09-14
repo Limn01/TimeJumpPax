@@ -13,7 +13,7 @@ public class EnemyDamage : MonoBehaviour
     GameObject player;
     Animator anim;
     PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
+    Player playerMovement;
     
 
     void Awake()
@@ -21,7 +21,7 @@ public class EnemyDamage : MonoBehaviour
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = FindObjectOfType<Player>();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -56,15 +56,15 @@ public class EnemyDamage : MonoBehaviour
     {
         timer = 0f;
 
-        playerMovement.knockbackCount = playerMovement.knockbackLength;
+        playerMovement.knockBackCount = playerMovement.knockBackLength;
 
         if (player.transform.position.x < transform.position.x)
         {
-            playerMovement.knockbackFromRight = true;
+            playerMovement.knockBackFromRight = true;
         }
         else
         {
-            playerMovement.knockbackFromRight = false;
+            playerMovement.knockBackFromRight = false;
         }
 
         if (playerHealth.CurrentHealth > 0)

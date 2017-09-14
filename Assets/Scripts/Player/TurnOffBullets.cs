@@ -7,9 +7,6 @@ public class TurnOffBullets : MonoBehaviour
 {
     public float damage = 1;
 
-    GameObject turrent;
-    Turrent turrentHealth;
-   
     void OnEnable()
     {
         Invoke("Destroy", 2f);
@@ -37,6 +34,7 @@ public class TurnOffBullets : MonoBehaviour
 
         else if (other.gameObject.tag == "Boss")
         {
+            this.gameObject.SetActive(false);
             BossHealth bossHealth = other.gameObject.GetComponent<BossHealth>();
             bossHealth.TakeDamage(damage);
         }
@@ -50,6 +48,12 @@ public class TurnOffBullets : MonoBehaviour
         else if (other.gameObject.tag == "Obstacle")
         {
             this.gameObject.SetActive(false);
+        }
+        else if (other.gameObject.tag == "Patrol")
+        {
+            this.gameObject.SetActive(false);
+            PatrolEnemyScript patrolHealth = other.gameObject.GetComponent<PatrolEnemyScript>();
+            patrolHealth.TakeDamage(damage);
         }
     }
 

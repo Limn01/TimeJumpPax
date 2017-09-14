@@ -9,7 +9,7 @@ public class HoverEnemyDamage : MonoBehaviour
 
     GameObject player;
     PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
+    Player playerMovement;
     float timer;
 
     bool playerInRange;
@@ -18,7 +18,7 @@ public class HoverEnemyDamage : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
 
     }
 
@@ -28,15 +28,15 @@ public class HoverEnemyDamage : MonoBehaviour
         {
             playerInRange = true;
 
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
+            playerMovement.knockBackCount = playerMovement.knockBackLength;
 
             if (other.transform.position.x < transform.position.x)
             {
-                playerMovement.knockbackFromRight = true;
+                playerMovement.knockBackFromRight = true;
             }
             else
             {
-                playerMovement.knockbackFromRight = false;
+                playerMovement.knockBackFromRight = false;
             }
         }
     }

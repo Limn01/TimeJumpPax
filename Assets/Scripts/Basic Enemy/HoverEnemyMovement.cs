@@ -14,6 +14,8 @@ public class HoverEnemyMovement : MonoBehaviour
     Rigidbody2D rb2D;
     bool hittingWall;
 
+    float timeCounter = 0;
+
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -38,11 +40,5 @@ public class HoverEnemyMovement : MonoBehaviour
             transform.localScale = new Vector2(1, 1);
             rb2D.velocity = new Vector2(-moveSpeed, rb2D.velocity.y);
         }
-    }
-
-    private void Update()
-    {
-
-        
     }
 }
