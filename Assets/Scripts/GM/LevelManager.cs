@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour
     GameObject camera;
     ProCamera2DTransitionsFX transition;
     GameObject player;
+    GameObject gameOver;
 
     // Use this for initialization
     void Awake()
@@ -43,10 +44,24 @@ public class LevelManager : MonoBehaviour
         camera = GameObject.FindGameObjectWithTag("MainCamera");
         proCamera = camera.GetComponent<ProCamera2D>();
         transition = camera.GetComponent<ProCamera2DTransitionsFX>();
+        gameOver = GameObject.FindGameObjectWithTag("GameOver");
+    }
+
+    private void Update()
+    {
+        if (playerHealth.CurrentHealth <= 0 && LifeManager.instance.lifeCounter < 0)
+        {
+            Debug.Log("Stopped Respawn");
+            gameOver.SetActive(true);
+
+    
+        }
     }
 
     public IEnumerator RespawnPlayer()
     {
+        while (LifeManager.instance.lifeCounter != 0)
+        {
             player.gameObject.SetActive(false);
             playerMovement.enabled = false;
             transition.TransitionExit();
@@ -67,6 +82,8 @@ public class LevelManager : MonoBehaviour
 
             LifeManager.instance.TakeLife();
             playerHealth.FullHealth();
+        }
+        //LifeManager.instance.TakeLife();
     }
 }
 

@@ -7,6 +7,7 @@ public class EnemyDamage : MonoBehaviour
 {
     public float damage = 1;
     public float timebetweenAttack = 0.5f;
+    
 
     bool playerInRange;
     float timer;
@@ -14,6 +15,7 @@ public class EnemyDamage : MonoBehaviour
     Animator anim;
     PlayerHealth playerHealth;
     Player playerMovement;
+    
     
 
     void Awake()

@@ -17,19 +17,22 @@ public class LifeManager : MonoBehaviour
     GameObject gameOverScreen;
     [SerializeField]
     float restartDelay = 5f;
-    [SerializeField]
-    Transform restartPoint;
+    
     [SerializeField]
     float restartTimer;
 
     [SerializeField]
     GameObject player;
+    PlayerHealth playerHealth;
+    LevelManager levelManager;
 
     void Awake()
     {
         instance = this;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = FindObjectOfType<PlayerHealth>();
+        levelManager = FindObjectOfType<LevelManager>();
     }
 
     void Start()
@@ -43,7 +46,7 @@ public class LifeManager : MonoBehaviour
     {
         if (lifeCounter < 0)
         {
-            Debug.Log("Game over");
+            Debug.Log("Stoppe Respawn");
             gameOverScreen.SetActive(true);
             player.SetActive(false);
             heart.SetActive(false);

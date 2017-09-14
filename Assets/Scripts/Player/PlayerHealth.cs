@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     public GameObject gameOver;
 
     public bool isDead;
+    public bool fullyDead = false;
     //public AudioSource sound;
     [SerializeField]
     AudioSource damageSound;
@@ -63,7 +64,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     void OnDestroy()
     {
 
-    }
+    }   
 
     void Awake()
     {
@@ -86,7 +87,6 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 
         CurrentHealth -= amount;
 
-        //cameraShake.ShakeCamera(3f, 3f);
         proShake.Shake("PlayerHit");
 
         damageSound.Play();
@@ -102,8 +102,12 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
         isDead = true;
         gameObject.SetActive(false);
         levelManager.StartCoroutine("RespawnPlayer");
-        //LevelManager.instance.StartCoroutine("RespawnPlayer");
         FullHealth();
+
+        if (LifeManager.instance.lifeCounter == 0)
+        {
+            gameOver.SetActive(true);
+        }
     }
 
     public void FullHealth()
