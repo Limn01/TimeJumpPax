@@ -9,15 +9,17 @@ public class UIManager : MonoBehaviour
     public Animator portalAnim;
     public Animator fadeOut;
     public float waitChangeScene;
-    public AudioSource selectSound;
     public AudioSource mainmenuMusic;
     public Animator select;
     public float fadeOutWait;
+
+    AudioManager audioManager;
 
     private void Start()
     {
         titleAnim.SetTrigger("IsOpen");
         portalAnim.SetTrigger("IsOn");
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void Update()
@@ -25,7 +27,7 @@ public class UIManager : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             select.SetTrigger("Select");
-            selectSound.Play();
+            audioManager.Play("StartGame");
             mainmenuMusic.Stop();
             StartCoroutine(ChangeScene());
         }

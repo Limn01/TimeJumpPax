@@ -19,8 +19,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     public bool isDead;
     public bool fullyDead = false;
     //public AudioSource sound;
-    [SerializeField]
-    AudioSource damageSound;
+    
     [SerializeField]
     HealthBar healthBar;
     ProCamera2DShake proShake;
@@ -32,6 +31,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     GameObject player;
     Player playerController;
     LevelManager levelManager;
+    AudioManager audioManager;
 
     public float CurrentHealth
     {
@@ -73,6 +73,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
         camera = GameObject.FindGameObjectWithTag("MainCamera");
         proShake = camera.GetComponent<ProCamera2DShake>();
         anim = GetComponentInChildren<Animator>();
+        audioManager = FindObjectOfType<AudioManager>();
 
         Initialize();
 
@@ -89,7 +90,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 
         proShake.Shake("PlayerHit");
 
-        damageSound.Play();
+        audioManager.Play("PlayerHurt");
 
         if (CurrentHealth <= 0 && !isDead)
         {

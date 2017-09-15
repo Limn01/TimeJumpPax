@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     Animator anim;
     bool isGrounded;
     PlayerHealth playerHealth;
+    AudioManager audioManager;
     
     bool doubleJump = false;
     public bool canDoubleJump;
@@ -50,6 +51,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         playerHealth = FindObjectOfType<PlayerHealth>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     void Start()
@@ -146,6 +148,7 @@ public class Player : MonoBehaviour
         if (controller.collisions.below)
         {
             velocity.y = maxJumpVelocity;
+            audioManager.Play("PlayerJump");
             doubleJump = false;
             
         }
@@ -153,6 +156,7 @@ public class Player : MonoBehaviour
         {
             velocity.y = maxJumpVelocity / 1.3f;
             doubleJump = true;
+            audioManager.Play("DoubleJump");
         }
     }
 

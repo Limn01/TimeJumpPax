@@ -7,7 +7,6 @@ using Com.LuisPedroFonseca.ProCamera2D;
 
 public class LevelManager : MonoBehaviour
 {
-    //public static LevelManager instance;
     public GameObject currentCheckPoint;
 
     [SerializeField]
@@ -29,15 +28,6 @@ public class LevelManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        //if (instance == null)
-        //{
-        //    instance = this;
-        //}
-        //else if (instance != this)
-        //    Destroy(gameObject);
-        //
-        //DontDestroyOnLoad(gameObject);
-
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<Player>();
@@ -53,8 +43,6 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("Stopped Respawn");
             gameOver.SetActive(true);
-
-    
         }
     }
 
@@ -74,16 +62,9 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             transition.TransitionEnter();
             playerMovement.enabled = true;
-
-            //SceneManager.LoadScene("level prototype");
-            //Camera.main.transform.position = new (currentCheckPoint.transform.position.x,currentCheckPoint.transform.position.y, -10);
-
-            //camera.CenterTargetOnStart = true;
-
             LifeManager.instance.TakeLife();
             playerHealth.FullHealth();
         }
-        //LifeManager.instance.TakeLife();
     }
 }
 

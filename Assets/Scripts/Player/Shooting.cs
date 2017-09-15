@@ -10,7 +10,13 @@ public class Shooting : MonoBehaviour
   
     float cooldownTimer = 100f;
     float timer;
-    public AudioSource shootSound;
+
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = FindObjectOfType<AudioManager>();
+    }
 
     void Update()
     { 
@@ -21,7 +27,7 @@ public class Shooting : MonoBehaviour
             if (timer > timeBetweenShots)
             {
                 Shoot();
-                shootSound.Play();
+                audioManager.Play("PlayerShoot");
             }
         }
     }

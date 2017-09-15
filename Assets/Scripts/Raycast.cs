@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Com.LuisPedroFonseca.ProCamera2D;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class Raycast : MonoBehaviour
 {
     public LayerMask collisionMask;
