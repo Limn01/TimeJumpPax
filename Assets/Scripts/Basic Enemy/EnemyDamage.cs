@@ -10,11 +10,12 @@ public class EnemyDamage : MonoBehaviour
     
 
     bool playerInRange;
-    float timer;
+    public float timer;
     GameObject player;
     Animator anim;
     PlayerHealth playerHealth;
     Player playerMovement;
+    Controller2D controller;
     
     
 
@@ -24,6 +25,7 @@ public class EnemyDamage : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = FindObjectOfType<Player>();
+        controller = player.GetComponent<Controller2D>();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -49,7 +51,7 @@ public class EnemyDamage : MonoBehaviour
         if (timer >= timebetweenAttack && playerInRange)
         {
             Attack();
-
+            
             Debug.Log("Attacking");
         }
     }

@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     bool wallSliding;
     int wallDirX;
     Rigidbody2D rb;
-    Animator anim;
+    //Animator anim;
     bool isGrounded;
     PlayerHealth playerHealth;
     AudioManager audioManager;
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
+        //anim = GetComponentInChildren<Animator>();
         playerHealth = FindObjectOfType<PlayerHealth>();
         audioManager = FindObjectOfType<AudioManager>();
     }
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         CalculateVelocity();
         HandleWallSliding();
 
-        anim.SetFloat("Speed", Mathf.Abs(Input.GetAxisRaw("Horizontal")));
+        //anim.SetFloat("Speed", Mathf.Abs(Input.GetAxisRaw("Horizontal")));
 
         controller.Move(velocity * Time.deltaTime, directionalInput);
 
@@ -91,12 +91,12 @@ public class Player : MonoBehaviour
 
         if (controller.collisions.below)
         {
-            anim.SetBool("IsGrounded", true);
+            //anim.SetBool("IsGrounded", true);
             
         }
         else
         {
-            anim.SetBool("IsGrounded", false);
+            //anim.SetBool("IsGrounded", false);
         }
 
         if (knockBackCount <= 0)
@@ -209,19 +209,19 @@ public class Player : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "MovingPlatform")
-        {
-            transform.parent = collision.transform;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "MovingPlatform")
-        {
-            transform.parent = null;
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.tag == "MovingPlatform")
+    //    {
+    //        transform.parent = collision.transform;
+    //    }
+    //}
+    //
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.tag == "MovingPlatform")
+    //    {
+    //        transform.parent = null;
+    //    }
+    //}
 }

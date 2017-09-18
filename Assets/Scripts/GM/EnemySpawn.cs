@@ -6,14 +6,16 @@ using System.Linq;
 public class EnemySpawn : MonoBehaviour
 {
     public Transform tranform;
-    [SerializeField]
+   
     List<GameObject> enemies = new List<GameObject>();
     GameObject player;
+   
 
     void Awake()
     {
         //enemy = GameObject.FindGameObjectWithTag("Enemy");
         player = GameObject.FindGameObjectWithTag("Player");
+       
     }
 
     void OnTriggerEnter2D(Collider2D col)
