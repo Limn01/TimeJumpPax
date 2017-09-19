@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
 
     bool hittingWall;
     public bool moveRight;
+    bool notAtEdge;
 
     private void Start()
     {
@@ -25,34 +26,27 @@ public class Enemy : MonoBehaviour
         velocity += Vector3.down * gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime, false);
 
+        notAtEdge = controller.collisions.below || controller.collisions.above;
+        hittingWall = controller.collisions.right || controller.collisions.left;
+
         if (controller.collisions.below)
         {
             velocity.y = 0;
-            //velocity = new Vector2(moveSpeed, velocity.y);
         }
-
-        if (controller.collisions.right || controller.collisions.left)
+        
+        if (hittingWall || !notAtEdge)
         {
             moveRight = !moveRight;
         }
-
-        
 
         if (moveRight)
         {
             velocity = new Vector2(moveSpeed, velocity.y);
         }
-
-        if (!moveRight)
+        
+        else
         {
             velocity = new Vector2(-moveSpeed, velocity.y);
         }
-
-        //if (hittingWall)
-        //{
-        //    moveRight = !moveRight;
-        //}
-
-        
     }
 }

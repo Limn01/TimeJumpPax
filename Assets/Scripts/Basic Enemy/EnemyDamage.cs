@@ -9,7 +9,7 @@ public class EnemyDamage : MonoBehaviour
     public float timebetweenAttack = 0.5f;
     
 
-    bool playerInRange;
+    public bool playerInRange;
     public float timer;
     GameObject player;
     Animator anim;
@@ -28,17 +28,17 @@ public class EnemyDamage : MonoBehaviour
         controller = player.GetComponent<Controller2D>();
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.gameObject == player)
+        if (collision.gameObject == player)
         {
             playerInRange = true;
         }
     }
 
-    void OnCollisionExit2D(Collision2D other)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        if (other.gameObject == player)
+        if (collision.gameObject == player)
         {
             playerInRange = false;
         }
