@@ -15,9 +15,17 @@ public class TestingTriggers : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == player)
+        if (controller.collider.tag == "Player")
         {
-            Debug.Log("shit");
+            Debug.Log("pie");
+        }
+    }
+
+    private void Update()
+    {
+        if (controller.collider.tag == "Finish")
+        {
+            Debug.Log("Poo");
         }
     }
 }

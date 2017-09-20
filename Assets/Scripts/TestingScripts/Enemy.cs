@@ -26,10 +26,10 @@ public class Enemy : MonoBehaviour
         velocity += Vector3.down * gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime, false);
 
-        notAtEdge = controller.collisions.below || controller.collisions.above;
+        notAtEdge = controller.collisions.below;
         hittingWall = controller.collisions.right || controller.collisions.left;
 
-        if (controller.collisions.below)
+        if (controller.collisions.below || controller.collisions.above)
         {
             velocity.y = 0;
         }

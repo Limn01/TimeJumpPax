@@ -7,6 +7,7 @@ public class Controller2D : Raycast
 {
     public float maxSlopeAngle = 80;
 
+    EnemyDamage enemyDamage;
     public CollisionInfo collisions;
     [HideInInspector]
     public Vector2 playerInput;
@@ -79,6 +80,11 @@ public class Controller2D : Raycast
                     continue;
                 }
 
+                //if (hit.collider.tag == "Enemy")
+                //{
+                //    enemyDamage.Attack();
+                //}
+
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
                 if (i == 0 && slopeAngle <= maxSlopeAngle)
@@ -148,6 +154,8 @@ public class Controller2D : Raycast
                     }
                 }
 
+               
+
                 moveAmount.y = (hit.distance - skinWidth) * directionY;
                 rayLength = hit.distance;
 
@@ -159,6 +167,8 @@ public class Controller2D : Raycast
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
             }
+
+            
         }
 
         if (collisions.climbingSlope)

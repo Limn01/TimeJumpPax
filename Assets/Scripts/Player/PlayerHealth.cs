@@ -18,14 +18,12 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
 
     public bool isDead;
     public bool fullyDead = false;
-    //public AudioSource sound;
     
     [SerializeField]
     HealthBar healthBar;
     ProCamera2DShake proShake;
     GameObject camera;
-
-    //GameObject player;
+    
     Animator anim;
     GameObject gameManager;
     GameObject player;
@@ -101,6 +99,7 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
     void Death()
     {
         isDead = true;
+        audioManager.Play("Death");
         gameObject.SetActive(false);
         levelManager.StartCoroutine("RespawnPlayer");
         FullHealth();

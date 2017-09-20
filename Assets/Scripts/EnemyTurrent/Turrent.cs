@@ -86,7 +86,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
     private void FixedUpdate()
     {
-        rb.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.down * -gravity * Time.deltaTime,ForceMode2D.Impulse);
     }
 
 
@@ -125,8 +125,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             pooledObj[randomIndex].transform.position = shotPoint.transform.position;
             pooledObj[randomIndex].transform.rotation = transform.rotation;
             pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
-
-
         }
     }
 
@@ -174,32 +172,27 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         currentHealth = startingHealth;
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "MovingPlatform")
-        {
-            transform.parent = other.transform;
-        }
-
-        if (other.gameObject.tag == "Player")
-        {
-            playerMovement.knockbackCount = playerMovement.knockbackLength;
-
-            if (player.transform.position.x < transform.position.x)
-            {
-                playerMovement.knockbackFromRight = true;
-            }
-            else
-            {
-                playerMovement.knockbackFromRight = false;
-            }
-
-            if (playerHealth.CurrentHealth > 0)
-            {
-                playerHealth.TakeDamage(damage);
-            }
-        }
-    }
+    //void OnCollisionEnter2D(Collision2D other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        playerMovement.knockbackCount = playerMovement.knockbackLength;
+    //
+    //        if (player.transform.position.x < transform.position.x)
+    //        {
+    //            playerMovement.knockbackFromRight = true;
+    //        }
+    //        else
+    //        {
+    //            playerMovement.knockbackFromRight = false;
+    //        }
+    //
+    //        if (playerHealth.CurrentHealth > 0)
+    //        {
+    //            playerHealth.TakeDamage(damage);
+    //        }
+    //    }
+    //}
 }
 
 

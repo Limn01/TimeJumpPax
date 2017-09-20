@@ -7,17 +7,13 @@ public class EnemyDamage : MonoBehaviour
 {
     public float damage = 1;
     public float timebetweenAttack = 0.5f;
-    
 
-    public bool playerInRange;
-    public float timer;
+    bool playerInRange = false;
+    float timer;
     GameObject player;
     Animator anim;
     PlayerHealth playerHealth;
     Player playerMovement;
-    Controller2D controller;
-    
-    
 
     void Awake()
     {
@@ -25,7 +21,7 @@ public class EnemyDamage : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = FindObjectOfType<Player>();
-        controller = player.GetComponent<Controller2D>();
+       
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -35,7 +31,7 @@ public class EnemyDamage : MonoBehaviour
             playerInRange = true;
         }
     }
-
+    
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject == player)

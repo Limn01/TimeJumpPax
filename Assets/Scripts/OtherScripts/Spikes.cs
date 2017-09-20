@@ -12,11 +12,13 @@ public class Spikes : MonoBehaviour
     float restartDelay = 2f;
     GameObject player;
     LevelManager levelManager;
+    AudioManager audioManager;
 
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         levelManager = FindObjectOfType<LevelManager>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void Update()
@@ -38,11 +40,13 @@ public class Spikes : MonoBehaviour
         {
             if (other.gameObject == player)
             {
+                audioManager.Play("Death");
                 levelManager.StartCoroutine("RespawnPlayer");
             }
         }
         else
         {
+            audioManager.Play("Death");
             levelManager.StopCoroutine("RespawnPlayer");
             player.gameObject.SetActive(false);
             gameOver.SetActive(true);
