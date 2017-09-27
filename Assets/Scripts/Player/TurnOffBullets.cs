@@ -55,6 +55,12 @@ public class TurnOffBullets : MonoBehaviour
             PatrolEnemyScript patrolHealth = other.gameObject.GetComponent<PatrolEnemyScript>();
             patrolHealth.TakeDamage(damage);
         }
+        else if (other.gameObject.tag == "FlyingEnemies")
+        {
+            this.gameObject.SetActive(false);
+            FlyingEnemies flyingEnemies = other.gameObject.GetComponent<FlyingEnemies>();
+            flyingEnemies.TakeDamage(damage);
+        }
     }
 
     void OnDisable()

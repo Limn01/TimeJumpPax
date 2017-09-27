@@ -8,14 +8,19 @@ public class BossHealth : MonoBehaviour
     public float currentHealth;
     public float damage = 1;
     public GameObject explosion;
+    public TimeManager timeManager;
+
+    float timer;
 
     bool isDamaged;
     public bool isDead;
 
+    
+
     private void OnEnable()
     {
         currentHealth = startingHealth;
-        isDead = false;
+        //isDead = false;
     }
 
     private void Update()
@@ -29,7 +34,7 @@ public class BossHealth : MonoBehaviour
 
         currentHealth -= amount;
 
-        if (currentHealth <= 0 && !isDead)
+        if (currentHealth <= 0)
         {
             Death();
         }
@@ -38,6 +43,8 @@ public class BossHealth : MonoBehaviour
     void Death()
     {
         isDead = true;
+        timeManager.DoSlowmotion();
+        Debug.Log("time slow should work");
         this.gameObject.SetActive(false);
         Instantiate(explosion, transform.position, Quaternion.identity);
     }

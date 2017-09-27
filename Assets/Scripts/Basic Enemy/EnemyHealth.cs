@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour,Idamageable
     float startingHealth = 1;
     [SerializeField]
     float currentHealth;
-
+    
     bool damaged;
     bool isDead;
     

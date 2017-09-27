@@ -57,7 +57,6 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
     {
         if (other.gameObject == player)
         {
-
             playerMovement.knockBackCount = playerMovement.knockBackLength;
 
             if (player.transform.position.x < transform.position.x)
@@ -80,12 +79,13 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
     {
         damaged = true;
 
-        currentHealth -= amount;
+        gameObject.GetComponentInChildren<Animation>().Play("FlyingHitDamage");
 
-        gameObject.GetComponentInChildren<Animator>().Play("FlyingDamage");
+        currentHealth -= amount;
 
         if (currentHealth <= 0 && !isDead)
         {
+            gameObject.GetComponentInChildren<Animation>().Stop("FlyingHitDamage");
             Death();
         }
     }

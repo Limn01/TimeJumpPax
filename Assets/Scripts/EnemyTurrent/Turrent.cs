@@ -138,12 +138,14 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     {
         isDamaged = true;
 
-        gameObject.GetComponent<Animation>().Play("TurrentDamage");
+        gameObject.GetComponentInChildren<Animation>().Play("TurrentDamage");
 
         currentHealth -= amount;
 
         if (currentHealth <= 0 && !isDead)
         {
+            gameObject.GetComponentInChildren<Animation>().Stop("TurrentDamage");
+
             Death();
         }
     }
@@ -151,6 +153,8 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     void Death()
     {
         isDead = true;
+
+        
 
         GameObject obj = ExplosionsPool.current.GetPooledObject();
         List<GameObject> pooledObj = new List<GameObject>();

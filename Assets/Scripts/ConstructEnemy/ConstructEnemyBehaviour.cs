@@ -82,4 +82,9 @@ public class ConstructEnemyBehaviour : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, distance);
+    }
 }

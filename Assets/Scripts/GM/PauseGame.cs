@@ -79,6 +79,7 @@ public class PauseGame : MonoBehaviour
 
         if (iconTransform.position == secondPoint.position && Input.GetButtonDown("Jump") && isPaused)
         {
+            Time.timeScale = timeScaleStore;
             SceneManager.LoadScene("MainMenu");
         }
 

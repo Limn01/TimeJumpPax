@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class MainBoss : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class MainBoss : MonoBehaviour
     float maxJumpVelocity;
     float minJumpVelocity;
     float gravityStore;
+    public float timer;
+    float timeBetweenSlowmoion = 2;
    
     bool coroutineStarted = false;
     bool otherCoroutineStarted = false;
@@ -50,6 +53,7 @@ public class MainBoss : MonoBehaviour
     Rigidbody2D rb;
     BossHealth bossHealth;
     Animator anim;
+    TimeManager timeManager;
 
     private void Awake()
     {
@@ -58,6 +62,7 @@ public class MainBoss : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
         anim = GetComponentInChildren<Animator>();
+        timeManager = FindObjectOfType<TimeManager>();
     }
 
     private void Start()
@@ -98,11 +103,6 @@ public class MainBoss : MonoBehaviour
             coroutineStarted = false;
             StopAllCoroutines();
             StartCoroutine(BossMovementChange());
-        }
-
-        if (bossHealth.currentHealth <= 0)
-        {
-            knownPosPatricle.SetActive(false);
         }
     }
 
@@ -244,11 +244,13 @@ public class MainBoss : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+        knownPosPatricle.SetActive(false);
     }
 
     private void OnEnable()
     {
         StartCoroutine(BossMove());
+        knownPosPatricle.SetActive(true);
     }
 
     private void OnDrawGizmos()
