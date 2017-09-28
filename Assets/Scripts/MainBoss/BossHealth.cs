@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossHealth : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class BossHealth : MonoBehaviour
     public GameObject explosion;
     public TimeManager timeManager;
 
+    float timeBetweenDeath = .5f;
     float timer;
 
     bool isDamaged;
@@ -25,7 +27,17 @@ public class BossHealth : MonoBehaviour
 
     private void Update()
     {
+        timer += Time.deltaTime;
         
+        if (isDead)
+        {
+            if (timer >= timeBetweenDeath)
+            {
+                //timer = 0;
+                SceneManager.LoadScene("MainMenu");
+                //timeManager.DoSlowmotion();
+            }
+        }
     }
 
     public void TakeDamage(float amount)
@@ -43,9 +55,10 @@ public class BossHealth : MonoBehaviour
     void Death()
     {
         isDead = true;
-        timeManager.DoSlowmotion();
-        Debug.Log("time slow should work");
+        //timeManager.DoSlowmotion();
+        //Debug.Log("time slow should work");
         this.gameObject.SetActive(false);
         Instantiate(explosion, transform.position, Quaternion.identity);
+        //SceneManager.LoadScene("MainMenu");
     }
 }

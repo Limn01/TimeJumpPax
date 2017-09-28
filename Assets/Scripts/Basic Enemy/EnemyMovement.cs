@@ -34,18 +34,18 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+        //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        //maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        //minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
     }
 
     private void FixedUpdate()
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
 
-        notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
+        //notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
-        rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
+        //rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
 
         Movement();
     }
@@ -77,7 +77,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Movement()
     {
-        if (hittingWall || !notAtEdge)
+        if (hittingWall)
         {
             moveRight = !moveRight;
         }
