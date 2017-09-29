@@ -7,7 +7,6 @@ public class Shooting : MonoBehaviour
     public float bulletSpeed;
     public Transform shotEnd;
     public float timeBetweenShots;
-    public TimeManager timeManager;
   
     float cooldownTimer = 100f;
     float timer;
@@ -29,7 +28,6 @@ public class Shooting : MonoBehaviour
             {
                 Shoot();
                 audioManager.Play("PlayerShoot");
-                timeManager.DoSlowmotion();
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
+public class FlyingEnemies : MonoBehaviour, Idamageable
 {
     public float moveSpeed;
     public float playerRange;
@@ -32,11 +32,12 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
         playerMovement = player.GetComponent<Player>();
         target = player.GetComponent<Transform>();
     }
-
  
     private void OnEnable()
     {
         currentHealth = startingHealth;
+        isDead = false;
+        gameObject.GetComponentInChildren<Animation>().Stop("FlyingHitDamage");
     }
 
     void Update()
@@ -85,7 +86,7 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
 
         if (currentHealth <= 0 && !isDead)
         {
-            gameObject.GetComponentInChildren<Animation>().Stop("FlyingHitDamage");
+            
             Death();
         }
     }
@@ -96,11 +97,11 @@ public class FlyingEnemies : MonoBehaviour, IHealable,  Idamageable
         gameObject.SetActive(false);
     }
 
-    public void FullHealth()
-    {
-        isDead = false;
-        currentHealth = startingHealth;
-    }
+    //public void FullHealth()
+    //{
+    //    isDead = false;
+    //    currentHealth = startingHealth;
+    //}
 }
 
 

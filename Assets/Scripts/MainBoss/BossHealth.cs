@@ -9,35 +9,24 @@ public class BossHealth : MonoBehaviour
     public float currentHealth;
     public float damage = 1;
     public GameObject explosion;
-    public TimeManager timeManager;
+    public GameObject portal;
+    public Transform portalSpawnPoint;
 
     float timeBetweenDeath = .5f;
     float timer;
 
     bool isDamaged;
-    public bool isDead;
-
+    bool isDead;
     
+    GameObject player;
+    GravityBody gravityBody;
 
     private void OnEnable()
     {
-        currentHealth = startingHealth;
-        //isDead = false;
-    }
+        player = GameObject.FindGameObjectWithTag("Player");
+        gravityBody = player.GetComponent<GravityBody>();
 
-    private void Update()
-    {
-        timer += Time.deltaTime;
-        
-        if (isDead)
-        {
-            if (timer >= timeBetweenDeath)
-            {
-                //timer = 0;
-                SceneManager.LoadScene("MainMenu");
-                //timeManager.DoSlowmotion();
-            }
-        }
+        currentHealth = startingHealth;
     }
 
     public void TakeDamage(float amount)
@@ -59,6 +48,6 @@ public class BossHealth : MonoBehaviour
         //Debug.Log("time slow should work");
         this.gameObject.SetActive(false);
         Instantiate(explosion, transform.position, Quaternion.identity);
-        //SceneManager.LoadScene("MainMenu");
+        Instantiate(portal, portalSpawnPoint.position, Quaternion.identity);
     }
 }

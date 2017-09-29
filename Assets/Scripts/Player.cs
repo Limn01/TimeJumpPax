@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     bool isGrounded;
     PlayerHealth playerHealth;
     AudioManager audioManager;
+    HeadStomp headStomp;
     
     bool doubleJump = false;
     public bool canDoubleJump;
@@ -49,6 +50,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        headStomp = GetComponentInChildren<HeadStomp>();
         //anim = GetComponentInChildren<Animator>();
         playerHealth = FindObjectOfType<PlayerHealth>();
         audioManager = FindObjectOfType<AudioManager>();
@@ -115,6 +117,19 @@ public class Player : MonoBehaviour
             }
 
             knockBackCount -= Time.deltaTime;
+        }
+
+        if (headStomp.jumpOn)
+        {
+            headStomp.jumpOn = false;
+            velocity = new Vector2(velocity.x, headStomp.bounceOnEnemy);
+        }
+        else
+        {
+            if (!headStomp.jumpOn)
+            {
+                velocity = new Vector2(velocity.x, velocity.y);
+            }
         }
     }
 
@@ -208,20 +223,4 @@ public class Player : MonoBehaviour
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
     }
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "MovingPlatform")
-    //    {
-    //        transform.parent = collision.transform;
-    //    }
-    //}
-    //
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "MovingPlatform")
-    //    {
-    //        transform.parent = null;
-    //    }
-    //}
 }

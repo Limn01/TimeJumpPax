@@ -13,6 +13,5 @@ public class GravityAttractor : MonoBehaviour
 
         body.AddForce(gravityUp * gravity);
         body.transform.rotation = Quaternion.FromToRotation(localUp, gravityUp) * body.transform.rotation;
-        
     }
 }
