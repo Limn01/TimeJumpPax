@@ -5,47 +5,44 @@ using UnityEngine;
 public class EndOfDemoCutScene : MonoBehaviour
 {
     public float moveSpeed;
-    //public float waitTime;
-    public Transform currentPoint;
-    public Transform[] points;
-    public int pointIndex;
+    public float waitTime;
+    public Transform pathHolder;
 
-    private void Start()
+    Animator anim;
+
+    void Start()
     {
-        currentPoint = points[pointIndex];
-    }
+        anim = GetComponent<Animator>();
 
-    private void Update()
-    {
-        transform.position = Vector2.MoveTowards(transform.position, currentPoint.position, moveSpeed * Time.deltaTime);
-
-        if (transform.position == currentPoint.position)
+        Vector3[] wayPoints = new Vector3[pathHolder.childCount];
+        for (int i = 0; i < wayPoints.Length; i++)
         {
-            pointIndex++;
-
-            if (pointIndex == points.Length)
-            {
-                pointIndex = 0;
-            }
-
-            currentPoint = points[pointIndex];
+            wayPoints[i] = pathHolder.GetChild(i).position;
         }
+
+        StartCoroutine(FollowPath(wayPoints));
     }
 
-    private void Move()
+    IEnumerator FollowPath(Vector3[] wayPoints)
     {
-        transform.position = Vector2.MoveTowards(transform.position, currentPoint.position, moveSpeed * Time.deltaTime);
+        transform.position = wayPoints[0];
 
-        if (transform.position == currentPoint.position)
+        int targetWaypointIndex = 1;
+        Vector3 targetWaypoint = wayPoints[targetWaypointIndex];
+
+        while (true)
         {
-            pointIndex++;
+            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, moveSpeed * Time.deltaTime);
 
-            if (pointIndex == points.Length)
+            if (transform.position == targetWaypoint)
             {
-                pointIndex = 0;
+                targetWaypointIndex = (targetWaypointIndex + 1) % wayPoints.Length;
+                targetWaypoint = wayPoints[targetWaypointIndex];
+                transform.localScale = new Vector3(-1, 1, 1);
+                yield return new WaitForSeconds(waitTime);
+                transform.localScale = new Vector3(1, 1, 1);
             }
-
-            currentPoint = points[pointIndex];
+            yield return null;
         }
     }
 }

@@ -11,12 +11,10 @@ public class EyeShooterMovement : MonoBehaviour
 
     void Start()
     {
-
         Vector3[] wayPoints = new Vector3[pathHolder.childCount];
         for (int i = 0; i < wayPoints.Length; i++)
         {
             wayPoints[i] = pathHolder.GetChild(i).position;
-            
         }
 
         StartCoroutine(FollowPath(wayPoints));
@@ -41,6 +39,5 @@ public class EyeShooterMovement : MonoBehaviour
             }
             yield return null;
         }
-
     }
 }
