@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
 
         yield return new WaitForSeconds(waitChangeScene);
 
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadSceneAsync("Level1");
     }
 
     private void OnDisable()

@@ -35,6 +35,13 @@ public class LevelManager : MonoBehaviour
         proCamera = camera.GetComponent<ProCamera2D>();
         transition = camera.GetComponent<ProCamera2DTransitionsFX>();
         gameOver = GameObject.FindGameObjectWithTag("GameOver");
+
+        transition.TransitionEnter();
+    }
+
+    private void Start()
+    {
+       
     }
 
     private void Update()

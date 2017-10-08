@@ -53,6 +53,6 @@ public class PortalEnter : MonoBehaviour
 
         yield return new WaitForSeconds(wait);
 
-        SceneManager.LoadScene("EndOfDemo");
+        SceneManager.LoadSceneAsync("EndOfDemo");
     }
 }

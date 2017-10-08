@@ -54,7 +54,7 @@ public class LifeManager : MonoBehaviour
 
             if (restartTimer >= restartDelay)
             {
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadSceneAsync("MainMenu");
                 //player.transform.position = restartPoint.position;
                 //player.SetActive(true);
                 //gameOverScreen.SetActive(false);
