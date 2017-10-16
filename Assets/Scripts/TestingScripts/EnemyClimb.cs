@@ -30,8 +30,8 @@ public class EnemyClimb : MonoBehaviour
         Ray leftRay = new Ray(bottomLeft, down);
         Ray rightRay = new Ray(bottomRight, down);
 
-        Debug.DrawLine(leftRay.origin, leftRay.origin + leftRay.direction * distance, Color.cyan);
-        Debug.DrawLine(rightRay.origin, rightRay.origin + rightRay.direction * distance, Color.cyan);
+        Debug.DrawLine(leftRay.origin, leftRay.origin + leftRay.direction * distance, Color.red);
+        Debug.DrawLine(rightRay.origin, rightRay.origin + rightRay.direction * distance, Color.red);
 
         RaycastHit2D leftRayHit = Physics2D.Raycast(leftRay.origin, leftRay.direction, distance, groundMask);
         RaycastHit2D rightRayHit = Physics2D.Raycast(rightRay.origin, rightRay.direction, distance, groundMask);
