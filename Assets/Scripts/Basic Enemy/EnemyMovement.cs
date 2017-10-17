@@ -11,6 +11,8 @@ public class EnemyMovement : MonoBehaviour
     public float wallCheckRadius;
     public LayerMask whatIsWall;
     public Transform edgeCheck;
+    public float rayDistance;
+    public LayerMask groundCollision;
 
     Rigidbody2D rb2d;
     bool hittingWall;
@@ -34,9 +36,35 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+       // gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+       // maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+       // minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+    }
+
+    private void Update()
+    {
+        Vector3 pos = transform.position;
+        Vector3 down = -transform.up;
+        Vector3 size = transform.localScale;
+
+        Vector3 halfSize = size * 0.5f;
+
+        Vector3 rayFromScale = pos + down * halfSize.y;
+
+        Ray ray = new Ray(rayFromScale, down);
+
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.magenta);
+
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundCollision);
+
+        if (hit)
+        {
+            Vector2 targetLocation = hit.point;
+
+            targetLocation += new Vector2(0, size.y / 2);
+
+            transform.position = targetLocation;
+        }
     }
 
     private void FixedUpdate()
@@ -45,7 +73,7 @@ public class EnemyMovement : MonoBehaviour
 
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
-        rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
+        //rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
 
         Movement();
     }
@@ -56,22 +84,22 @@ public class EnemyMovement : MonoBehaviour
         Gizmos.DrawSphere(edgeCheck.position, wallCheckRadius);
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-
-        if (other.gameObject.tag == "MovingPlatform")
-        {
-            if (gameObject.activeInHierarchy)
-            {
-                transform.parent = other.transform;
-            }
-        }
-
-        if (other.gameObject.tag == "Ground")
-        {
-            transform.parent = null;
-        }
-    }
+    //void OnCollisionEnter2D(Collision2D other)
+    //{
+    //
+    //    if (other.gameObject.tag == "MovingPlatform")
+    //    {
+    //        if (gameObject.activeInHierarchy)
+    //        {
+    //            transform.parent = other.transform;
+    //        }
+    //    }
+    //
+    //    if (other.gameObject.tag == "Ground")
+    //    {
+    //        transform.parent = null;
+    //    }
+    //}
 
     void Movement()
     {
@@ -80,41 +108,15 @@ public class EnemyMovement : MonoBehaviour
             moveRight = !moveRight;
         }
 
-        //if (hittingWall)
-        //{
-        //    rb2d.velocity = new Vector2(rb2d.velocity.x, -moveSpeed);
-        //    //transform.rotation = Quaternion.Euler(0,0,90);
-        //    //rb2d.AddForce(Vector2.right, ForceMode2D.Force);
-        //    rb2d.gravityScale = 0;
-        //
-        //   // moveRight = false;
-        //}
-
-        //if (!notAtEdge)
-        //{
-        //    //transform.localScale = new Vector3(1, 1, 1);
-        //    transform.rotation = Quaternion.Euler(0,0,90);
-        //    rb2d.velocity = new Vector2(rb2d.velocity.x, -moveSpeed);
-        //    //rb2d.gravityScale = 10;
-        //}
-
         if (moveRight)
         {
-            //rb2d.gravityScale = -10;
             rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
             transform.localScale = new Vector3(-1, 1, 1);
-            // transform.rotation = Quaternion.Euler(0,0,90);
         }
         else
         {
-            if (!moveRight || !hittingWall && !notAtEdge)
-            {
-                transform.localScale = new Vector3(1, 1, 1);
-                rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
-                //enemyCloneSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-                // rb2d.gravityScale = -10;
-            }
+            transform.localScale = new Vector3(1, 1, 1);
+            rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
         }
     }   
 }

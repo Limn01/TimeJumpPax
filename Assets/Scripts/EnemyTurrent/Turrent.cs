@@ -12,21 +12,16 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     float startingHealth = 5;
     [SerializeField]
     float currentHealth;
+    public float rayDistance;
+    public LayerMask groundCollision;
 
-    float gravity;
     float shotCounter;
     bool isDamaged;
     public bool isDead;
     bool restore;
     public LayerMask playerLayer;
     int damage = 2;
-    public float maxJumpHeight = 6;
-    public float minJumpHeight = 1;
-    public float timeToJumpApex = .4f;
-    float accerlerationTimeAirborne = .2f;
-    float accelerationTimeGrounded = .1f;
-    float maxJumpVelocity;
-    float minJumpVelocity;
+
 
     RaycastHit2D hit;
     GameObject player;
@@ -65,7 +60,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<PlayerMovement>();
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
 
         //Init();
     }
@@ -77,24 +72,47 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
     private void Start()
     {
-        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
-
-        currentHealth = startingHealth;
+        //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        //maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        //minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
+        //
+        //currentHealth = startingHealth;
     }
 
     private void FixedUpdate()
     {
-        rb.AddForce(Vector2.down * -gravity * Time.deltaTime,ForceMode2D.Impulse);
+        //rb.AddForce(Vector2.down * -gravity * Time.deltaTime,ForceMode2D.Impulse);
     }
 
 
     void Update()
     {
+        Vector3 pos = transform.position;
+        Vector3 down = -transform.up;
+        Vector3 right = transform.right;
+        Vector3 size = transform.localScale;
+        Vector3 halfSize = size * 0.37f;
+
+        Vector3 rayFromScale = pos + down * halfSize.y;
+
+        Ray ray = new Ray(rayFromScale, down);
+
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.magenta);
+
+        RaycastHit2D groundHit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundCollision);
+
+        if (groundHit)
+        {
+            Vector2 targetLocation = groundHit.point;
+            targetLocation += new Vector2(0, size.y / 3.1f);
+            transform.position = targetLocation;
+        }
+
         shotCounter += Time.deltaTime;
 
-        hit = Physics2D.Raycast(transform.position, Vector2.right, playerInRange, playerLayer);
+        //Ray shootRay = new Ray(pos, right);
+
+        hit = Physics2D.Raycast(transform.position, Vector3.right, playerInRange, playerLayer);
 
         if (hit.collider != null && hit.collider.tag == "Player")
         {
@@ -103,7 +121,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
                 Shoot();
             }
         }
-
         if (isDead)
         {
             FullHealth();
@@ -131,7 +148,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position +transform.localScale.x*Vector3.right*playerInRange);
+        Gizmos.DrawLine(transform.position, transform.position + transform.localScale.x * Vector3.right * playerInRange);
     }
 
     public void TakeDamage(float amount)
@@ -154,8 +171,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     {
         isDead = true;
 
-        
-
         GameObject obj = ExplosionsPool.current.GetPooledObject();
         List<GameObject> pooledObj = new List<GameObject>();
         pooledObj.Add(obj);
@@ -166,6 +181,7 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             pooledObj[randomIndex].transform.position = transform.position;
             pooledObj[randomIndex].transform.rotation = transform.rotation;
         }
+
         this.gameObject.SetActive(false);
     }
 
@@ -190,7 +206,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     //        {
     //            playerMovement.knockbackFromRight = false;
     //        }
-    //
     //        if (playerHealth.CurrentHealth > 0)
     //        {
     //            playerHealth.TakeDamage(damage);
