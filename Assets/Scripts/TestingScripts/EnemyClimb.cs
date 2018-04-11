@@ -14,6 +14,13 @@ public class EnemyClimb : MonoBehaviour
     bool isPrevLeftHit = false;
     bool isPrevRightHit = false;
 
+    Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     private void Update()
     {
         Vector3 pos = transform.position;
@@ -30,8 +37,8 @@ public class EnemyClimb : MonoBehaviour
         Ray leftRay = new Ray(bottomLeft, down);
         Ray rightRay = new Ray(bottomRight, down);
 
-        Debug.DrawLine(leftRay.origin, leftRay.origin + leftRay.direction * distance, Color.red);
-        Debug.DrawLine(rightRay.origin, rightRay.origin + rightRay.direction * distance, Color.red);
+        Debug.DrawLine(leftRay.origin, leftRay.origin + leftRay.direction * distance, Color.cyan);
+        Debug.DrawLine(rightRay.origin, rightRay.origin + rightRay.direction * distance, Color.cyan);
 
         RaycastHit2D leftRayHit = Physics2D.Raycast(leftRay.origin, leftRay.direction, distance, groundMask);
         RaycastHit2D rightRayHit = Physics2D.Raycast(rightRay.origin, rightRay.direction, distance, groundMask);
@@ -67,6 +74,8 @@ public class EnemyClimb : MonoBehaviour
         }
 
         transform.position -= transform.right * Time.deltaTime * moveSpeed;
+
+        
 
         isPrevLeftHit = isCurrLeftHit;
         isPrevRightHit = isCurrRightHit;
