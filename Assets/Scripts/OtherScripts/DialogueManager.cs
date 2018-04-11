@@ -17,10 +17,13 @@ public class DialogueManager : MonoBehaviour
     bool isTyping = false;
     bool cancelTyping = false;
     Player player;
+    float moveSpeedStore;
  
     private void Start()
     {
         player = FindObjectOfType<Player>();
+
+        moveSpeedStore = player.moveSpeed;
     }
 
     private void Update()
@@ -37,7 +40,7 @@ public class DialogueManager : MonoBehaviour
                     dialogueActive = false;
 
                     currentLine = 0;
-                    player.enabled = true;
+                    player.moveSpeed = moveSpeedStore;
                 }
                 else
                 {
@@ -82,6 +85,6 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueActive = true;
         dialogueBox.SetActive(true);
-        player.enabled = false;
+        player.moveSpeed = 0;
     }
 }

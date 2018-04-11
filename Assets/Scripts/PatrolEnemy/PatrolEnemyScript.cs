@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolEnemyScript : MonoBehaviour, Idamageable,IHealable
+public class PatrolEnemyScript : MonoBehaviour
 {
     [SerializeField]
     float startingHealth = 5;

@@ -24,35 +24,15 @@ public class RobotBombController : MonoBehaviour
 
     bool rayIsHitting = false;
 
-    private void Awake()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
-
-        
     }
 
-    private void Update()
+    void Update()
     {
-        Vector3 down = -transform.up;
-        Vector3 pos = transform.position;
-
-        Ray ray = new Ray(pos, down);
-
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.green);
-
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundLayer);
-
-        if (hit.collider != null)
-        {
-            rayIsHitting = true;
-
-            Vector3 targetPos = hit.point;
-
-            targetPos += new Vector3(0, transform.localScale.y / 2, 0);
-
-            transform.position = targetPos;
-        }
+        StickToGround();
 
         timer += Time.deltaTime;
 
@@ -83,9 +63,28 @@ public class RobotBombController : MonoBehaviour
         timer = 0;
 
         Instantiate(bullet, shootPoint.position, Quaternion.identity);
+    }
 
-        
+    void StickToGround()
+    {
+        Vector3 down = -transform.up;
+        Vector3 pos = transform.position;
 
-        
+        Ray ray = new Ray(pos, down);
+
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.green);
+
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundLayer);
+
+        if (hit.collider != null)
+        {
+            rayIsHitting = true;
+
+            Vector3 targetPos = hit.point;
+
+            targetPos += new Vector3(0, transform.localScale.y / 2, 0);
+
+            transform.position = targetPos;
+        }
     }
 }

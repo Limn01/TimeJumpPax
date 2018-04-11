@@ -38,9 +38,9 @@ namespace Com.LuisPedroFonseca.ProCamera2D
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (LifeManager.instance.lifeCounter != 0)
+            if (LifeManager.instance.lifeCounter > 0)
             {
-                if (other.gameObject == player)
+                if (other.gameObject.layer == 8)
                 {
                     audioManager.Play("Death");
                     //LevelManager.instance.StartCoroutine("RespawnPlayer");

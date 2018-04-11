@@ -11,7 +11,7 @@ public class RobotWormSpawner : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.layer == 8)
+        if (col.gameObject.CompareTag("Player"))
         {
             SpawnEnemy();
         }
@@ -19,7 +19,7 @@ public class RobotWormSpawner : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.layer == 8)
+        if (col.gameObject.CompareTag("Player"))
         {
             TurnEnemyOff();
         }

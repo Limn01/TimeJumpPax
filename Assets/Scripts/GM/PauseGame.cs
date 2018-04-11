@@ -33,11 +33,14 @@ public class PauseGame : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
     }
 
+    private void Start()
+    {
+        timeScaleStore = Time.timeScale;
+    }
+
     private void OnEnable()
     {
         iconTransform.position = firstPoint.position;
-
-        timeScaleStore = Time.timeScale;
     }
 
     // Update is called once per frame
@@ -80,7 +83,7 @@ public class PauseGame : MonoBehaviour
         if (iconTransform.position == secondPoint.position && Input.GetButtonDown("Jump") && isPaused)
         {
             Time.timeScale = timeScaleStore;
-            SceneManager.LoadSceneAsync("MainMenu");
+            SceneManager.LoadScene("MainMenu");
         }
 
         if (iconTransform.position == firstPoint.position && Input.GetButtonDown("Jump") && isPaused)

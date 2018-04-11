@@ -31,7 +31,6 @@ public class EnemyMovement : MonoBehaviour
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        //gameObject.transform.parent = null;
     }
 
     private void Start()
@@ -73,8 +72,6 @@ public class EnemyMovement : MonoBehaviour
 
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, wallCheckRadius, whatIsWall);
 
-        //rb2d.AddForce(Vector2.down * -gravity * Time.deltaTime, ForceMode2D.Impulse);
-
         Movement();
     }
 
@@ -83,23 +80,6 @@ public class EnemyMovement : MonoBehaviour
         Gizmos.DrawSphere(wallCheck.position, wallCheckRadius);
         Gizmos.DrawSphere(edgeCheck.position, wallCheckRadius);
     }
-
-    //void OnCollisionEnter2D(Collision2D other)
-    //{
-    //
-    //    if (other.gameObject.tag == "MovingPlatform")
-    //    {
-    //        if (gameObject.activeInHierarchy)
-    //        {
-    //            transform.parent = other.transform;
-    //        }
-    //    }
-    //
-    //    if (other.gameObject.tag == "Ground")
-    //    {
-    //        transform.parent = null;
-    //    }
-    //}
 
     void Movement()
     {
@@ -111,11 +91,11 @@ public class EnemyMovement : MonoBehaviour
         if (moveRight)
         {
             rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-1, 0.3f, 1);
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(1, 0.3f, 1);
             rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
         }
     }   

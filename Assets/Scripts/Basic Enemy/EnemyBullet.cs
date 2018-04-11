@@ -30,27 +30,34 @@ public class EnemyBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.layer == 10)
         {
             this.gameObject.SetActive(false);
         }
 
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.layer == 8)
         {
-            this.gameObject.SetActive(false);
-
-            playerMovement.knockBackCount = playerMovement.knockBackLength;
-
-            if (other.transform.position.x < transform.position.x)
+            if (!playerHealth.invinc)
             {
-                playerMovement.knockBackFromRight = true;
+                Attack();
+                playerHealth.TakeDamage(damage);
+                this.gameObject.SetActive(false);
             }
+        }
+    }
 
-            if (other.transform.position.x > transform.position.x)
-            {
-                playerMovement.knockBackFromRight = false;
-            }
-            playerHealth.TakeDamage(damage);
+    void Attack()
+    {
+        playerMovement.knockBackCount = playerMovement.knockBackLength;
+
+        if (transform.position.x < transform.position.x)
+        {
+            playerMovement.knockBackFromRight = true;
+        }
+
+        if (transform.position.x > transform.position.x)
+        {
+            playerMovement.knockBackFromRight = false;
         }
     }
 

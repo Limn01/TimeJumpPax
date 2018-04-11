@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turrent : MonoBehaviour,Idamageable,IHealable
+public class Turrent : MonoBehaviour
 {
     public float playerInRange;
     public float bulletSpeed;
     public Transform shotPoint;
     public float shotDuration;
-    [SerializeField]
-    float startingHealth = 5;
-    [SerializeField]
-    float currentHealth;
+    
     public float rayDistance;
     public LayerMask groundCollision;
 
     float shotCounter;
-    bool isDamaged;
-    public bool isDead;
-    bool restore;
     public LayerMask playerLayer;
     int damage = 2;
-
 
     RaycastHit2D hit;
     GameObject player;
@@ -29,67 +22,17 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
     PlayerMovement playerMovement;
     Rigidbody2D rb;
 
-    //public float CurrentHealth
-    //{
-    //    get
-    //    {
-    //        return currentHealth;
-    //    }
-    //
-    //    set
-    //    {
-    //        this.currentHealth = value;
-    //    }
-    //}
-    //
-    //public float StartingHealth
-    //{
-    //    get
-    //    {
-    //        return startingHealth;
-    //    }
-    //
-    //    set
-    //    {
-    //        this.startingHealth = value;
-    //    }
-    //}
-
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<PlayerMovement>();
-        //rb = GetComponent<Rigidbody2D>();
-
-        //Init();
     }
-
-    private void OnEnable()
-    {
-        currentHealth = startingHealth;
-    }
-
-    private void Start()
-    {
-        //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        //maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        //minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
-        //
-        //currentHealth = startingHealth;
-    }
-
-    private void FixedUpdate()
-    {
-        //rb.AddForce(Vector2.down * -gravity * Time.deltaTime,ForceMode2D.Impulse);
-    }
-
 
     void Update()
     {
         Vector3 pos = transform.position;
         Vector3 down = -transform.up;
-        Vector3 right = transform.right;
         Vector3 size = transform.localScale;
         Vector3 halfSize = size * 0.37f;
 
@@ -110,8 +53,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
 
         shotCounter += Time.deltaTime;
 
-        //Ray shootRay = new Ray(pos, right);
-
         hit = Physics2D.Raycast(transform.position, Vector3.right, playerInRange, playerLayer);
 
         if (hit.collider != null && hit.collider.tag == "Player")
@@ -120,11 +61,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
             {
                 Shoot();
             }
-        }
-        if (isDead)
-        {
-            FullHealth();
-            Debug.Log("Restore Health");
         }
     }
 
@@ -150,68 +86,6 @@ public class Turrent : MonoBehaviour,Idamageable,IHealable
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + transform.localScale.x * Vector3.right * playerInRange);
     }
-
-    public void TakeDamage(float amount)
-    {
-        isDamaged = true;
-
-        gameObject.GetComponentInChildren<Animation>().Play("TurrentDamage");
-
-        currentHealth -= amount;
-
-        if (currentHealth <= 0 && !isDead)
-        {
-            gameObject.GetComponentInChildren<Animation>().Stop("TurrentDamage");
-
-            Death();
-        }
-    }
-
-    void Death()
-    {
-        isDead = true;
-
-        GameObject obj = ExplosionsPool.current.GetPooledObject();
-        List<GameObject> pooledObj = new List<GameObject>();
-        pooledObj.Add(obj);
-        int randomIndex = Random.Range(0, pooledObj.Count);
-        if (!pooledObj[randomIndex].activeInHierarchy)
-        {
-            pooledObj[randomIndex].SetActive(true);
-            pooledObj[randomIndex].transform.position = transform.position;
-            pooledObj[randomIndex].transform.rotation = transform.rotation;
-        }
-
-        this.gameObject.SetActive(false);
-    }
-
-    public void FullHealth()
-    {
-        restore = true;
-        isDead = false;
-        currentHealth = startingHealth;
-    }
-
-    //void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        playerMovement.knockbackCount = playerMovement.knockbackLength;
-    //
-    //        if (player.transform.position.x < transform.position.x)
-    //        {
-    //            playerMovement.knockbackFromRight = true;
-    //        }
-    //        else
-    //        {
-    //            playerMovement.knockbackFromRight = false;
-    //        }
-    //        if (playerHealth.CurrentHealth > 0)
-    //        {
-    //            playerHealth.TakeDamage(damage);
-    //        }
-    //    }
-    //}
 }
 
 

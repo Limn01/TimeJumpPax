@@ -13,14 +13,8 @@ public class EnemyClimb : MonoBehaviour
     bool isCurrRightHit = false;
     bool isPrevLeftHit = false;
     bool isPrevRightHit = false;
-
-    Rigidbody2D rb;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
+    
+    
     private void Update()
     {
         Vector3 pos = transform.position;
@@ -74,8 +68,6 @@ public class EnemyClimb : MonoBehaviour
         }
 
         transform.position -= transform.right * Time.deltaTime * moveSpeed;
-
-        
 
         isPrevLeftHit = isCurrLeftHit;
         isPrevRightHit = isCurrRightHit;

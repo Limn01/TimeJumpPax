@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour
     ProCamera2DTransitionsFX transition;
     GameObject player;
     GameObject gameOver;
+    AudioManager audio;
 
     // Use this for initialization
     void Awake()
@@ -35,13 +36,13 @@ public class LevelManager : MonoBehaviour
         proCamera = camera.GetComponent<ProCamera2D>();
         transition = camera.GetComponent<ProCamera2DTransitionsFX>();
         gameOver = GameObject.FindGameObjectWithTag("GameOver");
-
-        transition.TransitionEnter();
+        audio = FindObjectOfType<AudioManager>();
     }
 
     private void Start()
     {
-       
+        transition.TransitionEnter();
+        audio.Play("LevelMusic");
     }
 
     private void Update()
@@ -49,29 +50,27 @@ public class LevelManager : MonoBehaviour
         if (playerHealth.CurrentHealth <= 0 && LifeManager.instance.lifeCounter < 0)
         {
             Debug.Log("Stopped Respawn");
+            StopCoroutine(RespawnPlayer());
             gameOver.SetActive(true);
         }
     }
 
     public IEnumerator RespawnPlayer()
     {
-        while (LifeManager.instance.lifeCounter != 0)
-        {
-            player.gameObject.SetActive(false);
-            playerMovement.enabled = false;
-            transition.TransitionExit();
+        player.gameObject.SetActive(false);
+        playerMovement.enabled = false;
+        transition.TransitionExit();
 
-            yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
+       
+        player.transform.position = currentCheckPoint.transform.position;
 
-            player.gameObject.SetActive(true);
-            player.transform.position = currentCheckPoint.transform.position;
-
-            yield return new WaitForSeconds(1.5f);
-            transition.TransitionEnter();
-            playerMovement.enabled = true;
-            LifeManager.instance.TakeLife();
-            playerHealth.FullHealth();
-        }
+        yield return new WaitForSeconds(1f);
+        player.gameObject.SetActive(true);
+        transition.TransitionEnter();
+        playerMovement.enabled = true;
+        LifeManager.instance.TakeLife();
+        playerHealth.FullHealth();
     }
 }
 

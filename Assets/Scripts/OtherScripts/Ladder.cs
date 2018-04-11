@@ -5,25 +5,25 @@ using UnityEngine;
 public class Ladder : MonoBehaviour
 {
     GameObject player;
-    PlayerMovement playerMovement;
+    Player playerMovement;
 
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement = player.GetComponent<Player>();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == 8)
         {
             playerMovement.onLadder = true;
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == 8)
         {
             playerMovement.onLadder = false;
         }

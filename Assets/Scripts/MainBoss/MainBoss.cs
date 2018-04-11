@@ -104,6 +104,12 @@ public class MainBoss : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(BossMovementChange());
         }
+
+        if (bossHealth.currentHealth <= 5)
+        {
+            timeToHoldJump = .5f;
+            timeTojump = .4f;
+        }
     }
 
     IEnumerator BossMove()

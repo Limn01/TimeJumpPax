@@ -8,12 +8,21 @@ public class BossSpawn : MonoBehaviour
     public GameObject boss;
     public GameObject wallBlock;
 
+    AudioManager audio;
+
+    private void Awake()
+    {
+        audio = FindObjectOfType<AudioManager>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
         {
             boss.SetActive(true);
             wallBlock.SetActive(true);
+            audio.Play("BossMusic");
+            audio.Stop("LevelMusic");
         }
     }
 

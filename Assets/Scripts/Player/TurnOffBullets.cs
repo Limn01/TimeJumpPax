@@ -7,65 +7,77 @@ public class TurnOffBullets : MonoBehaviour
 {
     public float damage = 1;
 
-    void OnEnable()
+    public GameObject bullet;
+    public Collider2D bulletCol;
+
+    int enemyLayer;
+
+    bool isOnScreen;
+
+    Camera cam;
+    Plane[] planes;
+
+    private void Start()
     {
-        Invoke("Destroy", 2f);
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+
+        cam = Camera.main;
     }
 
-    void Destroy()
+    private void Update()
     {
-        gameObject.SetActive(false);
+        planes = GeometryUtility.CalculateFrustumPlanes(cam);
+
+        if (GeometryUtility.TestPlanesAABB(planes, bulletCol.bounds))
+        {
+            isOnScreen = true;
+        }
+        else
+        {
+            isOnScreen = false;
+        }
+
+        if (!isOnScreen)
+        {
+            OffScreenDisable();
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.CompareTag("Ground"))
         {
             this.gameObject.SetActive(false);
         }
-
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.layer == enemyLayer)
         {
             this.gameObject.SetActive(false);
-            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-            enemyHealth.TakeDamage(damage);
+            Enemy enemy = other.GetComponent<Enemy>();
+            enemy.TakeDamage(damage);
         }
-
-        else if (other.gameObject.tag == "Boss")
+        else if (other.gameObject.CompareTag("Boss"))
         {
             this.gameObject.SetActive(false);
             BossHealth bossHealth = other.gameObject.GetComponent<BossHealth>();
             bossHealth.TakeDamage(damage);
         }
-        else if (other.gameObject.tag == "Turrent")
+        else if (other.gameObject.CompareTag("Obstacle"))
         {
             this.gameObject.SetActive(false);
-            Turrent turrent = other.gameObject.GetComponent<Turrent>();
-            turrent.TakeDamage(damage);
+            
         }
-
-        else if (other.gameObject.tag == "Obstacle")
-        {
-            this.gameObject.SetActive(false);
-        }
-        else if (other.gameObject.tag == "Patrol")
+        else if (other.gameObject.CompareTag("Patrol"))
         {
             this.gameObject.SetActive(false);
             PatrolEnemyScript patrolHealth = other.gameObject.GetComponent<PatrolEnemyScript>();
             patrolHealth.TakeDamage(damage);
         }
-        else if (other.gameObject.tag == "FlyingEnemies")
-        {
-            this.gameObject.SetActive(false);
-            FlyingEnemies flyingEnemies = other.gameObject.GetComponent<FlyingEnemies>();
-            flyingEnemies.TakeDamage(damage);
-        }
     }
 
-    void OnDisable()
+    void OffScreenDisable()
     {
-        CancelInvoke();
+        isOnScreen = false;
+        this.gameObject.SetActive(false);
     }
 }
 

@@ -36,9 +36,9 @@ public class Spikes : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (LifeManager.instance.lifeCounter != 0)
+        if (LifeManager.instance.lifeCounter > 0)
         {
-            if (other.gameObject == player)
+            if (other.gameObject.layer == 8)
             {
                 audioManager.Play("Death");
                 levelManager.StartCoroutine("RespawnPlayer");

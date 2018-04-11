@@ -1,60 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.LuisPedroFonseca.ProCamera2D;
 
 public class EnemyDamage : MonoBehaviour
 {
     public float damage = 1;
-    public float timebetweenAttack = 0.5f;
+    public float timebetweenAttack = 1f;
 
-    bool playerInRange = false;
+    bool playerInRange;
+
     float timer;
     GameObject player;
-    Animator anim;
     PlayerHealth playerHealth;
     Player playerMovement;
+    int enemyLayer;
+    int playerLayer;
+
+    EnemyHealth enemyHealth;
 
     void Awake()
     {
-        anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = FindObjectOfType<Player>();
-       
+        enemyHealth = GetComponent<EnemyHealth>();
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        playerLayer = LayerMask.NameToLayer("Player");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == player)
+        if (collision.gameObject.layer == playerLayer)
         {
             playerInRange = true;
         }
     }
     
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject == player)
+        if (collision.gameObject.layer == playerLayer)
         {
             playerInRange = false;
         }
     }
 
-    void Update()
+    public virtual void Update()
     {
         timer += Time.deltaTime;
 
-        if (timer >= timebetweenAttack && playerInRange)
+        if (/*timer >= timebetweenAttack*/ playerInRange /*&& enemyHealth.currentHealth > 0*/)
         {
-            Attack();
-            
-            Debug.Log("Attacking");
+            if (!playerHealth.invinc)
+            {
+                Attack();
+            }
         }
     }
 
     void Attack()
     {
         timer = 0f;
+
+        if (playerHealth.CurrentHealth > 0)
+        {
+            playerHealth.TakeDamage(damage);
+        }
 
         playerMovement.knockBackCount = playerMovement.knockBackLength;
 
@@ -65,11 +75,6 @@ public class EnemyDamage : MonoBehaviour
         else
         {
             playerMovement.knockBackFromRight = false;
-        }
-
-        if (playerHealth.CurrentHealth > 0)
-        {
-            playerHealth.TakeDamage(damage);
         }
     }
 }

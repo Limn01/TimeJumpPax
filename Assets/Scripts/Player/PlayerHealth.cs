@@ -4,32 +4,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using Com.LuisPedroFonseca.ProCamera2D;
 
-public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
+public class PlayerHealth : MonoBehaviour
 {
-    public CamaraShake cameraShake;
+    //public CamaraShake cameraShake;
 
     [SerializeField]
     private float maxValue;
     [SerializeField]
     private float currentHealth;
-    
-    public bool damaged = false;
-    public GameObject gameOver;
 
+    public float timeBetweenInvis;
+    public GameObject gameOver;
+    public float flashSpeed;
+    int enemyLayer;
+    int playerLayer;
+
+    public bool damaged = false;
     public bool isDead;
     public bool fullyDead = false;
-    
+    public bool invinc;
+   
+    public float hurtTime;
+    public float timer;
+   
     [SerializeField]
     HealthBar healthBar;
     ProCamera2DShake proShake;
     GameObject camera;
-    
     Animator anim;
     GameObject gameManager;
     GameObject player;
     Player playerController;
     LevelManager levelManager;
     AudioManager audioManager;
+    SpriteRenderer render;
 
     public float CurrentHealth
     {
@@ -72,17 +80,40 @@ public class PlayerHealth : MonoBehaviour, IHealable, Idamageable
         proShake = camera.GetComponent<ProCamera2DShake>();
         anim = GetComponentInChildren<Animator>();
         audioManager = FindObjectOfType<AudioManager>();
+        render = GetComponentInChildren<SpriteRenderer>();
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        playerLayer = LayerMask.NameToLayer("Player");
 
         Initialize();
 
         CurrentHealth = MaxValue;
     }
 
+    private void Update()
+    {
+
+        if (timer <= 0)
+        {
+            invinc = false;
+            render.color = Color.white;
+            gameObject.GetComponentInChildren<Animation>().Stop("PlayerDamage");
+        }
+        else
+        {
+            invinc = true;
+            timer -= Time.deltaTime;
+            gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
+
+        }
+
+        damaged = false;
+    }
     public void TakeDamage(float amount)
     {
         damaged = true;
 
-        gameObject.GetComponentInChildren<Animation>().Play("PlayerDamage");
+        //StartCoroutine(HurtBlinker());
+        timer += 1.5f;
 
         CurrentHealth -= amount;
 

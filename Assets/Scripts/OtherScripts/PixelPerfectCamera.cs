@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class PixelPerfectCamera : MonoBehaviour
 {
-    Vector2 position;
+    public static float pixelToUnits = 1f;
+    public static float scale = 2f;
 
-    void Awake()
-    {
-        GetComponent<Camera>().orthographicSize = Screen.height / 2;
-        position = transform.position;
-        transform.position = new Vector3(position.x - .1f, position.y - .1f, -10);
-    }
+    public Vector2 nativeResolution = new Vector2(16, 9);
 
-    void LateUpdate()
+    Camera cam;
+
+    private void Awake()
     {
-        transform.position = new Vector3(position.x - .1f, position.y - .1f, -10);
+        cam = Camera.main.GetComponent<Camera>();
+
+        if (cam.orthographic)
+        {
+            scale = Screen.height / nativeResolution.y;
+            pixelToUnits *= scale;
+            cam.orthographicSize = (Screen.height / 2.0f) / pixelToUnits;
+        }
     }
 }
