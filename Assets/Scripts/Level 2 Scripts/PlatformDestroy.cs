@@ -7,12 +7,14 @@ public class PlatformDestroy : MonoBehaviour
     public DissolveState dissolveState;
     public float waitBetweenDrop;
     public ParticleSystem leaveParticle;
+    public float dissolveRate;
 
     int playerLayer;
     public float timer;
-    float dissolveSpeed = 1;
+    public float dissolveSpeed;
 
     bool landedOn;
+    public bool dissolveStarted = false;
     bool timerStarted = false;
 
     BoxCollider2D boxCol;
@@ -28,30 +30,40 @@ public class PlatformDestroy : MonoBehaviour
     }
 
     private void Update()
-    {
+    { 
+        if (dissolveStarted)
+        {
+            dissolveRate = Mathf.Lerp(dissolveRate, 1f, dissolveSpeed * Time.deltaTime);
+            instaceMat.SetFloat("_DissolveAmount", dissolveRate);
+        }
+        else if (!dissolveStarted)
+        {
+            dissolveRate = 0f;
+            instaceMat.SetFloat("_DissolveAmount", 0f);
+        }
+
         switch (dissolveState)
         {
             case DissolveState.Ready:
 
                 timerStarted = false;
+                dissolveStarted = false;
+                
                 dissolveState = DissolveState.Dissolve;
                 break;
 
             case DissolveState.Dissolve:
 
-                if (timerStarted)
+                if (timerStarted && dissolveStarted)
                 {
                     timer += Time.deltaTime;
 
                     if (timer >= waitBetweenDrop)
                     {
                         boxCol.isTrigger = true;
-                        //dissolveMat.enabled = false;
-                        dissolveMat.material.
-                        
                         dissolveState = DissolveState.Cooldown;
                     }
-                    
+
                 }
                 break;
 
@@ -63,7 +75,7 @@ public class PlatformDestroy : MonoBehaviour
                 {
                     timer = 0;
                     boxCol.isTrigger = false;
-                    dissolveMat.enabled = true;
+                    
                     dissolveState = DissolveState.Ready;
                 }
                 break;
@@ -72,10 +84,12 @@ public class PlatformDestroy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.layer == playerLayer && !timerStarted)
+        if (other.gameObject.layer == playerLayer && !timerStarted && !dissolveStarted)
         {
             timerStarted = true;
+            dissolveStarted = true;
             leaveParticle.Play();
+
         }
     }
 }

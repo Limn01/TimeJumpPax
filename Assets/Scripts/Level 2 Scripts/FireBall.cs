@@ -7,21 +7,23 @@ public class FireBall : MonoBehaviour
     public GameObject fireBall;
     public Transform shotPoint;
     public Transform target;
-    public GameObject wireSphere;
     public float maxJumpHeight;
     public float timeBetweenFire;
     public float playerRange;
     public LayerMask playerMask;
     public float fireballSpeed;
+    public int fireballIndex = 1;
 
     bool playerInRange;
-    float timer;
-    
+    public float timer;
+
+    GenericObjectPooler oP;
     GameObject player;
 
-    private void Awake()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        oP = GenericObjectPooler.SharedInstance;
     }
 
     private void Update()
@@ -42,18 +44,24 @@ public class FireBall : MonoBehaviour
     void ShootFireball()
     {
         timer = 0;
-
-        GameObject obj = FireBallPool.current.GetPooledObject();
-        List<GameObject> pooledObj = new List<GameObject>();
-        pooledObj.Add(obj);
-        int randomIndex = Random.Range(0, pooledObj.Count);
-        if (!pooledObj[randomIndex].activeInHierarchy)
-        {
-            pooledObj[randomIndex].SetActive(true);
-            pooledObj[randomIndex].transform.position = shotPoint.transform.position;
-            pooledObj[randomIndex].transform.rotation = transform.rotation;
-            pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.up * fireballSpeed * maxJumpHeight, ForceMode2D.Impulse);
-        }
+        fireBall = oP.GetPooledObject(fireballIndex);
+        fireBall.SetActive(true);
+        fireBall.transform.rotation = shotPoint.transform.rotation;
+        fireBall.transform.position = shotPoint.transform.position;
+        fireBall.GetComponent<Rigidbody2D>().AddForce(shotPoint.up * fireballSpeed * maxJumpHeight, ForceMode2D.Impulse);
+        
+        //objectPooler.SpawnFromPool("Fireball", shotPoint.position, shotPoint.rotation);
+        //GameObject obj = FireBallPool.current.GetPooledObject();
+        //List<GameObject> pooledObj = new List<GameObject>();
+        //pooledObj.Add(obj);
+        //int randomIndex = Random.Range(0, pooledObj.Count);
+        //if (!pooledObj[randomIndex].activeInHierarchy)
+        //{
+        //    pooledObj[randomIndex].SetActive(true);
+        //    pooledObj[randomIndex].transform.position = shotPoint.transform.position;
+        //    pooledObj[randomIndex].transform.rotation = transform.rotation;
+        //    pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.up * fireballSpeed * maxJumpHeight, ForceMode2D.Impulse);
+        //}
     }
 
     //private void OnDrawGizmos()

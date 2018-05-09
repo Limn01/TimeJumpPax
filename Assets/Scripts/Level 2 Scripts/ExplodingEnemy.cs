@@ -8,20 +8,37 @@ public class ExplodingEnemy : Enemy
     
     public int explodeBullets;
     public Transform explodePoint;
-    public Transform target;
     public float timeBetweenEplosion;
     public float speed;
     public float verticalSpeed;
     public float amplitude;
-
+    public GameObject enemyProjectile;
+    
     float explodeTimer;
     float bulletRotation;
     float distance;
+    int enemyProjectileIndex = 3;
+
+    public Transform target;
+    GenericObjectPooler objectPooler;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        target = player.GetComponent<Transform>();
+        objectPooler = GenericObjectPooler.SharedInstance;
+    }
 
     protected override void Update()
     {
         base.Update();
 
+        ExplodeStates();
+    }
+
+    void ExplodeStates()
+    {
         switch (explodeState)
         {
             case ExplodeState.Wait:
@@ -45,31 +62,40 @@ public class ExplodingEnemy : Enemy
                 {
                     if (i == 0)
                     {
-                        GameObject obj = EnemyProjectilesPool.current.GetPooledObject();
-                        List<GameObject> pooledObj = new List<GameObject>();
-                        pooledObj.Add(obj);
-                        int randomIndex = Random.Range(0, pooledObj.Count);
-                        if (!pooledObj[randomIndex].activeInHierarchy)
-                        {
-                            pooledObj[randomIndex].SetActive(true);
-                            pooledObj[randomIndex].transform.position = explodePoint.transform.position;
-                            pooledObj[randomIndex].transform.rotation = Quaternion.Euler(90,0,0);
-                        }
+                        enemyProjectile = objectPooler.GetPooledObject(enemyProjectileIndex);
+                        enemyProjectile.transform.position = explodePoint.transform.position;
+                        enemyProjectile.transform.rotation = Quaternion.Euler(90, 0, 0);
+                        enemyProjectile.SetActive(true);
+
+                        //GameObject obj = EnemyProjectilesPool.current.GetPooledObject();
+                        //List<GameObject> pooledObj = new List<GameObject>();
+                        //pooledObj.Add(obj);
+                        //int randomIndex = Random.Range(0, pooledObj.Count);
+                        //if (!pooledObj[randomIndex].activeInHierarchy)
+                        //{
+                        //    pooledObj[randomIndex].SetActive(true);
+                        //    pooledObj[randomIndex].transform.position = explodePoint.transform.position;
+                        //    pooledObj[randomIndex].transform.rotation = Quaternion.Euler(90,0,0);
+                        //}
                         explodeState = ExplodeState.Cooldown;
                     }
                     else
                     {
                         float newEuler = bulletRotation * i;
-                        GameObject obj = EnemyProjectilesPool.current.GetPooledObject();
-                        List<GameObject> pooledObj = new List<GameObject>();
-                        pooledObj.Add(obj);
-                        int randomIndex = Random.Range(0, pooledObj.Count);
-                        if (!pooledObj[randomIndex].activeInHierarchy)
-                        {
-                            pooledObj[randomIndex].SetActive(true);
-                            pooledObj[randomIndex].transform.position = explodePoint.transform.position;
-                            pooledObj[randomIndex].transform.rotation = Quaternion.Euler(0, 0, newEuler);
-                        }
+                        enemyProjectile = objectPooler.GetPooledObject(enemyProjectileIndex);
+                        enemyProjectile.transform.position = explodePoint.transform.position;
+                        enemyProjectile.transform.rotation = Quaternion.Euler(0, 0, newEuler);
+                        enemyProjectile.SetActive(true);
+                        //GameObject obj = EnemyProjectilesPool.current.GetPooledObject();
+                        //List<GameObject> pooledObj = new List<GameObject>();
+                        //pooledObj.Add(obj);
+                        //int randomIndex = Random.Range(0, pooledObj.Count);
+                        //if (!pooledObj[randomIndex].activeInHierarchy)
+                        //{
+                        //    pooledObj[randomIndex].SetActive(true);
+                        //    pooledObj[randomIndex].transform.position = explodePoint.transform.position;
+                        //    pooledObj[randomIndex].transform.rotation = Quaternion.Euler(0, 0, newEuler);
+                        //}
                         explodeState = ExplodeState.Cooldown;
                     }
                 }

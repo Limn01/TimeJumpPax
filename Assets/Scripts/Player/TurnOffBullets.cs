@@ -11,6 +11,9 @@ public class TurnOffBullets : MonoBehaviour
     public Collider2D bulletCol;
 
     int enemyLayer;
+    int groundLayer;
+    int obstacleLayer;
+    int bossLayer;
 
     bool isOnScreen;
 
@@ -20,7 +23,9 @@ public class TurnOffBullets : MonoBehaviour
     private void Start()
     {
         enemyLayer = LayerMask.NameToLayer("Enemy");
-
+        groundLayer = LayerMask.NameToLayer("Ground");
+        obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        bossLayer = LayerMask.NameToLayer("Boss");
         cam = Camera.main;
     }
 
@@ -45,7 +50,7 @@ public class TurnOffBullets : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.layer == groundLayer)
         {
             this.gameObject.SetActive(false);
         }
@@ -55,22 +60,15 @@ public class TurnOffBullets : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
         }
-        else if (other.gameObject.CompareTag("Boss"))
+        else if (other.gameObject.layer == bossLayer)
         {
             this.gameObject.SetActive(false);
             BossHealth bossHealth = other.gameObject.GetComponent<BossHealth>();
             bossHealth.TakeDamage(damage);
         }
-        else if (other.gameObject.CompareTag("Obstacle"))
+        else if (other.gameObject.layer == obstacleLayer)
         {
             this.gameObject.SetActive(false);
-            
-        }
-        else if (other.gameObject.CompareTag("Patrol"))
-        {
-            this.gameObject.SetActive(false);
-            PatrolEnemyScript patrolHealth = other.gameObject.GetComponent<PatrolEnemyScript>();
-            patrolHealth.TakeDamage(damage);
         }
     }
 

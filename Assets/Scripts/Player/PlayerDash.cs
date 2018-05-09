@@ -31,18 +31,15 @@ public class PlayerDash : MonoBehaviour
                 var isDashingKeyDown = Input.GetAxis("Dash");
                 if (isDashingKeyDown == 1)
                 {
-                    if (playerGraphic.localRotation.y <= 360)
+                    if (playerMovement.velocity.x >= 1)
                     {
-                        //savedVelocity = rb2D.velocity;
-                        //savedVelocity = playerMovement.velocity;
-                        //rb2D.AddForce(Vector2.right * 7, ForceMode2D.Impulse);
                         playerMovement.velocity = new Vector3(dashSpeed /*+ dashLength*/, playerMovement.velocity.y);
                         dashParticle.SetActive(true);
                         //transform.position = transform.Translate(Vector3.right * Time.deltaTime, 0, 0);
                         dashState = DashState.Dashing;
                     }
 
-                    if (playerGraphic.localRotation.y >= -360)
+                    if (playerMovement.velocity.x < 1)
                     {
                         //savedVelocity = rb2D.velocity;
                         //savedVelocity = playerMovement.velocity;
@@ -80,9 +77,9 @@ public class PlayerDash : MonoBehaviour
     }
 }
 
-public enum DashState
-{
-    Ready,
-    Dashing,
-    Cooldown
-}
+//public enum DashState
+//{
+//    Ready,
+//    Dashing,
+//    Cooldown
+//}

@@ -22,7 +22,6 @@ public class HoverEnemySpawn : MonoBehaviour
         if (col.gameObject.tag == "Player")
         {
             TurnEnemyOff();
-           
         }
     }
 

@@ -8,10 +8,12 @@ public class Enemy : MonoBehaviour
     public float startingHealth = 1;
     public float currentHealth;
 
-    bool playerInRange;
+    int playerLayer;
 
+    bool targetInRange;
     bool isHit;
     bool isDead;
+    bool IsOnscreen;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
@@ -22,6 +24,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<Player>();
+        playerLayer = LayerMask.NameToLayer("Player");
 
         currentHealth = startingHealth;
         isDead = false;
@@ -29,7 +32,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (playerInRange)
+        if (targetInRange)
         {
             if (!playerHealth.invinc)
             {
@@ -64,19 +67,19 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayer)
         {
-            playerInRange = true;
+            targetInRange = true;
         }
     }
 
-    protected virtual void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayer)
         {
-            playerInRange = false;
+            targetInRange = false;
         }
     }
 

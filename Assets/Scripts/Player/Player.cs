@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     public float knockBackCount;
     public float knockBackLength;
     public bool onLadder;
+    public float dashSpeed = 30f;
+    public float maxDash;
 
     public float wallSlideSpeedMax = 3;
     public float wallStickTime = .25f;
@@ -36,6 +38,8 @@ public class Player : MonoBehaviour
     public Vector3 velocity;
     float velocityXSmoothing;
     float gravityStore;
+
+    DashState dashState;
 
     Controller2D controller;
     
@@ -52,7 +56,9 @@ public class Player : MonoBehaviour
     float climbVelocity;
     float xAxis = 90;
     float dpadX;
-    float joystickAngle = 90;
+    float keyInput;
+    float dpadInput;
+    float dashTimer;
     
     bool doubleJump = false;
     public bool canDoubleJump;
@@ -84,48 +90,50 @@ public class Player : MonoBehaviour
     {
         CalculateVelocity();
         HandleWallSliding();
+        Dashing();
+        KnockBack();
 
         anim.SetFloat("Speed", Mathf.Abs(Input.GetAxisRaw("Horizontal")));
 
         controller.Move(velocity * Time.deltaTime, directionalInput);
 
-        float keyInput = Input.GetAxisRaw("Horizontal");
-        float dpadInput = Input.GetAxisRaw("DpadHorizontal");
-
-        //Vector2 keyInput = new Vector2(Input.GetAxisRaw("Horizonatl"), 0);
+        keyInput = Input.GetAxisRaw("Horizontal");
+        dpadInput = Input.GetAxisRaw("DpadHorizontal");
 
         if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0;
         }
 
-        if (Mathf.Abs(keyInput) < .1)
+        // Caps the joystick input to be positive or negative - FUCKING RAW!
+        keyInput = keyInput < 0 ? -1 : keyInput > 0 ? 1 : 0;
+
+        if (keyInput < 0)
         {
-            //Rotation(keyInput);
-            //shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
+            Rotation(keyInput);
+            shotEnd.localPosition = new Vector3(-0.548f, 0.222f, 0);
             shotEnd.rotation = Quaternion.AngleAxis(180, Vector3.up);
         }
 
-        if (Mathf.Abs(keyInput) >= .1)
+        if (keyInput > 0)
         {
-            xAxis = Input.GetAxisRaw("Horizontal");
-
-            Rotation(xAxis);
+            Rotation(keyInput);
             shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
             shotEnd.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
         
-        if (dpadInput < -0.01f)
+        if (dpadInput < 0)
         {
             Rotation(dpadInput);
+            shotEnd.localPosition = new Vector3(-0.548f, 0.222f, 0);
             shotEnd.transform.rotation = Quaternion.AngleAxis(180, Vector3.up); 
             anim.SetFloat("Speed", Mathf.Abs(dpadInput));
         }
 
-        if (Mathf.Abs(dpadInput) >= 0.1)
+        if (dpadInput > 0)
         {
-            dpadX = Input.GetAxisRaw("Horizontal");
-            Rotation(dpadX);
+            Rotation(dpadInput);
+            shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
             shotEnd.rotation = Quaternion.AngleAxis(0, Vector3.up);
             anim.SetFloat("Speed", Mathf.Abs(dpadInput));
         }
@@ -139,23 +147,23 @@ public class Player : MonoBehaviour
             anim.SetBool("IsGrounded", false);
         }
 
-        if (knockBackCount <= 0)
-        {
-            velocity = new Vector2(velocity.x, velocity.y);
-        }
-        else
-        {
-            if (knockBackFromRight)
-            {
-                velocity = new Vector2(-knockBack, knockBack);
-            }
-            if (!knockBackFromRight)
-            {
-                velocity = new Vector2(knockBack, knockBack);
-            }
-
-            knockBackCount -= Time.deltaTime;
-        }
+        //if (knockBackCount <= 0)
+        //{
+        //    velocity = new Vector2(velocity.x, velocity.y);
+        //}
+        //else
+        //{
+        //    if (knockBackFromRight)
+        //    {
+        //        velocity = new Vector2(-knockBack, knockBack);
+        //    }
+        //    if (!knockBackFromRight)
+        //    {
+        //        velocity = new Vector2(knockBack, knockBack);
+        //    }
+        //
+        //    knockBackCount -= Time.deltaTime;
+        //}
 
         LerpRotation();
     }
@@ -196,7 +204,7 @@ public class Player : MonoBehaviour
         }
         if (canDoubleJump && !controller.collisions.below && !doubleJump && !wallSliding)
         {
-            velocity.y = maxJumpVelocity / 1.3f;
+            velocity.y = maxJumpVelocity / 1f;
             doubleJump = true;
             audioManager.Play("DoubleJump");
         }
@@ -261,9 +269,83 @@ public class Player : MonoBehaviour
 
     void LerpRotation()
     {
-        joystickAngle = Mathf.Atan2(xAxis,0) * Mathf.Rad2Deg;
-        
-        Quaternion newRotation = Quaternion.Lerp(playerGraphic.rotation, Quaternion.Euler(/*targetRotation*/0,joystickAngle ,0), turnSmoothing * Time.deltaTime);
+        Quaternion newRotation = Quaternion.Lerp(playerGraphic.rotation, targetRotation, turnSmoothing * Time.deltaTime);
         playerGraphic.rotation = newRotation;
     }
+
+    void Dashing()
+    {
+        switch (dashState)
+        {
+            case DashState.Ready:
+
+                var isDahingKeyDown = Input.GetAxis("Dash");
+    
+                if (isDahingKeyDown == 1)
+                {
+                    if (playerGraphic.rotation.y > 0)
+                    {
+                        velocity = new Vector3(dashSpeed, velocity.y, velocity.z);
+                        dashState = DashState.Dashing;
+                    }
+
+                    if (playerGraphic.rotation.y < 0)
+                    {
+                        velocity = new Vector3(-dashSpeed, velocity.y, velocity.z);
+                        dashState = DashState.Dashing;
+                    }
+                }
+                break;
+
+            case DashState.Dashing:
+
+                dashTimer += Time.deltaTime * 3;
+
+                if (dashTimer >= maxDash)
+                {
+                    dashTimer = maxDash;
+                    dashState = DashState.Cooldown;
+                }
+                break;
+
+            case DashState.Cooldown:
+
+                dashTimer -= Time.deltaTime;
+
+                if (dashTimer <= 0)
+                {
+                    dashTimer = 0;
+                    dashState = DashState.Ready;
+                }
+                break;
+        }
+    }
+
+    void KnockBack()
+    {
+        if (knockBackCount <= 0)
+        {
+            velocity = new Vector2(velocity.x, velocity.y);
+        }
+        else
+        {
+            if (knockBackFromRight)
+            {
+                velocity = new Vector2(-knockBack, knockBack);
+            }
+            if (!knockBackFromRight)
+            {
+                velocity = new Vector2(knockBack, knockBack);
+            }
+
+            knockBackCount -= Time.deltaTime;
+        }
+    }
+}
+
+public enum DashState
+{
+    Ready,
+    Dashing,
+    Cooldown
 }
