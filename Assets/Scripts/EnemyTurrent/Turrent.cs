@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turrent : MonoBehaviour
+public class Turrent : Enemy
 {
     public float playerInRange;
     public float bulletSpeed;
@@ -13,24 +13,23 @@ public class Turrent : MonoBehaviour
     public LayerMask groundCollision;
 
     float shotCounter;
+    int enemyProjectileIndex = 1;
+
     public LayerMask playerLayer;
-    int damage = 2;
 
     RaycastHit2D hit;
-    GameObject player;
-    PlayerHealth playerHealth;
-    PlayerMovement playerMovement;
     Rigidbody2D rb;
+    ObjectPooler objectPooler;
 
-    void Awake()
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
+        objectPooler = ObjectPooler.SharedInstance;
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         Vector3 pos = transform.position;
         Vector3 down = -transform.up;
         Vector3 size = transform.localScale;
@@ -68,17 +67,11 @@ public class Turrent : MonoBehaviour
     {
         shotCounter = 0;
 
-        GameObject obj = TurrentBulletPool.current.GetPooledObject();
-        List<GameObject> pooledObj = new List<GameObject>();
-        pooledObj.Add(obj);
-        int randomIndex = Random.Range(0, pooledObj.Count);
-        if (!pooledObj[randomIndex].activeInHierarchy)
-        {
-            pooledObj[randomIndex].SetActive(true);
-            pooledObj[randomIndex].transform.position = shotPoint.transform.position;
-            pooledObj[randomIndex].transform.rotation = transform.rotation;
-            pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
-        }
+        GameObject enemyProjectile = objectPooler.GetPooledObject(enemyProjectileIndex);
+        enemyProjectile.SetActive(true);
+        enemyProjectile.transform.position = shotPoint.position;
+        enemyProjectile.transform.rotation = shotPoint.rotation;
+        enemyProjectile.GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
     }
 
     void OnDrawGizmos()

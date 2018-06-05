@@ -6,17 +6,19 @@ public class ObstacleBase : MonoBehaviour
 {
     public float damage = 1;
 
-    GameObject player;
-    PlayerHealth playerHealth;
-    Player playerMovement;
+    protected GameObject player;
+    protected PlayerHealth playerHealth;
+    protected Player playerMovement;
 
+    int playerLayerIndex;
     bool playerInRange;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<Player>();
+        playerLayerIndex = LayerMask.NameToLayer("Player");
     }
 
     protected virtual void Update()
@@ -32,7 +34,7 @@ public class ObstacleBase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             playerInRange = true;
         }
@@ -40,7 +42,7 @@ public class ObstacleBase : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             playerInRange = false;
         }

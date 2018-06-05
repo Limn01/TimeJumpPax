@@ -8,19 +8,20 @@ public class MainBoss : MonoBehaviour
     public float timeTojump = 2f;
     public float timeToShoot = 1f;
     public float chance;
+    public float groundCheckRadius;
+    public float moveSpeed;
+    public float bulletSpeed;
+    public float timeToHoldJump = 2f;
+
     public Vector2 jumpForce;
     public Transform groundCheck;
-    public float groundCheckRadius;
     public LayerMask whatIsGround;
     public Transform[] shotPoints;
     public GameObject bullet;
-    public float bulletSpeed;
     public Transform shotPoint;
     public Transform shotPoint1;
     public Transform shotPoint2;
-    public float timeToHoldJump = 2f;
     public Transform jumpTo;
-    public float moveSpeed;
     public Vector2 targetStoredPos;
     public GameObject jetBooster1;
     public GameObject jetBooster2;
@@ -38,7 +39,7 @@ public class MainBoss : MonoBehaviour
     float maxJumpVelocity;
     float minJumpVelocity;
     float gravityStore;
-    public float timer;
+    float timer;
     float timeBetweenSlowmoion = 2;
    
     bool coroutineStarted = false;
@@ -48,6 +49,7 @@ public class MainBoss : MonoBehaviour
     bool jumping;
     bool facingRight;
     bool facingLeft = true;
+
     Transform target;
     GameObject player;
     Rigidbody2D rb;

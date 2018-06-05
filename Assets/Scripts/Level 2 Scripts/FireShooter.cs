@@ -21,7 +21,7 @@ public class FireShooter : Enemy
 
     Transform target;
     AIPath pathFinding;
-    GenericObjectPooler objectPooler;
+    ObjectPooler objectPooler;
     Rigidbody2D rb;
 
     protected override void Awake()
@@ -36,7 +36,7 @@ public class FireShooter : Enemy
     private void Start()
     {
         timer = waitBetweenShots;
-        objectPooler = GenericObjectPooler.SharedInstance;
+        objectPooler = ObjectPooler.SharedInstance;
     }
 
     protected override void Update()
@@ -77,20 +77,6 @@ public class FireShooter : Enemy
             fireBall.transform.rotation = transform.rotation;
             fireBall.SetActive(true);
             fireBall.GetComponent<Rigidbody2D>().AddForce(direction * bulletSpeed, ForceMode2D.Impulse);
-
-            //GameObject obj = EnemyBulletPool.current.GetPooledObject();
-            //List<GameObject> pooledObj = new List<GameObject>();
-            //pooledObj.Add(obj);
-            //int randomIndex = Random.Range(0, pooledObj.Count);
-            //if (!pooledObj[randomIndex].activeInHierarchy)
-            //{
-            //    pooledObj[randomIndex].SetActive(true);
-            //    pooledObj[randomIndex].transform.position = /*shotPoint.*/transform.position;
-            //    pooledObj[randomIndex].transform.rotation = /*shotPoint.*/transform.rotation;
-            //    pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(direction * bulletSpeed, ForceMode2D.Impulse);
-            //
-            //    timer = waitBetweenShots;
-            //}
         }
     }
 

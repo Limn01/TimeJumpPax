@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public float startingHealth = 1;
     public float currentHealth;
 
-    int playerLayer;
+    int playerLayerIndex;
 
     bool targetInRange;
     bool isHit;
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<Player>();
-        playerLayer = LayerMask.NameToLayer("Player");
+        playerLayerIndex = LayerMask.NameToLayer("Player");
 
         currentHealth = startingHealth;
         isDead = false;
@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == playerLayer)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             targetInRange = true;
         }
@@ -77,7 +77,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == playerLayer)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             targetInRange = false;
         }

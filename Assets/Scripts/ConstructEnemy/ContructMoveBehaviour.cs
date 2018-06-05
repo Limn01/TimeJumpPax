@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContructMoveBehaviour : MonoBehaviour
+public class ContructMoveBehaviour : Enemy
 {
+    public GameObject contructModel;
+
     [SerializeField]
     float moveSpeed;
-    
+    [SerializeField]
+    float rotateSpeed = 200f;
+
     Vector3 targetStoredPosition;
     Transform target;
-    GameObject player;
+    Rigidbody2D rb;
+
     bool playerInRange;
     bool attack;
     float distance;
 
-    private void Awake()
+    protected override void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        base.Awake();
         target = player.GetComponent<Transform>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         distance = (transform.position - target.position).sqrMagnitude;
 
         if (!attack)
@@ -51,9 +59,14 @@ public class ContructMoveBehaviour : MonoBehaviour
 
     void EnemyTurn()
     {
-        Vector3 vectorToTarget = target.position - transform.position;
-        float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) + 90;
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * moveSpeed);
+        Vector2 direction = (Vector2)target.position - rb.position;
+        direction.Normalize();
+        float rotateAmount = Vector3.Cross(direction, transform.up).z;
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
+
+        //Vector3 vectorToTarget = target.position - transform.position;
+        //float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) + /90;
+        //Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * moveSpeed);
     }
 }

@@ -10,10 +10,10 @@ public class TurnOffBullets : MonoBehaviour
     public GameObject bullet;
     public Collider2D bulletCol;
 
-    int enemyLayer;
-    int groundLayer;
-    int obstacleLayer;
-    int bossLayer;
+    int enemyLayerIndex;
+    int groundLayerIndex;
+    int obstacleLayerIndex;
+    int bossLayerIndex;
 
     bool isOnScreen;
 
@@ -22,10 +22,10 @@ public class TurnOffBullets : MonoBehaviour
 
     private void Start()
     {
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        groundLayer = LayerMask.NameToLayer("Ground");
-        obstacleLayer = LayerMask.NameToLayer("Obstacle");
-        bossLayer = LayerMask.NameToLayer("Boss");
+        enemyLayerIndex = LayerMask.NameToLayer("Enemy");
+        groundLayerIndex = LayerMask.NameToLayer("Ground");
+        obstacleLayerIndex = LayerMask.NameToLayer("Obstacle");
+        bossLayerIndex = LayerMask.NameToLayer("Boss");
         cam = Camera.main;
     }
 
@@ -50,23 +50,23 @@ public class TurnOffBullets : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == groundLayer)
+        if (other.gameObject.layer == groundLayerIndex)
         {
             this.gameObject.SetActive(false);
         }
-        if (other.gameObject.layer == enemyLayer)
+        if (other.gameObject.layer == enemyLayerIndex)
         {
             this.gameObject.SetActive(false);
             Enemy enemy = other.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
         }
-        else if (other.gameObject.layer == bossLayer)
+        else if (other.gameObject.layer == bossLayerIndex)
         {
             this.gameObject.SetActive(false);
             BossHealth bossHealth = other.gameObject.GetComponent<BossHealth>();
             bossHealth.TakeDamage(damage);
         }
-        else if (other.gameObject.layer == obstacleLayer)
+        else if (other.gameObject.layer == obstacleLayerIndex)
         {
             this.gameObject.SetActive(false);
         }

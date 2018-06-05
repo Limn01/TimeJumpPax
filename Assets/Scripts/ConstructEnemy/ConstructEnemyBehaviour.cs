@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class ConstructEnemyBehaviour : MonoBehaviour
+public class ConstructEnemyBehaviour : ObstacleBase
 {
     [SerializeField]
     float moveSpeed;
@@ -13,18 +13,18 @@ public class ConstructEnemyBehaviour : MonoBehaviour
     Transform point;
     
     bool coroutineStarted = false;
-
-    GameObject player;
+    
     Transform target;
     float distance;
     Animator anim;
     Vector3[] wayPoints;
     Coroutine coroutine;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         anim = GetComponentInChildren<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
     }
 
@@ -39,8 +39,10 @@ public class ConstructEnemyBehaviour : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         distance = (transform.position - target.position).sqrMagnitude;
 
         if (distance < 50  && !coroutineStarted)

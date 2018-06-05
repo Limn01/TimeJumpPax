@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingEnemies : MonoBehaviour
+public class FlyingEnemies : Enemy
 {
     public float moveSpeed;
     public float playerRange;
@@ -10,23 +10,20 @@ public class FlyingEnemies : MonoBehaviour
     public Vector2 tempPos;
     public float verticalSpeed;
     public float amplitude;
-
-    Player playerMovement;
+   
     Transform target;
-    GameObject player;
-    PlayerHealth playerHealth;
     float distance;
 
-    void Awake()
+    protected override void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<Player>();
+        base.Awake();
         target = player.GetComponent<Transform>();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         distance = (transform.position - target.position).sqrMagnitude;
         
         if (distance < 100)

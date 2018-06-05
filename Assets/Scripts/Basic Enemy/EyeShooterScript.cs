@@ -2,68 +2,74 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyeShooterScript : MonoBehaviour
+public class EyeShooterScript : ObstacleBase
 {
-    public float playerInRange;
+    public float playerRange;
     public float bulletSpeed;
     public Transform shotPoint;
     public float waitBetweenShots;
+    public float rotateSpeed = 200f;
 
-    Player playerMovement;
-    GameObject player;
-
+    int enemyProjectileIndex = 1;
     float shotCounter;
+    Transform target;
+    Rigidbody2D rb;
+    ObjectPooler objectPooler;
 
-    void Awake()
+    protected override void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<Player>();
+        base.Awake();
+        rb = GetComponent<Rigidbody2D>();
+        target = player.GetComponent<Transform>();
 
         shotCounter = waitBetweenShots;
     }
 
-    void Update()
+    private void Start()
     {
+        objectPooler = ObjectPooler.SharedInstance;
+    }
+
+    private void FixedUpdate()
+    {
+        EnemyTurn();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
         shotCounter -= Time.deltaTime;
 
-        if (playerMovement.transform.position.x > transform.position.x && playerMovement.transform.position.x < transform.position.x + playerInRange && shotCounter < 0)
+        if (playerMovement.transform.position.x > transform.position.x && playerMovement.transform.position.x < transform.position.x + playerRange && shotCounter < 0)
         {
-            GameObject obj = EnemyBulletPool.current.GetPooledObject();
-            List<GameObject> pooledObj = new List<GameObject>();
-            pooledObj.Add(obj);
-            int randomIndex = Random.Range(0, pooledObj.Count);
-            if (!pooledObj[randomIndex].activeInHierarchy)
-            {
-                pooledObj[randomIndex].SetActive(true);
-                pooledObj[randomIndex].transform.position = shotPoint.transform.position;
-                pooledObj[randomIndex].transform.rotation = transform.rotation;
-                pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
-
-                shotCounter = waitBetweenShots;
-            }
+            GameObject enemyProjectile = objectPooler.GetPooledObject(enemyProjectileIndex);
+            enemyProjectile.transform.position = shotPoint.position;
+            enemyProjectile.transform.rotation = shotPoint.rotation;
+            enemyProjectile.SetActive(true);
+            enemyProjectile.GetComponent<Rigidbody2D>().AddForce(shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
         }
 
-        if (playerMovement.transform.position.x < transform.position.x && playerMovement.transform.position.x > transform.position.x - playerInRange && shotCounter < 0)
+        if (playerMovement.transform.position.x < transform.position.x && playerMovement.transform.position.x > transform.position.x - playerRange && shotCounter < 0)
         {
-            GameObject obj = EnemyBulletPool.current.GetPooledObject();
-            List<GameObject> pooledObj = new List<GameObject>();
-            pooledObj.Add(obj);
-            int randomIndex = Random.Range(0, pooledObj.Count);
-            if (!pooledObj[randomIndex].activeInHierarchy)
-            {
-                pooledObj[randomIndex].SetActive(true);
-                pooledObj[randomIndex].transform.position = shotPoint.transform.position;
-                pooledObj[randomIndex].transform.rotation = transform.rotation;
-                pooledObj[randomIndex].GetComponent<Rigidbody2D>().AddForce(-shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
-
-                shotCounter = waitBetweenShots;
-            }
+            GameObject enemyProjectile = objectPooler.GetPooledObject(enemyProjectileIndex);
+            enemyProjectile.transform.position = shotPoint.position;
+            enemyProjectile.transform.rotation = shotPoint.rotation;
+            enemyProjectile.GetComponent<Rigidbody2D>().AddForce(-shotPoint.right * bulletSpeed, ForceMode2D.Impulse);
         }
+    }
+
+    void EnemyTurn()
+    {
+        Vector2 direction = (Vector2)target.position - rb.position;
+        direction.Normalize();
+        float rotateAmount = Vector3.Cross(direction, transform.up).z;
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(new Vector3(transform.position.x - playerInRange, transform.position.y, transform.position.z),
-           new Vector3(transform.position.x + playerInRange, transform.position.y, transform.position.z));
+        Gizmos.DrawLine(new Vector3(transform.position.x - playerRange, transform.position.y, transform.position.z),
+           new Vector3(transform.position.x + playerRange, transform.position.y, transform.position.z));
     }
 }

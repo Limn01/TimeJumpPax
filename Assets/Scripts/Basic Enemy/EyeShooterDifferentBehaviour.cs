@@ -4,27 +4,43 @@ using UnityEngine;
 
 public class EyeShooterDifferentBehaviour : MonoBehaviour
 {
+    public GameObject enemyShooterModel;
+
     [SerializeField]
     Transform shotPoint;
     [SerializeField]
     float waitBetweenShots;
     [SerializeField]
     float bulletSpeed;
-    
+    [SerializeField]
+    float rotateSpeed = 200f;
+
     Transform target;
     GameObject player;
     float dist;
     float shotCounter;
+    Rigidbody2D rb;
+
+    ObjectPooler objectPooler;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.GetComponent<Transform>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
     {
+        objectPooler = ObjectPooler.SharedInstance;
         shotCounter = waitBetweenShots;
+
+        enemyShooterModel.transform.rotation = Quaternion.Euler(0, 0, -90);
+    }
+
+    private void FixedUpdate()
+    {
+        LookAtTarget();
     }
 
     private void Update()
@@ -33,7 +49,7 @@ public class EyeShooterDifferentBehaviour : MonoBehaviour
 
         if (dist < 1000)
         {
-            Shoot();
+            //Shoot();
         }
     }
 
@@ -61,5 +77,13 @@ public class EyeShooterDifferentBehaviour : MonoBehaviour
                 shotCounter = waitBetweenShots;
             }
         }
+    }
+
+    void LookAtTarget()
+    {
+        Vector2 direction = (Vector2)target.position - rb.position;
+        direction.Normalize();
+        float rotateAmount = Vector3.Cross(direction, transform.up).z;
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
     }
 }

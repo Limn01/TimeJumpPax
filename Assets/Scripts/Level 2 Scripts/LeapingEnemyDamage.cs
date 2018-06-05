@@ -8,6 +8,8 @@ public class LeapingEnemyDamage : MonoBehaviour
     public float startingHealth;
     public float currentHealth;
 
+    int playerLayerIndex;
+
     GameObject player;
     Player playerMovement;
     PlayerHealth playerHealth;
@@ -21,6 +23,7 @@ public class LeapingEnemyDamage : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<Player>();
+        playerLayerIndex = LayerMask.NameToLayer("Player");
 
         currentHealth = startingHealth;
         isDead = false;
@@ -28,7 +31,7 @@ public class LeapingEnemyDamage : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             playerInRange = true;
         }
@@ -36,7 +39,7 @@ public class LeapingEnemyDamage : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.layer == 8)
+        if (other.gameObject.layer == playerLayerIndex)
         {
             playerInRange = false;
         }

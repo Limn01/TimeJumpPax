@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : Enemy
 {
     public float moveSpeed;
     public bool moveRight;
@@ -28,8 +28,9 @@ public class EnemyMovement : MonoBehaviour
     float maxJumpVelocity;
     float minJumpVelocity;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         rb2d = GetComponent<Rigidbody2D>();
     }
 
@@ -40,30 +41,10 @@ public class EnemyMovement : MonoBehaviour
        // minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpVelocity);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        Vector3 pos = transform.position;
-        Vector3 down = -transform.up;
-        Vector3 size = transform.localScale;
-
-        Vector3 halfSize = size * 0.5f;
-
-        Vector3 rayFromScale = pos + down * halfSize.y;
-
-        Ray ray = new Ray(rayFromScale, down);
-
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.magenta);
-
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundCollision);
-
-        if (hit)
-        {
-            Vector2 targetLocation = hit.point;
-
-            targetLocation += new Vector2(0, size.y / 2);
-
-            transform.position = targetLocation;
-        }
+        base.Update();
+        StickToGround();
     }
 
     private void FixedUpdate()
@@ -91,12 +72,38 @@ public class EnemyMovement : MonoBehaviour
         if (moveRight)
         {
             rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-            transform.localScale = new Vector3(-1, 0.3f, 1);
+            transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
         }
         else
         {
-            transform.localScale = new Vector3(1, 0.3f, 1);
+            transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
+        }
+    }
+    
+    void StickToGround()
+    {
+        Vector3 pos = transform.position;
+        Vector3 down = -transform.up;
+        Vector3 size = transform.localScale;
+
+        Vector3 halfSize = size * 0.5f;
+
+        Vector3 rayFromScale = pos + down * halfSize.y;
+
+        Ray ray = new Ray(rayFromScale, down);
+
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.magenta);
+
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, rayDistance, groundCollision);
+
+        if (hit)
+        {
+            Vector2 targetLocation = hit.point;
+
+            targetLocation += new Vector2(0, size.y / 2);
+
+            transform.position = targetLocation;
         }
     }   
 }

@@ -111,21 +111,21 @@ public class Player : MonoBehaviour
         if (keyInput < 0)
         {
             Rotation(keyInput);
-            shotEnd.localPosition = new Vector3(-0.548f, 0.222f, 0);
+            //shotEnd.localPosition = new Vector3(0f, 0f, 0);
             shotEnd.rotation = Quaternion.AngleAxis(180, Vector3.up);
         }
 
         if (keyInput > 0)
         {
             Rotation(keyInput);
-            shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
+            //shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
             shotEnd.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
         }
         
         if (dpadInput < 0)
         {
             Rotation(dpadInput);
-            shotEnd.localPosition = new Vector3(-0.548f, 0.222f, 0);
+            //shotEnd.localPosition = new Vector3(-0.548f, 0.222f, 0);
             shotEnd.transform.rotation = Quaternion.AngleAxis(180, Vector3.up); 
             anim.SetFloat("Speed", Mathf.Abs(dpadInput));
         }
@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
         if (dpadInput > 0)
         {
             Rotation(dpadInput);
-            shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
+            //shotEnd.localPosition = new Vector3(0.548f, 0.222f, 0);
             shotEnd.rotation = Quaternion.AngleAxis(0, Vector3.up);
             anim.SetFloat("Speed", Mathf.Abs(dpadInput));
         }

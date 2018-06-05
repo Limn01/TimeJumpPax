@@ -7,14 +7,13 @@ public class Shooting : MonoBehaviour
     public float bulletSpeed;
     public Transform shotEnd;
     public float timeBetweenShots;
-    //public GameObject playerBullet;
   
     float cooldownTimer = 100f;
     float timer;
-    //public int playerBulletIndex = 0;
+    public int playerBulletIndex = 0;
 
+    ObjectPooler objectPooler;
     AudioManager audioManager;
-    GenericObjectPooler objectPooler;
 
     private void Awake()
     {
@@ -23,7 +22,7 @@ public class Shooting : MonoBehaviour
 
     private void Start()
     {
-        objectPooler = GenericObjectPooler.SharedInstance;
+        objectPooler = ObjectPooler.SharedInstance;
     }
 
     void Update()
@@ -43,10 +42,10 @@ public class Shooting : MonoBehaviour
 
     void Shoot()
     {
-        GameObject playerBullet = objectPooler.GetPooledObject(0);
+        GameObject playerBullet = objectPooler.GetPooledObject(playerBulletIndex);
         playerBullet.SetActive(true);
         playerBullet.transform.position = shotEnd.transform.position;
-        playerBullet.transform.rotation = shotEnd.transform.rotation;
+        playerBullet.transform.rotation = transform.rotation;
         playerBullet.GetComponent<Rigidbody2D>().AddForce(shotEnd.right * bulletSpeed, ForceMode2D.Impulse);
 
        

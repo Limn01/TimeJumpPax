@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: e105e4fdda449a042851cb8672fa983c
+timeCreated: 1524536847
+licenseType: Free
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Emissive: {fileID: 2800000, guid: 9435828bf74190f43b48761503a03147, type: 3}
+  - _T_Laser_pan_rotated: {fileID: 2800000, guid: a68fd8e7d6d74ef4dbcde9f3ad2f8fa4,
+      type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HoverEnemyMovement : MonoBehaviour
+public class HoverEnemyMovement : ObstacleBase
 {
     public float moveSpeed;
     public bool movingRight;
@@ -16,8 +16,9 @@ public class HoverEnemyMovement : MonoBehaviour
 
     float timeCounter = 0;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         rb2D = GetComponent<Rigidbody2D>();
     }
 

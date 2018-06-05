@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyClimb : MonoBehaviour
+public class EnemyClimb : Enemy
 {
     public float offset = 2f;
     public float distance;
@@ -14,16 +14,17 @@ public class EnemyClimb : MonoBehaviour
     bool isPrevLeftHit = false;
     bool isPrevRightHit = false;
     
-    
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         Vector3 pos = transform.position;
         Vector3 up = transform.up;
         Vector3 down = -transform.up;
         Vector3 right = transform.right;
         Vector3 left = -transform.right;
         Vector3 size = transform.localScale;
-        Vector3 halfSize = size * 0.5f;
+        Vector3 halfSize = size * 0.45f;
 
         Vector3 bottomLeft = pos + left * halfSize.x + down * halfSize.y;
         Vector3 bottomRight = pos + right * halfSize.x + down * halfSize.y;
